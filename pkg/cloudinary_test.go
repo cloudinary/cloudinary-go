@@ -2,8 +2,12 @@ package cloudinary
 
 import (
 	"cloudinary-labs/cloudinary-go/pkg/api/uploader"
+	"context"
 	"testing"
 )
+
+var c = Create()
+var ctx = context.Background()
 
 func TestCloudinary_CreateInstance(t *testing.T) {
 	c := Create()
@@ -26,8 +30,6 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 }
 
 func TestCloudinary_Upload(t *testing.T) {
-	c := Create()
-
 	params := uploader.UploadParams{
 		PublicID: "test_image",
 	}
@@ -44,10 +46,7 @@ func TestCloudinary_Upload(t *testing.T) {
 }
 
 func TestCloudinary_Admin(t *testing.T) {
-	c := Create()
-
-
-	resp, err := c.Admin.Ping()
+	resp, err := c.Admin.Ping(ctx)
 
 	if err != nil {
 		t.Error("Something went wrong with admin api", err)

@@ -85,12 +85,8 @@ type TagsParams struct {
 }
 
 func (a *Api) Tags(ctx context.Context, params TagsParams) (*TagsResult, error) {
-	if params.AssetType == "" {
-		params.AssetType = api.Image
-	}
-
 	res := &TagsResult{}
-	_, err := a.get(ctx, api.BuildPath(Tags, params.AssetType), params, res)
+	_, err := a.get(ctx, api.BuildPath(Tags, params.AssetType.ToString()), params, res)
 
 	return res, err
 }

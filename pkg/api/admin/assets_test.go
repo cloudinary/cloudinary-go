@@ -48,4 +48,3 @@ func TestAssets_DeleteAssets(t *testing.T) {
 		t.Error(err, resp)
 	}
 }
-
