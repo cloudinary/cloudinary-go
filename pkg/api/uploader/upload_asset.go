@@ -37,8 +37,8 @@ type UploadParams struct {
 	Exif                    bool            `json:"exif,omitempty"`
 	Colors                  bool            `json:"colors,omitempty"`
 	Phash                   bool            `json:"phash,omitempty"`
-	FaceCoordinates         string          `json:"face_coordinates,omitempty"`
-	CustomCoordinates       string          `json:"custom_coordinates,omitempty"`
+	FaceCoordinates         api.Coordinates `json:"face_coordinates,omitempty"`
+	CustomCoordinates       api.Coordinates `json:"custom_coordinates,omitempty"`
 	Backup                  bool            `json:"backup,omitempty"`
 	ReturnDeleteToken       bool            `json:"return_delete_token,omitempty"`
 	Invalidate              bool            `json:"invalidate,omitempty"`

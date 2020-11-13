@@ -24,7 +24,7 @@ func Create() *Api {
 
 func (u *Api) postForm(url string, formParams url.Values) []byte {
 	req, err := http.NewRequest("POST",
-		fmt.Sprintf("%v/%v/%v", api.ApiEndpoint, u.Config.Account.CloudName, url),
+		fmt.Sprintf("%v/%v/%v", api.BaseUrl, u.Config.Account.CloudName, url),
 		strings.NewReader(formParams.Encode()),
 	)
 	if err != nil {

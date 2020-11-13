@@ -2,26 +2,42 @@ package admin
 
 import (
 	"cloudinary-labs/cloudinary-go/pkg/api"
-	"encoding/json"
-	"net/url"
+	"context"
+	"net/http"
+	"time"
 )
+
+const (
+	Ping  api.EndPoint = "ping"
+	Usage api.EndPoint = "usage"
+)
+
+func (a *Api) Ping(ctx context.Context) (*PingResult, error) {
+	res := &PingResult{}
+	_, err := a.get(ctx, Ping, nil, res)
+
+	return res, err
+}
 
 type PingResult struct {
 	Status string        `json:"status"`
 	Error  api.ErrorResp `json:"error,omitempty"`
+	Response http.Response
 }
 
-func (a *Api) Ping() (*PingResult, error) {
-	resp := a.callApi("ping", url.Values{})
+type UsageParams struct {
+	Date time.Time `json:"-"`
+}
 
-	res := &PingResult{}
-	err := json.Unmarshal(resp, res)
-
-	if err != nil {
-		return nil, err
+func (a *Api) Usage(ctx context.Context, params UsageParams) (*UsageResult, error) {
+	date := ""
+	if !params.Date.IsZero() {
+		date = params.Date.Format("02-01-2006")
 	}
+	res := &UsageResult{}
+	_, err := a.get(ctx, api.BuildPath(Usage, date), params, res)
 
-	return res, nil
+	return res, err
 }
 
 type UsageResult struct {
@@ -57,50 +73,30 @@ type UsageResult struct {
 		ImageMaxPx        int `json:"image_max_px"`
 		AssetMaxTotalPx   int `json:"asset_max_total_px"`
 	} `json:"media_limits"`
-	Error api.ErrorResp `json:"error,omitempty"`
-}
-
-func (a *Api) Usage() (*UsageResult, error) {
-	resp := a.callApi("usage", url.Values{})
-
-	res := &UsageResult{}
-	err := json.Unmarshal(resp, res)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	Error    api.ErrorResp `json:"error,omitempty"`
+	Response interface{}
 }
 
 type TagsParams struct {
-	AssetType  string `json:"-"`
-	NextCursor string `json:"next_cursor,omitempty"`
-	MaxResults int    `json:"max_results,omitempty"`
-	Prefix     bool   `json:"prefix,omitempty"`
+	AssetType  api.AssetType `json:"-"`
+	NextCursor string        `json:"next_cursor,omitempty"`
+	MaxResults int           `json:"max_results,omitempty"`
+	Prefix     string        `json:"prefix,omitempty"`
+}
+
+func (a *Api) Tags(ctx context.Context, params TagsParams) (*TagsResult, error) {
+	if params.AssetType == "" {
+		params.AssetType = api.Image
+	}
+
+	res := &TagsResult{}
+	_, err := a.get(ctx, api.BuildPath(Tags, params.AssetType), params, res)
+
+	return res, err
 }
 
 type TagsResult struct {
-	Tags       []string `json:"tags"`
-	NextCursor string   `json:"next_cursor"`
-}
-
-func (a *Api) Tags(tagsParams TagsParams) (*TagsResult, error) {
-	if tagsParams.AssetType == "" {
-		tagsParams.AssetType = "image"
-	}
-	params, err := api.StructToParams(tagsParams)
-	if err != nil {
-		return nil, err
-	}
-	resp := a.callApi("tags/" + tagsParams.AssetType, params)
-
-	res := &TagsResult{}
-	err = json.Unmarshal(resp, res)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	Tags       []string      `json:"tags"`
+	NextCursor string        `json:"next_cursor"`
+	Error      api.ErrorResp `json:"error,omitempty"`
 }
