@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -52,7 +53,11 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 	var body io.Reader = nil
 
 	if method == http.MethodPost || method == http.MethodPut {
-		body = strings.NewReader(params.Encode())
+		decodedValue, err := url.QueryUnescape(params.Encode())
+		if err != nil {
+			return nil, err
+		}
+		body = strings.NewReader(decodedValue)
 	}
 	req, err := http.NewRequest(method,
 		fmt.Sprintf("%v/%v/%v", api.BaseUrl, a.Config.Account.CloudName, api.BuildPath(path)),

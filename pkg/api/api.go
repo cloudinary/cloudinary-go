@@ -124,7 +124,17 @@ func StructToParams(inputStruct interface{}) (url.Values, error) {
 
 	params := url.Values{}
 	for paramName, value := range paramsMap {
-		params.Add(paramName, fmt.Sprintf("%v", value))
+		resBytes, err := json.Marshal(value)
+		if err != nil {
+			return nil, err
+		}
+
+		res := string(resBytes)
+		if strings.HasPrefix(res, "\"") { // FIXME: Fix this dirty hack that prevents double quoting of strings
+			res, _ = strconv.Unquote(string(res))
+		}
+
+		params.Add(paramName, res)
 	}
 
 	return params, nil

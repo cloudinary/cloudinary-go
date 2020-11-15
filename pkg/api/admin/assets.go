@@ -27,9 +27,6 @@ type AssetTypesResult struct {
 	Error      api.ErrorResp `json:"error,omitempty"`
 }
 
-type CommonAssetsParams struct {
-}
-
 type AssetsParams struct {
 	AssetType   api.AssetType `json:"-"`
 	Prefix      string        `json:"prefix,omitempty"`
