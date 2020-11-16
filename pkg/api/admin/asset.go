@@ -102,16 +102,7 @@ type CinemagraphAnalysisResult struct {
 	CinemagraphScore float64 `json:"cinemagraph_score"`
 }
 
-type ImageMetadataResult struct {
-	OriginalTransmissionReference string `json:"OriginalTransmissionReference"`
-	ApplicationRecordVersion      string `json:"ApplicationRecordVersion"`
-	JFIFVersion                   string `json:"JFIFVersion"`
-	ResolutionUnit                string `json:"ResolutionUnit"`
-	XResolution                   string `json:"XResolution"`
-	YResolution                   string `json:"YResolution"`
-	Colorspace                    string `json:"Colorspace"`
-	DPI                           string `json:"DPI"`
-}
+type ImageMetadataResult map[string]string
 
 type PredominantResult struct {
 	Google     [][]interface{} `json:"google"`

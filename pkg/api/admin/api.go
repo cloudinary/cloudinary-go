@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"bytes"
 	"cloudinary-labs/cloudinary-go/pkg/api"
 	"cloudinary-labs/cloudinary-go/pkg/config"
 	"context"
@@ -10,8 +11,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
-	"strings"
 )
 
 // Api main struct
@@ -45,19 +44,14 @@ func (a *Api) delete(ctx context.Context, path interface{}, requestParams interf
 }
 
 func (a *Api) callApi(ctx context.Context, method string, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error){
-	params, err := api.StructToParams(requestParams)
-	if err != nil {
-		return nil, err
-	}
-
 	var body io.Reader = nil
 
 	if method == http.MethodPost || method == http.MethodPut {
-		decodedValue, err := url.QueryUnescape(params.Encode())
+		jsonReq, err := json.Marshal(requestParams)
 		if err != nil {
 			return nil, err
 		}
-		body = strings.NewReader(decodedValue)
+		body = bytes.NewBuffer(jsonReq)
 	}
 	req, err := http.NewRequest(method,
 		fmt.Sprintf("%v/%v/%v", api.BaseUrl, a.Config.Account.CloudName, api.BuildPath(path)),
@@ -68,10 +62,15 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 	}
 
 	if body == nil {
+		params, err := api.StructToParams(requestParams)
+		if err != nil {
+			return nil, err
+		}
 		req.URL.RawQuery = params.Encode()
 	}
 
 	req.Header.Set("User-Agent", api.UserAgent)
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.SetBasicAuth(a.Config.Account.ApiKey, a.Config.Account.ApiSecret)
 
 	req = req.WithContext(ctx)
