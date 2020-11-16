@@ -16,7 +16,7 @@ type ListUploadMappingsParams struct {
 
 func (a *Api) ListUploadMappings(ctx context.Context, params ListUploadMappingsParams) (*ListUploadMappingsResult, error) {
 	res := &ListUploadMappingsResult{}
-	_, err := a.get(ctx, UploadMappings, nil, res)
+	_, err := a.get(ctx, UploadMappings, params, res)
 
 	return res, err
 }

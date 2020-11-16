@@ -54,6 +54,7 @@ type StreamingProfileDetails struct {
 type StreamingProfileRepresentation struct {
 	Transformation transformation.Transformation `json:"transformation"`
 }
+
 type RawStreamingProfileRepresentation struct {
 	Transformation transformation.RawTransformation `json:"transformation"`
 }
@@ -82,10 +83,6 @@ func (a *Api) UpdateStreamingProfile(ctx context.Context, params UpdateStreaming
 	_, err := a.put(ctx, api.BuildPath(StreamingProfiles, params.Name), params, res)
 
 	return res, err
-}
-
-type UpdateStreamingProfileResult struct {
-	Error api.ErrorResp `json:"error,omitempty"`
 }
 
 type DeleteStreamingProfileParams struct {
