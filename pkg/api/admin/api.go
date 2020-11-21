@@ -43,7 +43,7 @@ func (a *Api) delete(ctx context.Context, path interface{}, requestParams interf
 	return a.callApi(ctx, http.MethodDelete, path, requestParams, result)
 }
 
-func (a *Api) callApi(ctx context.Context, method string, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error){
+func (a *Api) callApi(ctx context.Context, method string, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 
 	if method == http.MethodPost || method == http.MethodPut {
