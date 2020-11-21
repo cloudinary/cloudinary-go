@@ -20,8 +20,8 @@ func (a *Api) Ping(ctx context.Context) (*PingResult, error) {
 }
 
 type PingResult struct {
-	Status string        `json:"status"`
-	Error  api.ErrorResp `json:"error,omitempty"`
+	Status   string        `json:"status"`
+	Error    api.ErrorResp `json:"error,omitempty"`
 	Response http.Response
 }
 

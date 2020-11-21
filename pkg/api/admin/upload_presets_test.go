@@ -2,6 +2,7 @@ package admin
 
 import (
 	"cloudinary-labs/cloudinary-go/pkg/api"
+	"cloudinary-labs/cloudinary-go/pkg/api/uploader"
 	"testing"
 )
 
@@ -10,12 +11,11 @@ const UPName = "go-upload-preset"
 func TestUploadPresets_Create(t *testing.T) {
 
 	params := CreateUploadPresetParams{
-		Name:     UPName,
-		Unsigned: true,
-		Live:     true,
+		Name:         UPName,
+		Unsigned:     true,
+		Live:         true,
+		UploadParams: uploader.UploadParams{Tags: api.CldApiArray{"go-tag1", "go-tag2"}},
 	}
-
-	params.Tags = api.CldApiArray{"go-tag1", "go-tag2"}
 
 	resp, err := adminApi.CreateUploadPreset(ctx, params)
 
@@ -42,11 +42,11 @@ func TestUploadPresets_Get(t *testing.T) {
 
 func TestUploadPresets_Update(t *testing.T) {
 	updateUPParams := UpdateUploadPresetParams{
-		Name:     UPName,
-		Unsigned: false,
-		Live:     false,
+		Name:         UPName,
+		Unsigned:     false,
+		Live:         false,
+		UploadParams: uploader.UploadParams{Tags: api.CldApiArray{"go-tag3", "go-tag4"}},
 	}
-	updateUPParams.Tags = api.CldApiArray{"go-tag3", "go-tag4"}
 
 	resp, err := adminApi.UpdateUploadPreset(ctx, updateUPParams)
 

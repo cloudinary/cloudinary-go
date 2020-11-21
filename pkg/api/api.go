@@ -76,7 +76,7 @@ const (
 // Option is the optional parameters custom struct
 type Option map[string]interface{}
 
-type Coordinates   [][]int
+type Coordinates [][]int
 type CldApiArray []string
 
 type Context map[string]string
