@@ -32,7 +32,7 @@ func TestStreamingProfiles_Create(t *testing.T) {
 	resp, err := adminApi.CreateStreamingProfile(ctx, CreateStreamingProfileParams{
 		Name:            SPName,
 		DisplayName:     "Go SP",
-		Representations: []RawStreamingProfileRepresentation{{"c_fill,w_1000,h_1000"}},
+		Representations: StreamingProfileRepresentations{{Transformation: "c_fill,w_1000,h_1000"}},
 	})
 
 	if err != nil || resp.Error.Message != "" {

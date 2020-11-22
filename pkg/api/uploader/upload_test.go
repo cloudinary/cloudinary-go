@@ -5,7 +5,10 @@ import (
 )
 
 func TestUploader_Upload(t *testing.T) {
-	u := Create()
+	u, err := Create()
+	if err != nil {
+		t.Error(err)
+	}
 
 	params := UploadParams{
 		PublicID:              "go_test_image",

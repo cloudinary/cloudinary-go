@@ -4,6 +4,8 @@ import (
 	"cloudinary-labs/cloudinary-go/pkg/api"
 	"cloudinary-labs/cloudinary-go/pkg/transformation"
 	"context"
+	"encoding/json"
+	"strconv"
 )
 
 const (
@@ -55,14 +57,24 @@ type StreamingProfileRepresentation struct {
 	Transformation transformation.Transformation `json:"transformation"`
 }
 
+type StreamingProfileRepresentations []RawStreamingProfileRepresentation
+
+// Server expects to get a string of a json encoded array
+func (sprs StreamingProfileRepresentations) MarshalJSON() ([]byte, error) {
+	sprsa := ([]RawStreamingProfileRepresentation)(sprs)
+	paramsJsonObj, _ := json.Marshal(sprsa)
+
+	return []byte(strconv.Quote(string(paramsJsonObj))), nil
+}
+
 type RawStreamingProfileRepresentation struct {
 	Transformation transformation.RawTransformation `json:"transformation"`
 }
 
 type CreateStreamingProfileParams struct {
-	Name            string                              `json:"name"`
-	DisplayName     string                              `json:"display_name,omitempty"`
-	Representations []RawStreamingProfileRepresentation `json:"representations"`
+	Name            string                          `json:"name"`
+	DisplayName     string                          `json:"display_name,omitempty"`
+	Representations StreamingProfileRepresentations `json:"representations"`
 }
 
 func (a *Api) CreateStreamingProfile(ctx context.Context, params CreateStreamingProfileParams) (*GetStreamingProfileResult, error) {
@@ -73,9 +85,9 @@ func (a *Api) CreateStreamingProfile(ctx context.Context, params CreateStreaming
 }
 
 type UpdateStreamingProfileParams struct {
-	Name            string                              `json:"-"`
-	DisplayName     string                              `json:"display_name,omitempty"`
-	Representations []RawStreamingProfileRepresentation `json:"representations"`
+	Name            string                          `json:"-"`
+	DisplayName     string                          `json:"display_name,omitempty"`
+	Representations StreamingProfileRepresentations `json:"representations"`
 }
 
 func (a *Api) UpdateStreamingProfile(ctx context.Context, params UpdateStreamingProfileParams) (*GetStreamingProfileResult, error) {

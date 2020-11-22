@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -20,11 +19,15 @@ type Api struct {
 }
 
 // Create is creating a new Api instance from environment variable
-func Create() *Api {
-	return &Api{
-		Config: *config.Create(),
-		client: http.Client{},
+func Create() (*Api, error) {
+	c, err := config.Create()
+	if err != nil {
+		return nil, err
 	}
+	return &Api{
+		Config: *c,
+		client: http.Client{},
+	}, nil
 }
 
 func (a *Api) get(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
@@ -85,7 +88,7 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 		return nil, err
 	}
 
-	defer deferredClose(resp.Body)
+	defer api.DeferredClose(resp.Body)
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 
@@ -94,10 +97,4 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 	err = json.Unmarshal(bodyBytes, result)
 
 	return resp, err
-}
-
-func deferredClose(c io.Closer) {
-	if err := c.Close(); err != nil {
-		log.Println(err)
-	}
 }

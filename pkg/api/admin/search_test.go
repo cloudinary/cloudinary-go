@@ -15,7 +15,7 @@ func TestSearch_Search(t *testing.T) {
 	resp, err := adminApi.Search(ctx, s.GetQuery())
 
 	if err != nil || resp.TotalCount < 1 {
-		t.Error(resp)
+		t.Error(resp, err)
 	}
 }
 
@@ -30,6 +30,6 @@ func TestSearch_SearchQuery(t *testing.T) {
 	resp, err := adminApi.Search(ctx, sq)
 
 	if err != nil || resp.TotalCount < 1 {
-		t.Error(resp)
+		t.Error(resp, err)
 	}
 }

@@ -61,13 +61,13 @@ type SearchAsset struct {
 }
 
 type ImageAnalysis struct {
-	FaceCount         int               `json:"face_count"`
-	Faces             [][]int           `json:"faces"`
-	Grayscale         bool              `json:"grayscale"`
-	IllustrationScore int               `json:"illustration_score"`
-	Transparent       bool              `json:"transparent"`
-	Etag              string            `json:"etag"`
-	Colors            map[string]string `json:"colors"`
+	FaceCount         int                    `json:"face_count"`
+	Faces             [][]int                `json:"faces"`
+	Grayscale         bool                   `json:"grayscale"`
+	IllustrationScore int                    `json:"illustration_score"`
+	Transparent       bool                   `json:"transparent"`
+	Etag              string                 `json:"etag"`
+	Colors            map[string]float64 `json:"colors"`
 }
 
 type SearchUser struct {

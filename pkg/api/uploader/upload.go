@@ -3,6 +3,7 @@ package uploader
 import (
 	"cloudinary-labs/cloudinary-go/pkg/api"
 	"cloudinary-labs/cloudinary-go/pkg/config"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -16,19 +17,23 @@ type Api struct {
 }
 
 // Create is creating a new Api instance from environment variable
-func Create() *Api {
-	return &Api{
-		Config: *config.Create(),
+func Create() (*Api, error) {
+	c, err := config.Create()
+	if err != nil {
+		return nil, err
 	}
+	return &Api{
+		Config: *c,
+	}, nil
 }
 
-func (u *Api) postForm(url string, formParams url.Values) []byte {
+func (u *Api) postForm(url string, formParams url.Values) ([]byte, error) {
 	req, err := http.NewRequest("POST",
 		fmt.Sprintf("%v/%v/%v", api.BaseUrl, u.Config.Account.CloudName, url),
 		strings.NewReader(formParams.Encode()),
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	req.Header.Set("User-Agent", api.UserAgent)
@@ -37,29 +42,28 @@ func (u *Api) postForm(url string, formParams url.Values) []byte {
 	resp, err := client.Do(req)
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	defer resp.Body.Close()
+	defer api.DeferredClose(resp.Body)
 
-	body, _ := ioutil.ReadAll(resp.Body)
-
-	return body
+	return ioutil.ReadAll(resp.Body)
 }
 
-func (u *Api) postAndSignForm(url string, formParams url.Values) []byte {
+func (u *Api) postAndSignForm(url string, formParams url.Values) ([]byte, error) {
 	if u.Config.Account.ApiSecret == "" {
-		panic("Must provide Api Secret")
+		return nil, errors.New("must provide Api Secret")
 	}
+
 	formParams.Add("signature", api.SignRequest(formParams, u.Config.Account.ApiSecret))
 	formParams.Add("api_key", u.Config.Account.ApiKey)
 
 	return u.postForm(url, formParams)
 }
 
-func (u *Api) postFile(file string, formParams url.Values) []byte {
+func (u *Api) postFile(file string, formParams url.Values) ([]byte, error) {
 	if u.Config.Account.ApiSecret == "" {
-		panic("Must provide Api Secret")
+		return nil, errors.New("must provide Api Secret")
 	}
 
 	formParams.Add("signature", api.SignRequest(formParams, u.Config.Account.ApiSecret))

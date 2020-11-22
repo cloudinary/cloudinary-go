@@ -92,8 +92,11 @@ func (u *Api) Upload(file string, uploadParams ...UploadParams) (*UploadResult, 
 		return nil, err
 	}
 
-	body := u.postFile(file, formParams)
+	body, err := u.postFile(file, formParams)
 
+	if err != nil {
+		return nil, err
+	}
 	upload := &UploadResult{}
 	err = json.Unmarshal(body, upload)
 

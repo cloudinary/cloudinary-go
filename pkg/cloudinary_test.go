@@ -6,23 +6,23 @@ import (
 	"testing"
 )
 
-var c = Create()
+var c, _ = Create()
 var ctx = context.Background()
 
 func TestCloudinary_CreateInstance(t *testing.T) {
-	c := Create()
+	c, _ := Create()
 
 	if c.Config.Account.CloudName == "" {
 		t.Error("Something went wrong with Cloudinary instance")
 	}
 
-	c = CreateFromUrl("cloudinary://key:secret@test123")
+	c, _ = CreateFromUrl("cloudinary://key:secret@test123")
 
 	if c.Config.Account.CloudName != "test123" {
 		t.Error("Something went wrong with Cloudinary instance")
 	}
 
-	c = CreateFromParams("test123", "key", "secret")
+	c, _ = CreateFromParams("test123", "key", "secret")
 
 	if c.Config.Account.CloudName != "test123" {
 		t.Error("Something went wrong with Cloudinary instance")

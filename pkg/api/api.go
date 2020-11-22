@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
+	"log"
 	"net/url"
 	"strconv"
 	"strings"
@@ -83,8 +85,8 @@ type Context map[string]string
 type Metadata map[string]interface{}
 
 // MarshalJSON writes a quoted string in the custom format
-func (cdlApiArr CldApiArray) MarshalJSON() ([]byte, error) {
-	return []byte(strconv.Quote(strings.Join(cdlApiArr[:], ","))), nil
+func (cldApiArr CldApiArray) MarshalJSON() ([]byte, error) {
+	return []byte(strconv.Quote(strings.Join(cldApiArr[:], ","))), nil
 }
 
 // ErrorResp is the failed api request main struct
@@ -138,4 +140,10 @@ func StructToParams(inputStruct interface{}) (url.Values, error) {
 	}
 
 	return params, nil
+}
+
+func DeferredClose(c io.Closer) {
+	if err := c.Close(); err != nil {
+		log.Println(err)
+	}
 }

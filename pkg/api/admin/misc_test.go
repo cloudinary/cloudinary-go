@@ -7,7 +7,7 @@ import (
 )
 
 var ctx = context.Background()
-var adminApi = Create()
+var adminApi, _ = Create()
 
 func TestAdmin_Ping(t *testing.T) {
 	resp, err := adminApi.Ping(ctx)
