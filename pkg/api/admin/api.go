@@ -1,3 +1,6 @@
+//Enables Cloudinary Admin API functionality.
+//
+//https://cloudinary.com/documentation/admin_api
 package admin
 
 import (
@@ -12,13 +15,12 @@ import (
 	"net/http"
 )
 
-// Api main struct
 type Api struct {
 	Config config.Configuration
 	client http.Client
 }
 
-// Create is creating a new Api instance from environment variable
+// Creates a new Api instance from the environment variable (CLOUDINARY_URL).
 func Create() (*Api, error) {
 	c, err := config.Create()
 	if err != nil {

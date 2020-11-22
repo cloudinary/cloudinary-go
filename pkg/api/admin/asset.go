@@ -23,7 +23,13 @@ type AssetParams struct {
 	MaxResults            int              `json:"max_results,omitempty"`
 	DerivedNextCursor     string           `json:"derived_next_cursor,omitempty"`
 }
-
+//Returns the details of the specified asset and all its derived resources.
+//
+//Note that if you only need details about the original resource,
+//you can also use the uploader.Upload or uploader.Explicit methods, which return the same information and
+//are not rate limited.
+//
+//https://cloudinary.com/documentation/admin_api#get_the_details_of_a_single_resource
 func (a *Api) Asset(ctx context.Context, params AssetParams) (*AssetResult, error) {
 	res := &AssetResult{}
 	_, err := a.get(ctx, api.BuildPath(Assets, params.AssetType.ToString(), params.DeliveryType.ToString(),

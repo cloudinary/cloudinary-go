@@ -15,6 +15,7 @@ const (
 	Restore       api.EndPoint = "restore"
 )
 
+//Lists available asset types.
 func (a *Api) AssetTypes(ctx context.Context) (*AssetTypesResult, error) {
 	res := &AssetTypesResult{}
 	_, err := a.get(ctx, Assets, nil, res)
@@ -39,6 +40,9 @@ type AssetsParams struct {
 	Direction   string        `json:"direction,omitempty"`
 }
 
+//Lists all uploaded assets filtered by any specified AssetsParams.
+//
+//https://cloudinary.com/documentation/admin_api#get_resources
 func (a *Api) Assets(ctx context.Context, params AssetsParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
 	_, err := a.get(ctx, api.BuildPath(Assets, params.AssetType.ToString()), params, res)
