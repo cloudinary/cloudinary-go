@@ -2,6 +2,7 @@ package uploader
 
 import (
 	"cloudinary-labs/cloudinary-go/pkg/api"
+	"context"
 	"encoding/json"
 	"time"
 )
@@ -9,52 +10,75 @@ import (
 // UploadParams struct
 // See http://cloudinary.com/documentation/image_upload_api_reference#api_example_1
 type UploadParams struct {
-	PublicID                string          `json:"public_id,omitempty"`
-	PublicIds               api.CldApiArray `json:"public_ids,omitempty"`
-	UseFilename             bool            `json:"use_filename,omitempty"`
-	UniqueFilename          bool            `json:"unique_filename,omitempty"`
-	Folder                  string          `json:"folder,omitempty"`
-	Overwrite               bool            `json:"overwrite,omitempty"`
-	ResourceType            string          `json:"resource_type,omitempty"`
-	Type                    string          `json:"type,omitempty"`
-	Tags                    api.CldApiArray `json:"tags,omitempty"`
-	Context                 api.Context     `json:"context,omitempty"`
-	Metadata                api.Metadata    `json:"metadata,omitempty"`
-	Transformation          string          `json:"transformation,omitempty"`
-	Format                  string          `json:"format,omitempty"`
-	AllowedFormats          api.CldApiArray `json:"allowed_formats,omitempty"`
-	Eager                   string          `json:"eager,omitempty"`
-	Eval                    string          `json:"eval,omitempty"`
-	Async                   bool            `json:"async,omitempty"`
-	EagerAsync              bool            `json:"eager_async,omitempty"`
-	Proxy                   string          `json:"proxy,omitempty"`
-	Headers                 string          `json:"headers,omitempty"`
-	Callback                string          `json:"callback,omitempty"`
-	NotificationURL         string          `json:"notification_url,omitempty"`
-	EagerNotificationURL    string          `json:"eager_notification_url,omitempty"`
-	Faces                   bool            `json:"faces,omitempty"`
-	ImageMetadata           bool            `json:"image_metadata,omitempty"`
-	Exif                    bool            `json:"exif,omitempty"`
-	Colors                  bool            `json:"colors,omitempty"`
-	Phash                   bool            `json:"phash,omitempty"`
-	FaceCoordinates         api.Coordinates `json:"face_coordinates,omitempty"`
-	CustomCoordinates       api.Coordinates `json:"custom_coordinates,omitempty"`
-	Backup                  bool            `json:"backup,omitempty"`
-	ReturnDeleteToken       bool            `json:"return_delete_token,omitempty"`
-	Invalidate              bool            `json:"invalidate,omitempty"`
-	DiscardOriginalFilename bool            `json:"discard_original_filename,omitempty"`
-	Moderation              string          `json:"moderation,omitempty"`
-	UploadPreset            string          `json:"upload_preset,omitempty"`
-	RawConvert              string          `json:"raw_convert,omitempty"`
-	Categorization          string          `json:"categorization,omitempty"`
-	AutoTagging             float64         `json:"auto_tagging,omitempty"`
-	BackgroundRemoval       string          `json:"background_removal,omitempty"`
-	Detection               string          `json:"detection,omitempty"`
-	OCR                     string          `json:"ocr,omitempty"`
-	Timestamp               time.Time       `json:"timestamp,omitempty"`
-	QualityAnalysis         bool            `json:"quality_analysis,omitempty"`
-	AccessibilityAnalysis   bool            `json:"accessibility_analysis,omitempty"`
-	CinemagraphAnalysis     bool            `json:"cinemagraph_analysis,omitempty"`
+	PublicID                string           `json:"public_id,omitempty"`
+	PublicIds               api.CldApiArray  `json:"public_ids,omitempty"`
+	UseFilename             bool             `json:"use_filename,omitempty"`
+	UniqueFilename          bool             `json:"unique_filename,omitempty"`
+	Folder                  string           `json:"folder,omitempty"`
+	Overwrite               bool             `json:"overwrite,omitempty"`
+	ResourceType            string           `json:"resource_type,omitempty"`
+	Type                    api.DeliveryType `json:"type,omitempty"`
+	Tags                    api.CldApiArray  `json:"tags,omitempty"`
+	Context                 api.CldApiMap    `json:"context,omitempty"`
+	Metadata                api.Metadata     `json:"metadata,omitempty"`
+	Transformation          string           `json:"transformation,omitempty"`
+	Format                  string           `json:"format,omitempty"`
+	AllowedFormats          api.CldApiArray  `json:"allowed_formats,omitempty"`
+	Eager                   string           `json:"eager,omitempty"`
+	Eval                    string           `json:"eval,omitempty"`
+	Async                   bool             `json:"async,omitempty"`
+	EagerAsync              bool             `json:"eager_async,omitempty"`
+	Unsigned                bool             `json:"unsigned,omitempty"`
+	Proxy                   string           `json:"proxy,omitempty"`
+	Headers                 string           `json:"headers,omitempty"`
+	Callback                string           `json:"callback,omitempty"`
+	NotificationURL         string           `json:"notification_url,omitempty"`
+	EagerNotificationURL    string           `json:"eager_notification_url,omitempty"`
+	Faces                   bool             `json:"faces,omitempty"`
+	ImageMetadata           bool             `json:"image_metadata,omitempty"`
+	Exif                    bool             `json:"exif,omitempty"`
+	Colors                  bool             `json:"colors,omitempty"`
+	Phash                   bool             `json:"phash,omitempty"`
+	FaceCoordinates         api.Coordinates  `json:"face_coordinates,omitempty"`
+	CustomCoordinates       api.Coordinates  `json:"custom_coordinates,omitempty"`
+	Backup                  bool             `json:"backup,omitempty"`
+	ReturnDeleteToken       bool             `json:"return_delete_token,omitempty"`
+	Invalidate              bool             `json:"invalidate,omitempty"`
+	DiscardOriginalFilename bool             `json:"discard_original_filename,omitempty"`
+	Moderation              string           `json:"moderation,omitempty"`
+	UploadPreset            string           `json:"upload_preset,omitempty"`
+	RawConvert              string           `json:"raw_convert,omitempty"`
+	Categorization          string           `json:"categorization,omitempty"`
+	AutoTagging             float64          `json:"auto_tagging,omitempty"`
+	BackgroundRemoval       string           `json:"background_removal,omitempty"`
+	Detection               string           `json:"detection,omitempty"`
+	OCR                     string           `json:"ocr,omitempty"`
+	Timestamp               time.Time        `json:"timestamp,omitempty"`
+	QualityAnalysis         bool             `json:"quality_analysis,omitempty"`
+	AccessibilityAnalysis   bool             `json:"accessibility_analysis,omitempty"`
+	CinemagraphAnalysis     bool             `json:"cinemagraph_analysis,omitempty"`
+}
+
+// Upload is uploading an image
+func (u *Api) Upload(ctx context.Context, file string, uploadParams UploadParams) (*UploadResult, error) {
+	formParams, err := api.StructToParams(uploadParams)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := u.postFile(ctx, file, formParams)
+
+	if err != nil {
+		return nil, err
+	}
+	upload := &UploadResult{}
+	err = json.Unmarshal(body, upload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return upload, nil
 }
 
 // UploadResult image success response struct
@@ -78,31 +102,17 @@ type UploadResult struct {
 	URL              string          `json:"url"`
 	SecureURL        string          `json:"secure_url"`
 	AccessMode       string          `json:"access_mode"`
-	Context          api.Context     `json:"context,omitempty"`
+	Context          api.CldApiMap   `json:"context,omitempty"`
 	Metadata         api.Metadata    `json:"metadata,omitempty"`
 	Overwritten      bool            `json:"overwritten"`
 	OriginalFilename string          `json:"original_filename"`
 	Error            api.ErrorResp   `json:"error,omitempty"`
 }
 
-// UploadResult is uploading an image
-func (u *Api) Upload(file string, uploadParams ...UploadParams) (*UploadResult, error) {
-	formParams, err := api.StructToParams(uploadParams[0])
-	if err != nil {
-		return nil, err
-	}
+// UnsignedUpload is uploading an image using unsigned upload preset
+func (u *Api) UnsignedUpload(ctx context.Context, file string, uploadPreset string, uploadParams UploadParams) (*UploadResult, error) {
+	uploadParams.Unsigned = true
+	uploadParams.UploadPreset = uploadPreset
 
-	body, err := u.postFile(file, formParams)
-
-	if err != nil {
-		return nil, err
-	}
-	upload := &UploadResult{}
-	err = json.Unmarshal(body, upload)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return upload, nil
+	return u.Upload(ctx, file, uploadParams)
 }

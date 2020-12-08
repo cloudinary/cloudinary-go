@@ -34,7 +34,7 @@ func TestCloudinary_Upload(t *testing.T) {
 		PublicID: "test_image",
 	}
 
-	resp, err := c.Upload.Upload("https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png", params)
+	resp, err := c.Upload.Upload(ctx, "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png", params)
 
 	if err != nil {
 		t.Error("Something went wrong with the uploader", err)

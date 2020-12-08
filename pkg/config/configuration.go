@@ -17,7 +17,7 @@ func Create() (*Configuration, error) {
 }
 
 // CreateFromUrl is creating a new Configuration instance from a cloudinary url
-func CreateFromUrl(cldUrlStr string) (*Configuration, error)  {
+func CreateFromUrl(cldUrlStr string) (*Configuration, error) {
 	cldUrl, err := url.Parse(cldUrlStr)
 	if err != nil {
 		return nil, err
@@ -29,7 +29,7 @@ func CreateFromUrl(cldUrlStr string) (*Configuration, error)  {
 }
 
 // CreateFromParams is creating a new Configuration instance from provided parameters
-func CreateFromParams(cloud string, key string, secret string) (*Configuration, error)  {
+func CreateFromParams(cloud string, key string, secret string) (*Configuration, error) {
 	return &Configuration{
 		Account: Account{
 			CloudName: cloud,

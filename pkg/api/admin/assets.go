@@ -50,32 +50,10 @@ func (a *Api) Assets(ctx context.Context, params AssetsParams) (*AssetsResult, e
 	return res, err
 }
 
-type ListAssetResult struct {
-	AssetID     string       `json:"asset_id"`
-	PublicID    string       `json:"public_id"`
-	Format      string       `json:"format"`
-	Version     int          `json:"version"`
-	AssetType   string       `json:"resource_type"`
-	Type        string       `json:"type"`
-	CreatedAt   time.Time    `json:"created_at"`
-	Bytes       int          `json:"bytes"`
-	Width       int          `json:"width"`
-	Height      int          `json:"height"`
-	Backup      bool         `json:"backup"`
-	AccessMode  string       `json:"access_mode"`
-	URL         string       `json:"url"`
-	SecureURL   string       `json:"secure_url"`
-	Tags        []string     `json:"tags,omitempty"`
-	Context     api.Context  `json:"context,omitempty"`
-	Metadata    api.Metadata `json:"metadata,omitempty"`
-	Placeholder bool         `json:"placeholder,omitempty"`
-	Error       string       `json:"error,omitempty"`
-}
-
 type AssetsResult struct {
-	Assets     []ListAssetResult `json:"resources"`
-	NextCursor string            `json:"next_cursor"`
-	Error      api.ErrorResp     `json:"error,omitempty"`
+	Assets     []api.BriefAssetResult `json:"resources"`
+	NextCursor string                 `json:"next_cursor"`
+	Error      api.ErrorResp          `json:"error,omitempty"`
 }
 
 type AssetsByTagParams struct {
@@ -164,7 +142,7 @@ func (a *Api) RestoreAssets(ctx context.Context, params RestoreAssetsParams) (*R
 	return res, err
 }
 
-type RestoreAssetsResult map[string]ListAssetResult
+type RestoreAssetsResult map[string]api.BriefAssetResult
 
 type DeleteAssetsParams struct {
 	AssetType       api.AssetType    `json:"-"`

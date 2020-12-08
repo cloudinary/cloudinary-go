@@ -81,8 +81,41 @@ type Option map[string]interface{}
 type Coordinates [][]int
 type CldApiArray []string
 
-type Context map[string]string
+type CldApiMap map[string]string
 type Metadata map[string]interface{}
+
+type BriefAssetResult struct {
+	AssetID     string    `json:"asset_id"`
+	PublicID    string    `json:"public_id"`
+	Format      string    `json:"format"`
+	Version     int       `json:"version"`
+	AssetType   string    `json:"resource_type"`
+	Type        string    `json:"type"`
+	CreatedAt   time.Time `json:"created_at"`
+	Bytes       int       `json:"bytes"`
+	Width       int       `json:"width"`
+	Height      int       `json:"height"`
+	Backup      bool      `json:"backup"`
+	AccessMode  string    `json:"access_mode"`
+	URL         string    `json:"url"`
+	SecureURL   string    `json:"secure_url"`
+	Tags        []string  `json:"tags,omitempty"`
+	Context     CldApiMap `json:"context,omitempty"`
+	Metadata    Metadata  `json:"metadata,omitempty"`
+	Placeholder bool      `json:"placeholder,omitempty"`
+	Error       string    `json:"error,omitempty"`
+}
+
+// MarshalJSON writes a quoted string in the custom format
+func (cldApiMap CldApiMap) MarshalJSON() ([]byte, error) {
+	// FIXME: handle escaping
+	var params []string
+	for name, value := range cldApiMap {
+		params = append(params, strings.Join([]string{name, value}, "="))
+	}
+
+	return []byte(strconv.Quote(strings.Join(params, "|"))), nil
+}
 
 // MarshalJSON writes a quoted string in the custom format
 func (cldApiArr CldApiArray) MarshalJSON() ([]byte, error) {
@@ -105,15 +138,18 @@ func BuildPath(parts ...interface{}) string {
 	return strings.Join(partsSlice, "/")
 }
 
-func SignRequest(params url.Values, secret string) string {
+func SignRequest(params url.Values, secret string) (string, error) {
 	params.Set("timestamp", strconv.FormatInt(time.Now().Unix(), 10))
 
-	encodedParams := params.Encode()
+	encodedUnescapedParams, err := url.QueryUnescape(params.Encode())
+	if err != nil {
+		return "", err
+	}
 
 	hash := sha1.New()
-	hash.Write([]byte(encodedParams + secret))
+	hash.Write([]byte(encodedUnescapedParams + secret))
 
-	return hex.EncodeToString(hash.Sum(nil))
+	return hex.EncodeToString(hash.Sum(nil)), nil
 }
 
 func StructToParams(inputStruct interface{}) (url.Values, error) {

@@ -23,6 +23,7 @@ type AssetParams struct {
 	MaxResults            int              `json:"max_results,omitempty"`
 	DerivedNextCursor     string           `json:"derived_next_cursor,omitempty"`
 }
+
 //Returns the details of the specified asset and all its derived resources.
 //
 //Note that if you only need details about the original resource,
@@ -130,7 +131,7 @@ type UpdateAssetParams struct {
 	QualityOverride   int                  `json:"quality_override,omitempty"`
 	NotificationUrl   string               `json:"notification_url,omitempty"`
 	Tags              api.CldApiArray      `json:"tags,omitempty,omitempty"`
-	Context           api.Context          `json:"context,omitempty"`
+	Context           api.CldApiMap        `json:"context,omitempty"`
 	FaceCoordinates   api.Coordinates      `json:"face_coordinates,omitempty"`
 	CustomCoordinates api.Coordinates      `json:"custom_coordinates,omitempty"`
 	AccessControl     interface{}          `json:"access_control,omitempty"`
