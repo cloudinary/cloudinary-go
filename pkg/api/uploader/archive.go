@@ -10,6 +10,7 @@ import (
 
 const (
 	GenerateArchive api.EndPoint = "generate_archive"
+	DownloadBackup  api.EndPoint = "download_backup"
 )
 
 type ArchiveFormat string
@@ -130,4 +131,30 @@ func (u *Api) DownloadFolder(folderPath string, params CreateArchiveParams) (str
 	}
 
 	return u.DownloadArchiveUrl(params)
+}
+
+type DownloadABackedUpAssetParams struct {
+	AssetID   string `json:"asset_id"`
+	VersionID string `json:"version_id,omitempty"`
+}
+
+// The returned url allows downloading the backed-up asset based on the the asset ID and the version ID.
+func (u *Api) DownloadBackedUpAsset(params DownloadABackedUpAssetParams) (string, error) {
+	queryParams, err := api.StructToParams(params)
+	if err != nil {
+		return "", err
+	}
+	queryParams, err = u.signRequest(queryParams)
+	if err != nil {
+		return "", err
+	}
+
+	urlStruct, err := url.Parse(u.getUploadURL(DownloadBackup))
+	if err != nil {
+		return "", err
+	}
+
+	urlStruct.RawQuery = queryParams.Encode()
+
+	return urlStruct.String(), nil
 }
