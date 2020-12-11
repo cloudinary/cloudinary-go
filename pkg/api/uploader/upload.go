@@ -42,7 +42,7 @@ func (u *Api) callUploadApi(ctx context.Context, path interface{}, requestParams
 		return err
 	}
 
-	return u.callUploadApiWithParams(ctx, api.BuildPath(getResourceType(requestParams), path), formParams, result)
+	return u.callUploadApiWithParams(ctx, api.BuildPath(getAssetType(requestParams), path), formParams, result)
 }
 
 func (u *Api) callUploadApiWithParams(ctx context.Context, path string, formParams url.Values, result interface{}) error {
@@ -60,7 +60,7 @@ func (u *Api) callUploadApiWithParams(ctx context.Context, path string, formPara
 }
 
 func (u *Api) postAndSignForm(ctx context.Context, urlPath string, formParams url.Values) ([]byte, error) {
-	formParams, err := u.signForm(formParams)
+	formParams, err := u.signRequest(formParams)
 	if err != nil {
 		return nil, err
 	}
@@ -68,19 +68,19 @@ func (u *Api) postAndSignForm(ctx context.Context, urlPath string, formParams ur
 	return u.postForm(ctx, urlPath, formParams)
 }
 
-func (u *Api) signForm(formParams url.Values) (url.Values, error) {
+func (u *Api) signRequest(requestParams url.Values) (url.Values, error) {
 	if u.Config.Account.ApiSecret == "" {
 		return nil, errors.New("must provide Api Secret")
 	}
 
-	signature, err := api.SignRequest(formParams, u.Config.Account.ApiSecret)
+	signature, err := api.SignParameters(requestParams, u.Config.Account.ApiSecret)
 	if err != nil {
 		return nil, err
 	}
-	formParams.Add("signature", signature)
-	formParams.Add("api_key", u.Config.Account.ApiKey)
+	requestParams.Add("signature", signature)
+	requestParams.Add("api_key", u.Config.Account.ApiKey)
 
-	return formParams, nil
+	return requestParams, nil
 }
 
 func (u *Api) postForm(ctx context.Context, urlPath interface{}, formParams url.Values) ([]byte, error) {
@@ -94,7 +94,7 @@ func (u *Api) postForm(ctx context.Context, urlPath interface{}, formParams url.
 }
 
 func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Values) ([]byte, error) {
-	formParams, err := u.signForm(formParams)
+	formParams, err := u.signRequest(formParams)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Val
 			return u.postLocalFile(ctx, uploadEndpoint, fileValue, formParams)
 		}
 	case io.Reader:
-			return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams)
+		return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams)
 	default:
 		return nil, errors.New("unsupported file type")
 	}
@@ -136,7 +136,7 @@ func (u *Api) postIOReader(ctx context.Context, urlPath string, reader io.Reader
 	bodyBuf := new(bytes.Buffer)
 	formWriter := multipart.NewWriter(bodyBuf)
 
-	headers := map[string]string {
+	headers := map[string]string{
 		"Content-Type": formWriter.FormDataContentType(),
 	}
 
@@ -163,7 +163,7 @@ func (u *Api) postIOReader(ctx context.Context, urlPath string, reader io.Reader
 
 func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.Buffer, headers map[string]string) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPost,
-		fmt.Sprintf("%v/%v/%v", api.BaseUrl, u.Config.Account.CloudName, api.BuildPath(urlPath)),
+		u.getUploadURL(urlPath),
 		bodyBuf,
 	)
 	if err != nil {
@@ -192,12 +192,16 @@ func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 	return ioutil.ReadAll(resp.Body)
 }
 
-func getResourceType(requestParams interface{}) string {
+func (u *Api) getUploadURL(urlPath interface{}) string {
+	return fmt.Sprintf("%v/%v/%v", api.BaseUrl, u.Config.Account.CloudName, api.BuildPath(urlPath))
+}
+
+func getAssetType(requestParams interface{}) string {
 	// FIXME: define interface or something to just access the field, and/or have a default value ("image") in the struct
-	resourceType := fmt.Sprintf("%v", reflect.ValueOf(requestParams).FieldByName("ResourceType"))
-	if resourceType == "" {
-		resourceType = fmt.Sprintf("%v", api.Image)
+	assetType := fmt.Sprintf("%v", reflect.ValueOf(requestParams).FieldByName("ResourceType"))
+	if assetType == "" {
+		assetType = fmt.Sprintf("%v", api.Image)
 	}
 
-	return resourceType
+	return assetType
 }

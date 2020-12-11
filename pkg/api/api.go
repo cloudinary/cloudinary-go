@@ -141,7 +141,7 @@ func BuildPath(parts ...interface{}) string {
 	return strings.Join(partsSlice, "/")
 }
 
-func SignRequest(params url.Values, secret string) (string, error) {
+func SignParameters(params url.Values, secret string) (string, error) {
 	params.Set("timestamp", strconv.FormatInt(time.Now().Unix(), 10))
 
 	encodedUnescapedParams, err := url.QueryUnescape(params.Encode())

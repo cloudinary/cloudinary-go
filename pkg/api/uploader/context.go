@@ -71,5 +71,5 @@ func (u *Api) callContextApi(ctx context.Context, command ContextCommand, reques
 
 	formParams.Add("command", fmt.Sprintf("%v", command))
 
-	return u.callUploadApiWithParams(ctx, api.BuildPath(getResourceType(requestParams), Context), formParams, result)
+	return u.callUploadApiWithParams(ctx, api.BuildPath(getAssetType(requestParams), Context), formParams, result)
 }
