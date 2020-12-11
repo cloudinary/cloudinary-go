@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -17,6 +18,8 @@ type EndPoint string
 
 const Version = "0.0.1-Alpha0"
 const UserAgent = "CloudinaryGo/" + Version
+
+var base64DataRegex = regexp.MustCompile("^data:([\\w-]+/[\\w\\-+.]+)?(;[\\w-]+=[\\w-]+)*;base64,([a-zA-Z0-9/+\\n=]+)$")
 
 var BaseUrl = "https://api.cloudinary.com/v1_1"
 
@@ -181,5 +184,26 @@ func StructToParams(inputStruct interface{}) (url.Values, error) {
 func DeferredClose(c io.Closer) {
 	if err := c.Close(); err != nil {
 		log.Println(err)
+	}
+}
+
+func IsValidUrl(urlCandidate string) bool {
+	_, err := url.ParseRequestURI(urlCandidate)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func IsBase64Data(base64Candidate string) bool {
+	return base64DataRegex.MatchString(base64Candidate)
+}
+
+func IsLocalFilePath(path interface{}) bool {
+	switch pathV := path.(type) {
+	case string:
+		return !(IsValidUrl(pathV) || IsBase64Data(pathV))
+	default:
+		return false
 	}
 }

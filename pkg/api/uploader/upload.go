@@ -1,17 +1,21 @@
 package uploader
 
 import (
+	"bufio"
+	"bytes"
 	"cloudinary-labs/cloudinary-go/pkg/api"
 	"cloudinary-labs/cloudinary-go/pkg/config"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
 	"reflect"
-	"strings"
 )
 
 // Upload Api main struct
@@ -30,65 +34,6 @@ func Create() (*Api, error) {
 		Config: *c,
 		client: http.Client{},
 	}, nil
-}
-
-func (u *Api) postForm(ctx context.Context, path interface{}, formParams url.Values) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodPost,
-		fmt.Sprintf("%v/%v/%v", api.BaseUrl, u.Config.Account.CloudName, api.BuildPath(path)),
-		strings.NewReader(formParams.Encode()),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("User-Agent", api.UserAgent)
-
-	req = req.WithContext(ctx)
-
-	resp, err := u.client.Do(req)
-	if err != nil {
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		default:
-		}
-		return nil, err
-	}
-
-	defer api.DeferredClose(resp.Body)
-
-	return ioutil.ReadAll(resp.Body)
-}
-
-func (u *Api) postAndSignForm(ctx context.Context, path string, formParams url.Values) ([]byte, error) {
-	if u.Config.Account.ApiSecret == "" {
-		return nil, errors.New("must provide Api Secret")
-	}
-
-	signature, err := api.SignRequest(formParams, u.Config.Account.ApiSecret)
-	if err != nil {
-		return nil, err
-	}
-	formParams.Add("signature", signature)
-	formParams.Add("api_key", u.Config.Account.ApiKey)
-
-	return u.postForm(ctx, path, formParams)
-}
-
-func (u *Api) postFile(ctx context.Context, file string, formParams url.Values) ([]byte, error) {
-	if u.Config.Account.ApiSecret == "" {
-		return nil, errors.New("must provide Api Secret")
-	}
-
-	signature, err := api.SignRequest(formParams, u.Config.Account.ApiSecret)
-	if err != nil {
-		return nil, err
-	}
-	formParams.Add("signature", signature)
-	formParams.Add("api_key", u.Config.Account.ApiKey)
-	formParams.Add("file", file)
-
-	return u.postForm(ctx, api.BuildPath("auto", Upload), formParams)
 }
 
 func (u *Api) callUploadApi(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) error {
@@ -112,6 +57,139 @@ func (u *Api) callUploadApiWithParams(ctx context.Context, path string, formPara
 
 	return err
 
+}
+
+func (u *Api) postAndSignForm(ctx context.Context, urlPath string, formParams url.Values) ([]byte, error) {
+	formParams, err := u.signForm(formParams)
+	if err != nil {
+		return nil, err
+	}
+
+	return u.postForm(ctx, urlPath, formParams)
+}
+
+func (u *Api) signForm(formParams url.Values) (url.Values, error) {
+	if u.Config.Account.ApiSecret == "" {
+		return nil, errors.New("must provide Api Secret")
+	}
+
+	signature, err := api.SignRequest(formParams, u.Config.Account.ApiSecret)
+	if err != nil {
+		return nil, err
+	}
+	formParams.Add("signature", signature)
+	formParams.Add("api_key", u.Config.Account.ApiKey)
+
+	return formParams, nil
+}
+
+func (u *Api) postForm(ctx context.Context, urlPath interface{}, formParams url.Values) ([]byte, error) {
+	bodyBuf := new(bytes.Buffer)
+	_, err := bodyBuf.Write([]byte(formParams.Encode()))
+	if err != nil {
+		return nil, err
+	}
+
+	return u.postBody(ctx, urlPath, bodyBuf, nil)
+}
+
+func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Values) ([]byte, error) {
+	formParams, err := u.signForm(formParams)
+	if err != nil {
+		return nil, err
+	}
+	uploadEndpoint := api.BuildPath(api.Auto, Upload)
+	switch fileValue := file.(type) {
+	case string:
+		if !api.IsLocalFilePath(file) {
+			formParams.Add("file", fileValue)
+
+			return u.postForm(ctx, uploadEndpoint, formParams)
+		} else {
+			return u.postLocalFile(ctx, uploadEndpoint, fileValue, formParams)
+		}
+	case io.Reader:
+			return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams)
+	default:
+		return nil, errors.New("unsupported file type")
+	}
+}
+
+// Creates a new file upload http request with optional extra params
+func (u *Api) postLocalFile(ctx context.Context, urlPath string, filePath string, formParams url.Values) ([]byte, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	fi, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+	bufferedReader := bufio.NewReader(file)
+
+	defer api.DeferredClose(file)
+
+	return u.postIOReader(ctx, urlPath, bufferedReader, fi.Name(), formParams)
+}
+
+func (u *Api) postIOReader(ctx context.Context, urlPath string, reader io.Reader, name string, formParams url.Values) ([]byte, error) {
+	bodyBuf := new(bytes.Buffer)
+	formWriter := multipart.NewWriter(bodyBuf)
+
+	headers := map[string]string {
+		"Content-Type": formWriter.FormDataContentType(),
+	}
+
+	for key, val := range formParams {
+		_ = formWriter.WriteField(key, val[0])
+	}
+
+	partWriter, err := formWriter.CreateFormFile("file", name)
+	if err != nil {
+		return nil, err
+	}
+	_, err = io.Copy(partWriter, reader)
+	if err != nil {
+		return nil, err
+	}
+
+	err = formWriter.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return u.postBody(ctx, urlPath, bodyBuf, headers)
+}
+
+func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.Buffer, headers map[string]string) ([]byte, error) {
+	req, err := http.NewRequest(http.MethodPost,
+		fmt.Sprintf("%v/%v/%v", api.BaseUrl, u.Config.Account.CloudName, api.BuildPath(urlPath)),
+		bodyBuf,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("User-Agent", api.UserAgent)
+	for key, val := range headers {
+		req.Header.Add(key, val)
+	}
+
+	req = req.WithContext(ctx)
+
+	resp, err := u.client.Do(req)
+	if err != nil {
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
+		}
+		return nil, err
+	}
+
+	defer api.DeferredClose(resp.Body)
+
+	return ioutil.ReadAll(resp.Body)
 }
 
 func getResourceType(requestParams interface{}) string {

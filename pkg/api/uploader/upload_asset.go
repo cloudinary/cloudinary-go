@@ -60,7 +60,7 @@ type UploadParams struct {
 }
 
 // Upload is uploading an image
-func (u *Api) Upload(ctx context.Context, file string, uploadParams UploadParams) (*UploadResult, error) {
+func (u *Api) Upload(ctx context.Context, file interface{}, uploadParams UploadParams) (*UploadResult, error) {
 	formParams, err := api.StructToParams(uploadParams)
 	if err != nil {
 		return nil, err
