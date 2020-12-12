@@ -25,11 +25,15 @@ var BaseUrl = "https://api.cloudinary.com/v1_1"
 
 type AssetType string
 
-func (a AssetType) ToString() string {
+func (a AssetType) String() string {
 	if a == "" {
 		a = Image
 	}
 	return string(a)
+}
+
+func (e EndPoint) String() string {
+	return string(e)
 }
 
 const (
@@ -42,7 +46,7 @@ const (
 
 type DeliveryType string
 
-func (d DeliveryType) ToString() string {
+func (d DeliveryType) String() string {
 	if d == "" {
 		d = Upload
 	}
@@ -132,9 +136,19 @@ type ErrorResp struct {
 
 func BuildPath(parts ...interface{}) string {
 	var partsSlice []string
+	//TODO: make it more elegant (?)
 	for _, part := range parts {
-		if part != "" {
-			partsSlice = append(partsSlice, fmt.Sprintf("%v", part))
+		partRes := ""
+		switch partV := part.(type) {
+		case string:
+			partRes = partV
+		case fmt.Stringer:
+			partRes = partV.String()
+		default:
+			partRes = fmt.Sprintf("%v", partV)
+		}
+		if len(partRes) > 0 {
+			partsSlice = append(partsSlice, partRes)
 		}
 	}
 

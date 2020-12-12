@@ -200,7 +200,7 @@ func getAssetType(requestParams interface{}) string {
 	// FIXME: define interface or something to just access the field, and/or have a default value ("image") in the struct
 	assetType := fmt.Sprintf("%v", reflect.ValueOf(requestParams).FieldByName("ResourceType"))
 	if assetType == "" {
-		assetType = fmt.Sprintf("%v", api.Image)
+		assetType = api.Image.String()
 	}
 
 	return assetType

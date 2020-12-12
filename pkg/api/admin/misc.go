@@ -99,7 +99,7 @@ type TagsParams struct {
 //https://cloudinary.com/documentation/admin_api#get_tags
 func (a *Api) Tags(ctx context.Context, params TagsParams) (*TagsResult, error) {
 	res := &TagsResult{}
-	_, err := a.get(ctx, api.BuildPath(Tags, params.AssetType.ToString()), params, res)
+	_, err := a.get(ctx, api.BuildPath(Tags, params.AssetType), params, res)
 
 	return res, err
 }

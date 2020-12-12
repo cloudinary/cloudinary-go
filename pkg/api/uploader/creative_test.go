@@ -18,7 +18,7 @@ func TestUploader_Creative(t *testing.T) {
 		t.Error(err)
 	}
 
-	if resp == nil || len(resp.ImageInfos) != 2 {
+	if resp == nil || len(resp.ImageInfos) < 2 {
 		t.Error(resp)
 	}
 
