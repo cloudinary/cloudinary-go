@@ -1,13 +1,9 @@
 package admin
 
 import (
-	"context"
 	"testing"
 	"time"
 )
-
-var ctx = context.Background()
-var adminApi, _ = Create()
 
 func TestAdmin_Ping(t *testing.T) {
 	resp, err := adminApi.Ping(ctx)

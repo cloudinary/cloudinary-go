@@ -9,11 +9,9 @@ func TestUploader_Explicit(t *testing.T) {
 	UploadTestAsset(t, publicID)
 
 	params := ExplicitParams{
-		UploadParams{
 			PublicID: publicID,
 			Type:     api.Upload,
 			Tags:     tags,
-		},
 	}
 
 	resp, err := uploadApi.Explicit(ctx, params)

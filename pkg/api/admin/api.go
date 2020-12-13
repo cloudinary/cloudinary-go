@@ -51,7 +51,7 @@ func (a *Api) delete(ctx context.Context, path interface{}, requestParams interf
 func (a *Api) callApi(ctx context.Context, method string, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 
-	if method == http.MethodPost || method == http.MethodPut {
+	if method == http.MethodPost || method == http.MethodPut || method == http.MethodDelete{
 		jsonReq, err := json.Marshal(requestParams)
 		if err != nil {
 			return nil, err

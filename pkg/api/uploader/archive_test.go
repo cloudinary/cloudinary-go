@@ -10,7 +10,7 @@ import (
 
 const folder = "go-folder"
 
-func TestUploader_CreateArchive(t *testing.T) {
+func TestUploader_CreateZip(t *testing.T) {
 	UploadTestAsset(t, publicID)
 	UploadTestAsset(t, publicID2)
 
@@ -18,7 +18,7 @@ func TestUploader_CreateArchive(t *testing.T) {
 		Tags: tags,
 	}
 
-	resp, err := uploadApi.CreateArchive(ctx, params)
+	resp, err := uploadApi.CreateZip(ctx, params)
 
 	if err != nil {
 		t.Error(err)
@@ -29,7 +29,7 @@ func TestUploader_CreateArchive(t *testing.T) {
 	}
 }
 
-func TestUploader_DownloadArchiveUrl(t *testing.T) {
+func TestUploader_DownloadZipUrl(t *testing.T) {
 	UploadTestAsset(t, publicID)
 	UploadTestAsset(t, publicID2)
 
@@ -38,7 +38,7 @@ func TestUploader_DownloadArchiveUrl(t *testing.T) {
 		TargetPublicId: "goArchive",
 	}
 
-	arURL, err := uploadApi.DownloadArchiveUrl(params)
+	arURL, err := uploadApi.DownloadZipUrl(params)
 
 	if err != nil {
 		t.Error(err)
