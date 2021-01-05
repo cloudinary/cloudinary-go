@@ -1,4 +1,4 @@
-module cloudinary-labs/cloudinary-go
+module cloudinary/cloudinary-go
 
 go 1.15
 

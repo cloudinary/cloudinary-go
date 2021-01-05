@@ -1,7 +1,7 @@
 package uploader
 
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api"
+	"cloudinary/cloudinary-go/pkg/api"
 	"context"
 	"fmt"
 	"os"

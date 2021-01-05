@@ -5,7 +5,7 @@ package admin
 // https://cloudinary.com/documentation/admin_api#resources
 
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api"
+	"cloudinary/cloudinary-go/pkg/api"
 	"context"
 	"time"
 )

@@ -1,7 +1,7 @@
 package cloudinary
 
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api/uploader"
+	"cloudinary/cloudinary-go/pkg/api/uploader"
 	"context"
 	"testing"
 )

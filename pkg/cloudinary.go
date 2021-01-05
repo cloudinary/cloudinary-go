@@ -1,9 +1,9 @@
 package cloudinary
 
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api/admin"
-	"cloudinary-labs/cloudinary-go/pkg/api/uploader"
-	"cloudinary-labs/cloudinary-go/pkg/config"
+	"cloudinary/cloudinary-go/pkg/api/admin"
+	"cloudinary/cloudinary-go/pkg/api/uploader"
+	"cloudinary/cloudinary-go/pkg/config"
 )
 
 // Cloudinary main struct

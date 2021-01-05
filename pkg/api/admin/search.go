@@ -13,7 +13,7 @@ package admin
 //
 // https://cloudinary.com/documentation/search_api
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api"
+	"cloudinary/cloudinary-go/pkg/api"
 	"context"
 	"time"
 )

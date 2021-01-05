@@ -19,7 +19,8 @@ import (
 
 type EndPoint string
 
-const Version = "1.0.0-Beta0"
+const Version = "0.1.0"
+
 const UserAgent = "CloudinaryGo/" + Version
 
 var apiVersion = "1_1"

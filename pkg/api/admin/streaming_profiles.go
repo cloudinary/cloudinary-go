@@ -5,8 +5,8 @@ package admin
 // https://cloudinary.com/documentation/admin_api#adaptive_streaming_profiles
 
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api"
-	"cloudinary-labs/cloudinary-go/pkg/transformation"
+	"cloudinary/cloudinary-go/pkg/api"
+	"cloudinary/cloudinary-go/pkg/transformation"
 	"context"
 	"encoding/json"
 	"strconv"

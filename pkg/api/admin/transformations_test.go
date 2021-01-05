@@ -1,7 +1,7 @@
 package admin
 
 import (
-	"cloudinary-labs/cloudinary-go/pkg/transformation"
+	"cloudinary/cloudinary-go/pkg/transformation"
 	"testing"
 )
 

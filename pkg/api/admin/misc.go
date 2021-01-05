@@ -1,7 +1,7 @@
 package admin
 
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api"
+	"cloudinary/cloudinary-go/pkg/api"
 	"context"
 	"net/http"
 	"time"

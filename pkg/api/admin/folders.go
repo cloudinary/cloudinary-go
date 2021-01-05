@@ -4,7 +4,7 @@ package admin
 //
 // https://cloudinary.com/documentation/admin_api#folders
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api"
+	"cloudinary/cloudinary-go/pkg/api"
 	"context"
 )
 

@@ -1,8 +1,8 @@
 package admin
 
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api"
-	"cloudinary-labs/cloudinary-go/pkg/api/admin/metadata"
+	"cloudinary/cloudinary-go/pkg/api"
+	"cloudinary/cloudinary-go/pkg/api/admin/metadata"
 	"context"
 	"net/http"
 )

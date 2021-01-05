@@ -4,8 +4,8 @@ package admin
 //
 // https://cloudinary.com/documentation/admin_api#upload_presets
 import (
-	"cloudinary-labs/cloudinary-go/pkg/api"
-	"cloudinary-labs/cloudinary-go/pkg/api/uploader"
+	"cloudinary/cloudinary-go/pkg/api"
+	"cloudinary/cloudinary-go/pkg/api/uploader"
 	"context"
 )
 

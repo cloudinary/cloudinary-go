@@ -6,8 +6,8 @@ package uploader
 import (
 	"bufio"
 	"bytes"
-	"cloudinary-labs/cloudinary-go/pkg/api"
-	"cloudinary-labs/cloudinary-go/pkg/config"
+	"cloudinary/cloudinary-go/pkg/api"
+	"cloudinary/cloudinary-go/pkg/config"
 	"context"
 	"encoding/json"
 	"errors"
