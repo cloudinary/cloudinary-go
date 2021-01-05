@@ -13,19 +13,19 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 	c, _ := Create()
 
 	if c.Config.Account.CloudName == "" {
-		t.Error("Something went wrong with Cloudinary instance")
+		t.Error("Please set up CLOUDINARY_URL environment variable to run the test.")
 	}
 
 	c, _ = CreateFromUrl("cloudinary://key:secret@test123")
 
 	if c.Config.Account.CloudName != "test123" {
-		t.Error("Something went wrong with Cloudinary instance")
+		t.Error("Failed creating Cloudinary instance from Cloudinary URL.")
 	}
 
 	c, _ = CreateFromParams("test123", "key", "secret")
 
 	if c.Config.Account.CloudName != "test123" {
-		t.Error("Something went wrong with Cloudinary instance")
+		t.Error("Failed creating Cloudinary instance from parameters.")
 	}
 }
 
@@ -37,11 +37,11 @@ func TestCloudinary_Upload(t *testing.T) {
 	resp, err := c.Upload.Upload(ctx, "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png", params)
 
 	if err != nil {
-		t.Error("Something went wrong with the uploader", err)
+		t.Error("Uploader failed: ", err)
 	}
 
 	if resp == nil || resp.PublicID != "test_image" {
-		t.Error("Something went wrong with the uploader", resp)
+		t.Error("Uploader failed: ", resp)
 	}
 }
 
@@ -49,10 +49,10 @@ func TestCloudinary_Admin(t *testing.T) {
 	resp, err := c.Admin.Ping(ctx)
 
 	if err != nil {
-		t.Error("Something went wrong with admin api", err)
+		t.Error("Admin API failed: ", err)
 	}
 
 	if resp == nil || resp.Status != "ok" {
-		t.Error("Something went wrong with admin api", resp)
+		t.Error("Admin API failed: ", resp)
 	}
 }

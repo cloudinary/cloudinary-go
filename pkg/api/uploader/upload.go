@@ -1,3 +1,6 @@
+// Package uploader is used for accessing Cloudinary Upload API functionality.
+//
+//https://cloudinary.com/documentation/image_upload_api_reference
 package uploader
 
 import (
@@ -16,6 +19,7 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"time"
 )
 
 // Upload Api main struct
@@ -24,7 +28,7 @@ type Api struct {
 	client http.Client
 }
 
-// Create is creating a new Api instance from environment variable
+// Create creates a new Admin Api instance from the environment variable.
 func Create() (*Api, error) {
 	c, err := config.Create()
 	if err != nil {
@@ -51,7 +55,7 @@ func (u *Api) callUploadApiWithParams(ctx context.Context, path string, formPara
 		return err
 	}
 
-	println(string(resp))
+	//log.Println(string(resp)) FIXME: find a good logger
 
 	err = json.Unmarshal(resp, result)
 
@@ -115,7 +119,7 @@ func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Val
 	}
 }
 
-// Creates a new file upload http request with optional extra params
+// postLocalFile creates a new file upload http request with optional extra params.
 func (u *Api) postLocalFile(ctx context.Context, urlPath string, filePath string, formParams url.Values) ([]byte, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -175,6 +179,9 @@ func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 		req.Header.Add(key, val)
 	}
 
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(u.Config.Api.Timeout)*time.Second)
+	defer cancel()
+
 	req = req.WithContext(ctx)
 
 	resp, err := u.client.Do(req)
@@ -193,7 +200,7 @@ func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 }
 
 func (u *Api) getUploadURL(urlPath interface{}) string {
-	return fmt.Sprintf("%v/%v/%v", api.BaseUrl, u.Config.Account.CloudName, api.BuildPath(urlPath))
+	return fmt.Sprintf("%v/%v/%v", api.BaseUrl(u.Config.Api.UploadPrefix), u.Config.Account.CloudName, api.BuildPath(urlPath))
 }
 
 func getAssetType(requestParams interface{}) string {

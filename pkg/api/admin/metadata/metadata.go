@@ -1,3 +1,6 @@
+// Package metadata defines the structured metadata.
+//
+// https://cloudinary.com/documentation/metadata_api
 package metadata
 
 type Field struct {

@@ -12,9 +12,9 @@ const (
 	Usage api.EndPoint = "usage"
 )
 
-//Tests the reachability of the Cloudinary API.
+// Ping tests the reachability of the Cloudinary API.
 //
-//https://cloudinary.com/documentation/admin_api#ping
+// https://cloudinary.com/documentation/admin_api#ping
 func (a *Api) Ping(ctx context.Context) (*PingResult, error) {
 	res := &PingResult{}
 	_, err := a.get(ctx, Ping, nil, res)
@@ -32,13 +32,13 @@ type UsageParams struct {
 	Date time.Time `json:"-"`
 }
 
-//Gets account usage details.
+// Usage gets account usage details.
 //
-//Returns a report detailing your current Cloudinary account usage details, including
-//storage, bandwidth, requests, number of resources, and add-on usage.
-//Note that numbers are updated periodically.
+// Returns a report detailing your current Cloudinary account usage details, including
+// storage, bandwidth, requests, number of resources, and add-on usage.
+// Note that numbers are updated periodically.
 //
-//https://cloudinary.com/documentation/admin_api#usage
+// https://cloudinary.com/documentation/admin_api#usage
 func (a *Api) Usage(ctx context.Context, params UsageParams) (*UsageResult, error) {
 	date := ""
 	if !params.Date.IsZero() {
@@ -88,15 +88,15 @@ type UsageResult struct {
 }
 
 type TagsParams struct {
-	AssetType  api.AssetType `json:"-"`                     //The type of asset.
-	NextCursor string        `json:"next_cursor,omitempty"` //The cursor used for pagination
-	MaxResults int           `json:"max_results,omitempty"` //Maximum number of tags to return (up to 500). Default: 10.
-	Prefix     string        `json:"prefix,omitempty"`      //Find all tags that start with the given prefix.
+	AssetType  api.AssetType `json:"-"`                     // The type of asset.
+	NextCursor string        `json:"next_cursor,omitempty"` // The cursor used for pagination.
+	MaxResults int           `json:"max_results,omitempty"` // Maximum number of tags to return (up to 500). Default: 10.
+	Prefix     string        `json:"prefix,omitempty"`      // Find all tags that start with the given prefix.
 }
 
-//Lists all the tags currently used for a specified asset type.
+// Tags lists all the tags currently used for a specified asset type.
 //
-//https://cloudinary.com/documentation/admin_api#get_tags
+// https://cloudinary.com/documentation/admin_api#get_tags
 func (a *Api) Tags(ctx context.Context, params TagsParams) (*TagsResult, error) {
 	res := &TagsResult{}
 	_, err := a.get(ctx, api.BuildPath(Tags, params.AssetType), params, res)

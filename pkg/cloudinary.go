@@ -13,7 +13,7 @@ type Cloudinary struct {
 	Upload uploader.Api
 }
 
-// Create is creating a new Cloudinary instance from environment variable
+// Create returns a new Cloudinary instance from environment variable.
 func Create() (*Cloudinary, error) {
 	c, err := config.Create()
 	if err != nil {
@@ -22,7 +22,7 @@ func Create() (*Cloudinary, error) {
 	return CreateFromConfiguration(*c)
 }
 
-// CreateFromUrl is creating a new Cloudinary instance from a cloudinary url
+// CreateFromUrl returns a new Cloudinary instance from a cloudinary url.
 func CreateFromUrl(cloudinaryUrl string) (*Cloudinary, error) {
 	c, err := config.CreateFromUrl(cloudinaryUrl)
 	if err != nil {
@@ -31,7 +31,7 @@ func CreateFromUrl(cloudinaryUrl string) (*Cloudinary, error) {
 	return CreateFromConfiguration(*c)
 }
 
-// CreateFromParams is creating a new Cloudinary instance from provided parameters
+// CreateFromParams returns a new Cloudinary instance from the provided parameters.
 func CreateFromParams(cloud string, key string, secret string) (*Cloudinary, error) {
 	c, err := config.CreateFromParams(cloud, key, secret)
 	if err != nil {
@@ -40,7 +40,7 @@ func CreateFromParams(cloud string, key string, secret string) (*Cloudinary, err
 	return CreateFromConfiguration(*c)
 }
 
-// CreateFromParams is creating a new Cloudinary instance from provided configuration
+// CreateFromConfiguration returns a new Cloudinary instance from the provided configuration.
 func CreateFromConfiguration(configuration config.Configuration) (*Cloudinary, error) {
 	return &Cloudinary{
 		Config: configuration,

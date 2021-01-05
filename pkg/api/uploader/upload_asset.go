@@ -8,7 +8,8 @@ import (
 )
 
 // UploadParams struct
-// See http://cloudinary.com/documentation/image_upload_api_reference#api_example_1
+//
+// http://cloudinary.com/documentation/image_upload_api_reference#api_example_1
 type UploadParams struct {
 	PublicID                string           `json:"public_id,omitempty"`
 	PublicIds               api.CldApiArray  `json:"public_ids,omitempty"`
@@ -59,7 +60,16 @@ type UploadParams struct {
 	CinemagraphAnalysis     bool             `json:"cinemagraph_analysis,omitempty"`
 }
 
-// Upload is uploading an image
+// Upload uploads an asset to a Cloudinary account.
+//
+// The asset can be:
+//   * a local file path
+//   * the actual data (io.Reader)
+//   * the Data URI (Base64 encoded), max ~60 MB (62,910,000 chars)
+//   * the remote FTP, HTTP or HTTPS URL address of an existing file
+//   * a private storage bucket (S3 or Google Storage) URL of a whitelisted bucket
+//
+// https://cloudinary.com/documentation/image_upload_api_reference#upload_method
 func (u *Api) Upload(ctx context.Context, file interface{}, uploadParams UploadParams) (*UploadResult, error) {
 	formParams, err := api.StructToParams(uploadParams)
 	if err != nil {
@@ -109,7 +119,11 @@ type UploadResult struct {
 	Error            api.ErrorResp   `json:"error,omitempty"`
 }
 
-// UnsignedUpload is uploading an image using unsigned upload preset
+// UnsignedUpload uploads an asset to a Cloudinary account.
+//
+// The upload is not signed so an upload preset is required.
+//
+// https://cloudinary.com/documentation/image_upload_api_reference#unsigned_upload_syntax
 func (u *Api) UnsignedUpload(ctx context.Context, file string, uploadPreset string, uploadParams UploadParams) (*UploadResult, error) {
 	uploadParams.Unsigned = true
 	uploadParams.UploadPreset = uploadPreset

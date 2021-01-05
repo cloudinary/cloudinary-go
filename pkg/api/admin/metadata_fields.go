@@ -13,7 +13,7 @@ const (
 	DataSourceRestore api.EndPoint = "datasource_restore"
 )
 
-// Lists all metadata field definitions.
+// ListMetadataFields lists all metadata field definitions.
 //
 // https://cloudinary.com/documentation/admin_api#get_metadata_fields
 func (a *Api) ListMetadataFields(ctx context.Context) (*ListMetadataFieldsResult, error) {
@@ -33,7 +33,7 @@ type MetadataFieldByFieldIdParams struct {
 	FieldExternalId string `json:"-"`
 }
 
-// Gets a single metadata field definition by external ID.
+// MetadataFieldByFieldId gets a single metadata field definition by external ID.
 //
 // https://cloudinary.com/documentation/admin_api#get_a_metadata_field_by_external_id
 func (a *Api) MetadataFieldByFieldId(ctx context.Context, params MetadataFieldByFieldIdParams) (*MetadataFieldByFieldIdResult, error) {
@@ -49,6 +49,9 @@ type MetadataFieldByFieldIdResult struct {
 	Response interface{}
 }
 
+// AddMetadataField creates a new metadata field definition.
+//
+// https://cloudinary.com/documentation/admin_api#create_a_metadata_field
 func (a *Api) AddMetadataField(ctx context.Context, params metadata.Field) (*AddMetadataFieldResult, error) {
 	res := &AddMetadataFieldResult{}
 	_, err := a.post(ctx, MetadataFields, params, res)
@@ -67,6 +70,11 @@ type UpdateMetadataFieldParams struct {
 	FieldExternalId string `json:"-"`
 }
 
+// UpdateMetadataField updates a metadata field by external ID.
+//
+// Updates a metadata field definition (partially, no need to pass the entire object) passed as JSON data.
+//
+// https://cloudinary.com/documentation/admin_api#update_a_metadata_field_by_external_id
 func (a *Api) UpdateMetadataField(ctx context.Context, params UpdateMetadataFieldParams) (*UpdateMetadataFieldResult, error) {
 	res := &UpdateMetadataFieldResult{}
 	_, err := a.put(ctx, api.BuildPath(MetadataFields, params.FieldExternalId), params, res)
@@ -84,9 +92,11 @@ type DeleteMetadataFieldParams struct {
 	FieldExternalId string `json:"-"`
 }
 
-// Gets a single metadata field definition by external ID.
+// DeleteMetadataField deletes a metadata field definition by external ID.
 //
-// https://cloudinary.com/documentation/admin_api#get_a_metadata_field_by_external_id
+// The external ID is immutable. Therefore, once deleted, the field's external ID can no longer be used for future purposes.
+//
+// https://cloudinary.com/documentation/admin_api#delete_a_metadata_field_by_external_id
 func (a *Api) DeleteMetadataField(ctx context.Context, params DeleteMetadataFieldParams) (*DeleteMetadataFieldResult, error) {
 	res := &DeleteMetadataFieldResult{}
 	_, err := a.delete(ctx, api.BuildPath(MetadataFields, params.FieldExternalId), params, res)
@@ -105,7 +115,7 @@ type DeleteDataSourceEntriesParams struct {
 	EntriesExternalIDs []string `json:"external_ids"`
 }
 
-// Deletes entries in a metadata single or multi-select field's datasource.
+// DeleteDataSourceEntries deletes entries in a metadata single or multi-select field's datasource.
 //
 // Deletes (blocks) the datasource (list) entries from the specified metadata field definition. Sets the state of
 // the entries to inactive. This is a soft delete. The entries still exist in the database and can be reactivated
@@ -130,7 +140,7 @@ type UpdateMetadataFieldDataSourceParams struct {
 	FieldExternalId string `json:"-"`
 }
 
-// Updates a metadata field datasource.
+// UpdateMetadataFieldDataSource updates a metadata field datasource.
 //
 // Updates the datasource of a supported field type (currently enum or set), passed as JSON data. The
 // update is partial: datasource entries with an existing external_id will be updated and entries with new
@@ -155,7 +165,7 @@ type RestoreDatasourceEntriesParams struct {
 	EntriesExternalIDs []string `json:"external_ids"`
 }
 
-// Restore entries in a metadata field datasource.
+// RestoreDatasourceEntries restores entries in a metadata field datasource.
 //
 // Restores (unblocks) any previously deleted datasource entries for a specified metadata field definition.
 // Sets the state of the entries to active.

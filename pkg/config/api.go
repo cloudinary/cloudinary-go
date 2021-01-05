@@ -1,8 +1,7 @@
 package config
 
-// Api Configuration struct
+// Api defines the configuration when making requests to the Cloudinary API.
 type Api struct {
 	UploadPrefix string `default:"https://api.cloudinary.com"`
-	Timeout      int    `default:"60"`
-	// TODO: add the rest
+	Timeout      int64  `default:"60"` // seconds
 }

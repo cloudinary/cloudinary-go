@@ -22,7 +22,13 @@ type DestroyParams struct {
 	Invalidate   bool   `json:"invalidate,omitempty"`
 }
 
-// Immediately and permanently deletes a single asset from your Cloudinary account.
+// Destroy immediately and permanently deletes a single asset from your Cloudinary account.
+//
+// Backed up assets are not deleted, and any assets and transformed assets already downloaded by visitors to your
+// website might still be accessible through cached copies on the CDN. You can invalidate any cached copies on the
+// CDN with the `Invalidate` parameter.
+//
+// https://cloudinary.com/documentation/image_upload_api_reference#destroy_method
 func (u *Api) Destroy(ctx context.Context, params DestroyParams) (*DestroyResult, error) {
 	res := &DestroyResult{}
 	err := u.callUploadApi(ctx, Destroy, params, res)
@@ -47,7 +53,13 @@ type RenameParams struct {
 	Invalidate   bool   `json:"invalidate,omitempty"`
 }
 
-// Renames the specified asset in your Cloudinary account.
+// Rename renames the specified asset in your Cloudinary account.
+//
+// The existing URLs of renamed assets and their associated derived resources are no longer valid, although any
+// assets and transformed assets already downloaded by visitors to your website might still be accessible through
+// cached copies on the CDN. You can invalidate any cached copies on the CDN with the `invalidate` parameter.
+//
+// https://cloudinary.com/documentation/image_upload_api_reference#rename_method
 func (u *Api) Rename(ctx context.Context, params RenameParams) (*RenameResult, error) {
 	res := &RenameResult{}
 	err := u.callUploadApi(ctx, Rename, params, res)
@@ -62,7 +74,9 @@ type RenameResult struct {
 
 type ExplicitParams = UploadParams
 
-// Applies actions to already uploaded assets.
+// Explicit applies actions to already uploaded assets.
+//
+// https://cloudinary.com/documentation/image_upload_api_reference#explicit_method
 func (u *Api) Explicit(ctx context.Context, params ExplicitParams) (*ExplicitResult, error) {
 	res := &ExplicitResult{}
 	err := u.callUploadApi(ctx, Explicit, params, res)
@@ -81,7 +95,7 @@ type UpdateMetadataParams struct {
 	Type      string          `json:"type,omitempty"`
 }
 
-// Populates metadata fields with the given values. Existing values will be overwritten.
+// UpdateMetadata populates metadata fields with the given values. Existing values will be overwritten.
 //
 // Any metadata-value pairs given are merged with any existing metadata-value pairs
 // (an empty value for an existing metadata field clears the value).

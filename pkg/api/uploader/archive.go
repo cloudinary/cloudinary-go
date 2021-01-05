@@ -27,7 +27,7 @@ const (
 	DownloadArchive ArchiveMode = "download"
 )
 
-// GenerateSpriteParams struct
+// CreateArchiveParams struct
 type CreateArchiveParams struct {
 	AllowMissing            bool             `json:"allow_mising,omitempty"`
 	Async                   bool             `json:"async,omitempty"`
@@ -52,7 +52,7 @@ type CreateArchiveParams struct {
 	UseOriginalFilename     bool             `json:"use_original_filename,omitempty"`
 }
 
-// Creates a new archive in the server and returns information in JSON format.
+// CreateArchive creates a new archive in the server and returns information in JSON format.
 func (u *Api) CreateArchive(ctx context.Context, params CreateArchiveParams) (*CreateArchiveResult, error) {
 	res := &CreateArchiveResult{}
 	err := u.callUploadApi(ctx, GenerateArchive, params, res)
@@ -82,14 +82,14 @@ type CreateArchiveResult struct {
 	Response      http.Response
 }
 
-// Creates a new zip archive in the server and returns information in JSON format.
+// CreateZip creates a new zip archive in the server and returns information in JSON format.
 func (u *Api) CreateZip(ctx context.Context, params CreateArchiveParams) (*CreateArchiveResult, error) {
 	params.TargetFormat = Zip
 
 	return u.CreateArchive(ctx, params)
 }
 
-// Returns a URL that when invoked creates an archive and returns it.
+// DownloadArchiveUrl creates a URL that when invoked generates an archive and returns it.
 func (u *Api) DownloadArchiveUrl(params CreateArchiveParams) (string, error) {
 	params.Mode = DownloadArchive
 
@@ -116,14 +116,14 @@ func (u *Api) DownloadArchiveUrl(params CreateArchiveParams) (string, error) {
 	return urlStruct.String(), nil
 }
 
-// Returns a URL that when invokes creates a zip archive and returns it.
+// DownloadZipUrl creates a URL that when invokes generates a zip archive and returns it.
 func (u *Api) DownloadZipUrl(params CreateArchiveParams) (string, error) {
 	params.TargetFormat = Zip
 
 	return u.DownloadArchiveUrl(params)
 }
 
-// Creates and returns a URL that when invoked creates an archive of a folder.
+// DownloadFolder creates a URL that when invoked generates an archive of a folder.
 func (u *Api) DownloadFolder(folderPath string, params CreateArchiveParams) (string, error) {
 	params.Prefixes = api.CldApiArray{folderPath}
 	if len(params.ResourceType) == 0 {
@@ -138,7 +138,8 @@ type DownloadABackedUpAssetParams struct {
 	VersionID string `json:"version_id,omitempty"`
 }
 
-// The returned url allows downloading the backed-up asset based on the the asset ID and the version ID.
+// DownloadBackedUpAsset creates a URL that  allows downloading the backed-up asset
+// based on the asset ID and the version ID.
 func (u *Api) DownloadBackedUpAsset(params DownloadABackedUpAssetParams) (string, error) {
 	queryParams, err := api.StructToParams(params)
 	if err != nil {

@@ -1,6 +1,6 @@
-//Enables Cloudinary Admin API functionality.
+// Package admin is used for accessing Cloudinary Admin API functionality.
 //
-//https://cloudinary.com/documentation/admin_api
+// https://cloudinary.com/documentation/admin_api
 package admin
 
 import (
@@ -20,7 +20,7 @@ type Api struct {
 	client http.Client
 }
 
-// Creates a new Api instance from the environment variable (CLOUDINARY_URL).
+// Create creates a new Admin Api instance from the environment variable (CLOUDINARY_URL).
 func Create() (*Api, error) {
 	c, err := config.Create()
 	if err != nil {
@@ -59,7 +59,7 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 		body = bytes.NewBuffer(jsonReq)
 	}
 	req, err := http.NewRequest(method,
-		fmt.Sprintf("%v/%v/%v", api.BaseUrl, a.Config.Account.CloudName, api.BuildPath(path)),
+		fmt.Sprintf("%v/%v/%v", api.BaseUrl(a.Config.Api.UploadPrefix), a.Config.Account.CloudName, api.BuildPath(path)),
 		body,
 	)
 	if err != nil {
@@ -94,7 +94,7 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 
-	println(string(bodyBytes))
+	//log.println(string(bodyBytes)) FIXME: find a good logger
 
 	err = json.Unmarshal(bodyBytes, result)
 

@@ -1,5 +1,9 @@
 package admin
 
+// Enables you to manage the assets in your account or cloud.
+//
+// https://cloudinary.com/documentation/admin_api#resources
+
 import (
 	"cloudinary-labs/cloudinary-go/pkg/api"
 	"context"
@@ -137,6 +141,12 @@ type UpdateAssetParams struct {
 	AccessControl     interface{}          `json:"access_control,omitempty"`
 }
 
+// UpdateAsset updates details of an existing asset.
+//
+// Updates one or more of the attributes associated with a specified asset. Note that you can also update
+// most attributes of an existing asset using the uploader.Explicit method, which is not rate limited.
+//
+// https://cloudinary.com/documentation/admin_api#update_details_of_an_existing_resource
 func (a *Api) UpdateAsset(ctx context.Context, params UpdateAssetParams) (*AssetResult, error) {
 	res := &AssetResult{}
 	_, err := a.post(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType,
