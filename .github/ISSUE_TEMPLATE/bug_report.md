@@ -21,12 +21,15 @@ Before proceeding, please update to the latest version and test if the issue per
 - [ ] Other (Specify)
 
 ## Steps to reproduce
+
 … if applicable
 
 ## Error screenshots
+
 … if applicable
 
 ## OS (if issue relates to UI, else ignore)
+
 - [ ] Linux
 - [ ] Windows
 - [ ] macOS
@@ -34,9 +37,12 @@ Before proceeding, please update to the latest version and test if the issue per
 - [ ] All
 
 ## Versions and Libraries (fill in the version numbers)
+
 - Cloudinary Go SDK Version - 0.0.0
 - GoLang Version - 0.0.0
+
 ## Config Files (Please paste the following files if possible)
 
 ## Repository
+
 If possible, please provide a link to a reproducible repository that showcases the problem

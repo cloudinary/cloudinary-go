@@ -1,4 +1,4 @@
-module cloudinary/cloudinary-go
+module github.com/cloudinary/cloudinary-go
 
 go 1.15
 

@@ -1,4 +1,4 @@
 0.1.0 / 2021-01-04
 ========================
 
- * The first public beta
+  * The first public beta
