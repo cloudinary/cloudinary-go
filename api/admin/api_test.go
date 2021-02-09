@@ -9,7 +9,7 @@ import (
 )
 
 var ctx = context.Background()
-var adminApi, _ = Create()
+var adminApi, _ = New()
 
 var testSuffix = getTestSuffix()
 

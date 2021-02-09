@@ -1,9 +1,10 @@
 package admin
 
 import (
+	"testing"
+
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
-	"testing"
 )
 
 const UPName = "go-upload-preset"

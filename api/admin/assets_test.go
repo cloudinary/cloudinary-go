@@ -1,8 +1,9 @@
 package admin
 
 import (
-	"github.com/cloudinary/cloudinary-go/api"
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api"
 )
 
 func TestAssets_AssetTypes(t *testing.T) {

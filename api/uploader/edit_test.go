@@ -1,8 +1,9 @@
 package uploader
 
 import (
-	"github.com/cloudinary/cloudinary-go/api"
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api"
 )
 
 func TestUploader_Explicit(t *testing.T) {

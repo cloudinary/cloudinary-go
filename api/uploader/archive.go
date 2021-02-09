@@ -2,10 +2,11 @@ package uploader
 
 import (
 	"context"
-	"github.com/cloudinary/cloudinary-go/api"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/api"
 )
 
 const (

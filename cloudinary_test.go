@@ -2,15 +2,16 @@ package cloudinary
 
 import (
 	"context"
-	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api/uploader"
 )
 
-var c, _ = Create()
+var c, _ = New()
 var ctx = context.Background()
 
 func TestCloudinary_CreateInstance(t *testing.T) {
-	c, _ := Create()
+	c, _ := New()
 
 	if c.Config.Account.CloudName == "" {
 		t.Error("Please set up CLOUDINARY_URL environment variable to run the test.")

@@ -1,10 +1,11 @@
 package admin
 
 import (
-	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
 	"log"
 	"testing"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
 )
 
 var metadataField = metadata.Field{

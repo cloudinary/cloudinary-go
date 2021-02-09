@@ -3,13 +3,14 @@ package uploader
 import (
 	"context"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/api"
 	"os"
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api"
 )
 
 var ctx = context.Background()
-var uploadApi, _ = Create()
+var uploadApi, _ = New()
 
 const LogoUrl = "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png"
 const LogoFilePath = "testdata/cloudinary_logo.png"

@@ -13,9 +13,9 @@ type Cloudinary struct {
 	Upload uploader.Api
 }
 
-// Create returns a new Cloudinary instance from environment variable.
-func Create() (*Cloudinary, error) {
-	c, err := config.Create()
+// New returns a new Cloudinary instance from environment variable.
+func New() (*Cloudinary, error) {
+	c, err := config.New()
 	if err != nil {
 		return nil, err
 	}

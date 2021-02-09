@@ -2,9 +2,10 @@
 package config
 
 import (
-	"github.com/creasty/defaults"
 	"net/url"
 	"os"
+
+	"github.com/creasty/defaults"
 )
 
 // Configuration is the main configuration struct.
@@ -13,8 +14,8 @@ type Configuration struct {
 	Api     Api
 }
 
-// Create returns a new Configuration instance from the environment variable
-func Create() (*Configuration, error) {
+// New returns a new Configuration instance from the environment variable
+func New() (*Configuration, error) {
 	return CreateFromUrl(os.Getenv("CLOUDINARY_URL"))
 }
 
