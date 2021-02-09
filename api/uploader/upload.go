@@ -11,9 +11,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/config"
-	"github.com/google/uuid"
 	"io"
 	"io/ioutil"
 	"mime/multipart"
@@ -23,11 +20,18 @@ import (
 	"reflect"
 	"strconv"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/config"
+	"github.com/google/uuid"
+
+	"github.com/cloudinary/cloudinary-go/logger"
 )
 
 // API is the Upload API main struct.
 type API struct {
 	Config config.Configuration
+	Logger *logger.Logger
 	client http.Client
 }
 
@@ -40,6 +44,7 @@ func New() (*API, error) {
 	return &API{
 		Config: *c,
 		client: http.Client{},
+		Logger: logger.New(),
 	}, nil
 }
 
@@ -58,7 +63,7 @@ func (u *API) callUploadAPIWithParams(ctx context.Context, path string, formPara
 		return err
 	}
 
-	// log.Println(string(resp)) //FIXME: find a good logger
+	u.Logger.Debug(string(resp))
 
 	err = json.Unmarshal(resp, result)
 

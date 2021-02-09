@@ -4,6 +4,7 @@ import (
 	"github.com/cloudinary/cloudinary-go/api/admin"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/cloudinary/cloudinary-go/config"
+	"github.com/cloudinary/cloudinary-go/logger"
 )
 
 // Cloudinary main struct
@@ -11,6 +12,7 @@ type Cloudinary struct {
 	Config config.Configuration
 	Admin  admin.API
 	Upload uploader.API
+	Logger *logger.Logger
 }
 
 // New returns a new Cloudinary instance from environment variable.
@@ -19,6 +21,7 @@ func New() (*Cloudinary, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return NewFromConfiguration(*c)
 }
 
@@ -42,13 +45,18 @@ func NewFromParams(cloud string, key string, secret string) (*Cloudinary, error)
 
 // NewFromConfiguration returns a new Cloudinary instance from the provided configuration.
 func NewFromConfiguration(configuration config.Configuration) (*Cloudinary, error) {
+	logger := logger.New()
+
 	return &Cloudinary{
 		Config: configuration,
 		Admin: admin.API{
 			Config: configuration,
+			Logger: logger,
 		},
 		Upload: uploader.API{
 			Config: configuration,
+			Logger: logger,
 		},
+		Logger: logger,
 	}, nil
 }

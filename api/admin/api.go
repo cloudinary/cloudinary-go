@@ -15,11 +15,13 @@ import (
 
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/config"
+	"github.com/cloudinary/cloudinary-go/logger"
 )
 
 // API is the Admin API struct.
 type API struct {
 	Config config.Configuration
+	Logger *logger.Logger
 	client http.Client
 }
 
@@ -32,6 +34,7 @@ func New() (*API, error) {
 	return &API{
 		Config: *c,
 		client: http.Client{},
+		Logger: logger.New(),
 	}, nil
 }
 
@@ -67,6 +70,7 @@ func (a *API) callAPI(ctx context.Context, method string, path interface{}, requ
 		body,
 	)
 	if err != nil {
+		a.Logger.Error(err)
 		return nil, err
 	}
 
@@ -100,7 +104,7 @@ func (a *API) callAPI(ctx context.Context, method string, path interface{}, requ
 		return nil, err
 	}
 
-	//log.println(string(bodyBytes)) FIXME: find a good logger
+	a.Logger.Debug(string(bodyBytes))
 
 	err = json.Unmarshal(bodyBytes, result)
 

@@ -54,6 +54,66 @@ To update the Cloudinary Go SDK to the latest version, use the `go get` command 
 go get -u github.com/cloudinary/cloudinary-go
 ```
 
+### Logging
+
+Default logger in Cloudinary Go SDK is `go log`. If you want to change error level to enable debug messages you could use `cloudinary.Logger.SetLevel`: 
+```go
+cloudinary.Logger.SetLevel(logger.DEBUG)
+```
+
+#### Using logrus with SDK
+```go
+package main
+
+import (
+	"github.com/cloudinary/cloudinary-go"
+	"github.com/sirupsen/logrus"
+	"log"
+)
+
+func main() {
+	// Start by creating a new instance of Cloudinary using CLOUDINARY_URL environment variable.
+	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromURL().
+	var cld, err = cloudinary.New()
+	if err != nil {
+		log.Fatalf("Failed to intialize Cloudinary, %v", err)
+	}
+
+	// Initialize your logger somewhere in your code.
+	// Set cloudinary.Logger.ErrorLogger and cloudinary.Logger.DebugLogger fields with logrus functions
+	var logger = logrus.New()
+	cld.Logger.ErrorLogger = logger.WithField("source", "cloudinary").Errorln
+	cld.Logger.DebugLogger = logger.WithField("source", "cloudinary").Debugln
+}
+```
+
+#### Using Zap with SDK
+```go
+package main
+
+import (
+	"github.com/cloudinary/cloudinary-go"
+	"github.com/sirupsen/logrus"
+	"log"
+)
+
+func main() {
+	// Start by creating a new instance of Cloudinary using CLOUDINARY_URL environment variable.
+	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromURL().
+	var cld, err = cloudinary.New()
+	if err != nil {
+		log.Fatalf("Failed to intialize Cloudinary, %v", err)
+	}
+
+	// Initialize your logger somewhere in your code.
+	// Set cloudinary.Logger.ErrorLogger and cloudinary.Logger.DebugLogger fields with zap sugared logger functions
+	var zapLogger, _ = zap.NewDevelopment()
+	var zapSugared = zapLogger.Sugar()
+
+	logger.ErrorLogger = zapSugared.With("source", "cloudinary").Error
+	logger.DebugLogger = zapSugared.With("source", "cloudinary").Debug
+}
+```
 
 ## Usage
 
