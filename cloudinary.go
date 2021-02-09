@@ -52,3 +52,17 @@ func CreateFromConfiguration(configuration config.Configuration) (*Cloudinary, e
 		},
 	}, nil
 }
+
+// SetDebugLogger set debug logging function
+func (c *Cloudinary) SetDebugLogger(logger config.Logger) {
+	c.Config.DebugLog = logger
+	c.Admin.Config.DebugLog = logger
+	c.Upload.Config.DebugLog = logger
+}
+
+// SetErrorLogger set error logging function
+func (c *Cloudinary) SetErrorLogger(logger config.Logger) {
+	c.Config.ErrorLog = logger
+	c.Admin.Config.ErrorLog = logger
+	c.Upload.Config.ErrorLog = logger
+}

@@ -2,15 +2,22 @@
 package config
 
 import (
-	"github.com/creasty/defaults"
+	"log"
 	"net/url"
 	"os"
+
+	"github.com/creasty/defaults"
 )
+
+// Logger cloudinary logger
+type Logger func(...interface{})
 
 // Configuration is the main configuration struct.
 type Configuration struct {
-	Account Account
-	Api     Api
+	Account  Account
+	Api      Api
+	DebugLog Logger
+	ErrorLog Logger
 }
 
 // Create returns a new Configuration instance from the environment variable
@@ -44,6 +51,9 @@ func CreateFromParams(cloud string, key string, secret string) (*Configuration, 
 	if err := defaults.Set(conf); err != nil {
 		return nil, err
 	}
+
+	conf.DebugLog = log.Println
+	conf.ErrorLog = log.Println
 
 	return conf, nil
 }

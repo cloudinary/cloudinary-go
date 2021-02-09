@@ -8,11 +8,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/config"
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/config"
 )
 
 type Api struct {
@@ -63,6 +64,7 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 		body,
 	)
 	if err != nil {
+		a.Config.ErrorLog(err)
 		return nil, err
 	}
 
