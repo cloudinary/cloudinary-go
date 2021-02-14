@@ -1,8 +1,9 @@
 package admin
 
 import (
-	"github.com/cloudinary/cloudinary-go/transformation"
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/transformation"
 )
 
 const TName = "go_transformation"

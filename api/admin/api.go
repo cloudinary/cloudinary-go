@@ -8,11 +8,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/config"
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/config"
 )
 
 type Api struct {
@@ -20,9 +21,9 @@ type Api struct {
 	client http.Client
 }
 
-// Create creates a new Admin Api instance from the environment variable (CLOUDINARY_URL).
-func Create() (*Api, error) {
-	c, err := config.Create()
+// New creates a new Admin Api instance from the environment variable (CLOUDINARY_URL).
+func New() (*Api, error) {
+	c, err := config.New()
 	if err != nil {
 		return nil, err
 	}

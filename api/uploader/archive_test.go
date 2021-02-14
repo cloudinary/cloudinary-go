@@ -1,11 +1,12 @@
 package uploader
 
 import (
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/stretchr/testify/assert"
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/stretchr/testify/assert"
 )
 
 const folder = "go-folder"
