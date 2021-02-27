@@ -14,8 +14,9 @@ package admin
 // https://cloudinary.com/documentation/search_api
 import (
 	"context"
-	"github.com/cloudinary/cloudinary-go/api"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/api"
 )
 
 const SearchEndPoint api.EndPoint = "resources/search"

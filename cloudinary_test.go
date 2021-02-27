@@ -2,27 +2,28 @@ package cloudinary
 
 import (
 	"context"
-	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api/uploader"
 )
 
-var c, _ = Create()
+var c, _ = New()
 var ctx = context.Background()
 
 func TestCloudinary_CreateInstance(t *testing.T) {
-	c, _ := Create()
+	c, _ := New()
 
 	if c.Config.Account.CloudName == "" {
 		t.Error("Please set up CLOUDINARY_URL environment variable to run the test.")
 	}
 
-	c, _ = CreateFromUrl("cloudinary://key:secret@test123")
+	c, _ = NewFromUrl("cloudinary://key:secret@test123")
 
 	if c.Config.Account.CloudName != "test123" {
 		t.Error("Failed creating Cloudinary instance from Cloudinary URL.")
 	}
 
-	c, _ = CreateFromParams("test123", "key", "secret")
+	c, _ = NewFromParams("test123", "key", "secret")
 
 	if c.Config.Account.CloudName != "test123" {
 		t.Error("Failed creating Cloudinary instance from parameters.")

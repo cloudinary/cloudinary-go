@@ -36,7 +36,7 @@ using the CLOUDINARY_URL environment variable / system property.
 
 The entry point of the library is the Cloudinary struct.
 
-    cld, _ := cloudinary.Create()
+    cld, _ := cloudinary.New()
 
 Here's an example of setting the configuration parameters programatically:
 

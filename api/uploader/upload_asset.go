@@ -3,8 +3,9 @@ package uploader
 import (
 	"context"
 	"encoding/json"
-	"github.com/cloudinary/cloudinary-go/api"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/api"
 )
 
 // UploadParams struct
