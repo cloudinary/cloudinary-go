@@ -132,6 +132,28 @@ func TestAdmin_RestoreMetadataFieldDataSource(t *testing.T) {
 	}
 }
 
+func TestAdmin_SortMetadataFieldsDatasource(t *testing.T) {
+	resp, err := adminAPI.SortMetadataFieldDatasource(ctx, admin.SortMetadataFieldDatasourceParams{FieldExternalId: metadataField.ExternalID, FieldSortBy: "value", FieldDirection: admin.Ascending})
+
+	if err != nil {
+		t.Error(err, resp)
+	}
+
+	if resp.Values[0].Value != dataSource2.Values[0].Value {
+		t.Error("Wrong response. Metadata fields should be sorted in ascending order")
+	}
+
+	resp, err = adminAPI.SortMetadataFieldDatasource(ctx, admin.SortMetadataFieldDatasourceParams{FieldExternalId: metadataField.ExternalID, FieldSortBy: "value", FieldDirection: admin.Descending})
+
+	if err != nil {
+		t.Error(err, resp)
+	}
+
+	if resp.Values[0].Value != dataSource2.Values[1].Value {
+		t.Error("Wrong response. Metadata fields should be sorted in descending order")
+	}
+}
+
 func TestAdmin_DeleteMetadataField(t *testing.T) {
 	resp, err := adminAPI.DeleteMetadataField(ctx, admin.DeleteMetadataFieldParams{FieldExternalID: metadataField.ExternalID})
 

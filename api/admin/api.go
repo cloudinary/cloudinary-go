@@ -25,6 +25,16 @@ type API struct {
 	client http.Client
 }
 
+// Direction is the sorting direction.
+type Direction string
+
+const (
+	// Ascending direction.
+	Ascending Direction = "asc"
+	// Descending direction.
+	Descending = "desc"
+)
+
 // New creates a new Admin API instance from the environment variable (CLOUDINARY_URL).
 func New() (*API, error) {
 	c, err := config.New()

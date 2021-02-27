@@ -12,6 +12,7 @@ const (
 	metadataFields    api.EndPoint = "metadata_fields"
 	dataSource        api.EndPoint = "datasource"
 	dataSourceRestore api.EndPoint = "datasource_restore"
+	sort              api.EndPoint = "sort"
 )
 
 // ListMetadataFields lists all metadata field definitions.
@@ -194,6 +195,26 @@ func (a *API) RestoreDatasourceEntries(ctx context.Context, params RestoreDataso
 
 // RestoreDatasourceEntriesResult is the result of RestoreDatasourceEntries.
 type RestoreDatasourceEntriesResult struct {
+	metadata.DataSource
+	Error    api.ErrorResp `json:"error,omitempty"`
+	Response interface{}
+}
+
+type SortMetadataFieldDatasourceParams struct {
+	FieldExternalId string    `json:"-"`
+	FieldSortBy     string    `json:"sort_by"`
+	FieldDirection  Direction `json:"direction,omitempty"`
+}
+
+// SortMetadataFieldDatasource sorts metadata fields datasource. Currently supports only value.
+func (a *API) SortMetadataFieldDatasource(ctx context.Context, params SortMetadataFieldDatasourceParams) (*SortMetadataFieldDatasourceResult, error) {
+	res := &SortMetadataFieldDatasourceResult{}
+	_, err := a.post(ctx, api.BuildPath(metadataFields, params.FieldExternalId, dataSource, sort), params, res)
+
+	return res, err
+}
+
+type SortMetadataFieldDatasourceResult struct {
 	metadata.DataSource
 	Error    api.ErrorResp `json:"error,omitempty"`
 	Response interface{}
