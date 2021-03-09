@@ -187,11 +187,6 @@ func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 
 	resp, err := u.client.Do(req)
 	if err != nil {
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		default:
-		}
 		return nil, err
 	}
 
