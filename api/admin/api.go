@@ -11,6 +11,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/config"
@@ -52,6 +53,7 @@ func (a *Api) delete(ctx context.Context, path interface{}, requestParams interf
 func (a *Api) callApi(ctx context.Context, method string, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 
+	// Populate body for POST/PUT/DELETE
 	if method == http.MethodPost || method == http.MethodPut || method == http.MethodDelete {
 		jsonReq, err := json.Marshal(requestParams)
 		if err != nil {
@@ -67,6 +69,7 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 		return nil, err
 	}
 
+	// Handle GET request query parameters
 	if body == nil {
 		params, err := api.StructToParams(requestParams)
 		if err != nil {
@@ -79,15 +82,13 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.SetBasicAuth(a.Config.Cloud.ApiKey, a.Config.Cloud.ApiSecret)
 
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(a.Config.Api.Timeout)*time.Second)
+	defer cancel()
+
 	req = req.WithContext(ctx)
 
 	resp, err := a.client.Do(req)
 	if err != nil {
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		default:
-		}
 		return nil, err
 	}
 
