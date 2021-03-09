@@ -180,7 +180,7 @@ func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 		req.Header.Add(key, val)
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, u.Config.Api.Timeout*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(u.Config.Api.Timeout)*time.Second)
 	defer cancel()
 
 	req = req.WithContext(ctx)
