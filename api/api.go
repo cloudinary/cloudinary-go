@@ -198,7 +198,7 @@ func StructToParams(inputStruct interface{}) (url.Values, error) {
 
 		res := string(resBytes)
 		if strings.HasPrefix(res, "\"") { // FIXME: Fix this dirty hack that prevents double quoting of strings
-			res, _ = strconv.Unquote(string(res))
+			res, _ = strconv.Unquote(res)
 		}
 
 		params.Add(paramName, res)

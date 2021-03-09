@@ -92,6 +92,16 @@ func (u *Api) Upload(ctx context.Context, file interface{}, uploadParams UploadP
 	return upload, nil
 }
 
+type Eager struct {
+	Transformation string `json:"transformation"`
+	Width          int    `json:"width"`
+	Height         int    `json:"height"`
+	Bytes          int    `json:"bytes"`
+	Format         string `json:"format"`
+	URL            string `json:"url"`
+	SecureURL      string `json:"secure_url"`
+}
+
 // UploadResult image success response struct
 type UploadResult struct {
 	AssetID          string          `json:"asset_id"`
@@ -117,6 +127,7 @@ type UploadResult struct {
 	Metadata         api.Metadata    `json:"metadata,omitempty"`
 	Overwritten      bool            `json:"overwritten"`
 	OriginalFilename string          `json:"original_filename"`
+	Eager            []Eager         `json:"eager"`
 	Error            api.ErrorResp   `json:"error,omitempty"`
 }
 
