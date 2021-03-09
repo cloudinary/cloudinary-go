@@ -35,17 +35,17 @@ Setting the `CloudName`, `ApiKey` and `ApiSecret` parameters can be done by init
 using the CLOUDINARY_URL environment variable / system property.
 
 The entry point of the library is the Cloudinary struct.
-
+```go
     cld, _ := cloudinary.New()
-
+```
 Here's an example of setting the configuration parameters programatically:
-
-    cld, _ := cloudinary.CreateFromParams('n07t21i7','123456789012345', 'abcdeghijklmnopqrstuvwxyz12')
-
+```go
+cld, _ := cloudinary.NewFromParams('n07t21i7','123456789012345', 'abcdeghijklmnopqrstuvwxyz12')
+```
 Another example of setting the configuration parameters by providing the CLOUDINARY_URL value:
-
-    cld, _ := cloudinary.CreateFromUrl('cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7')
-
+```go
+cld, _ := cloudinary.NewFromUrl('cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7')
+```
 ### Upload
 
 Assuming you have your Cloudinary configuration parameters defined (`CloudName`, `ApiKey`, `ApiSecret`), uploading to
@@ -53,25 +53,25 @@ Cloudinary is very simple.
 
 The following example uploads a local JPG to the cloud:
 
-```
+```go
 resp, err := cld.Upload.Upload(ctx, "my_picture.jpg", uploader.UploadParams{});
 ```
 
 The uploaded image is assigned a randomly generated public ID. The image is immediately available for a download through
 a CDN:
 
-```
-println(resp.SecureURL)
+```go
+log.Println(resp.SecureURL)
 
 // https://res.cloudinary.com/demo/image/upload/abcfrmo8zul1mafopawefg.jpg
 ```
 
 You can also specify your own public ID:
 
-```
+```go
 resp, err := cld.Upload.Upload(ctx, "my_picture.jpg", uploader.UploadParams{PublicID: "sample_remote.jpg"});
 if err != nil {...}
-println(resp.SecureURL)
+log.Println(resp.SecureURL)
 
 // https://res.cloudinary.com/demo/image/upload/sample_remote.jpg
 ```
