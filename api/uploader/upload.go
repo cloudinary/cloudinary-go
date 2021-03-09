@@ -74,16 +74,16 @@ func (u *Api) postAndSignForm(ctx context.Context, urlPath string, formParams ur
 }
 
 func (u *Api) signRequest(requestParams url.Values) (url.Values, error) {
-	if u.Config.Account.ApiSecret == "" {
+	if u.Config.Cloud.ApiSecret == "" {
 		return nil, errors.New("must provide Api Secret")
 	}
 
-	signature, err := api.SignParameters(requestParams, u.Config.Account.ApiSecret)
+	signature, err := api.SignParameters(requestParams, u.Config.Cloud.ApiSecret)
 	if err != nil {
 		return nil, err
 	}
 	requestParams.Add("signature", signature)
-	requestParams.Add("api_key", u.Config.Account.ApiKey)
+	requestParams.Add("api_key", u.Config.Cloud.ApiKey)
 
 	return requestParams, nil
 }
@@ -180,7 +180,7 @@ func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 		req.Header.Add(key, val)
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(u.Config.Api.Timeout)*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, u.Config.Api.Timeout*time.Second)
 	defer cancel()
 
 	req = req.WithContext(ctx)
@@ -201,7 +201,7 @@ func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 }
 
 func (u *Api) getUploadURL(urlPath interface{}) string {
-	return fmt.Sprintf("%v/%v/%v", api.BaseUrl(u.Config.Api.UploadPrefix), u.Config.Account.CloudName, api.BuildPath(urlPath))
+	return fmt.Sprintf("%v/%v/%v", api.BaseUrl(u.Config.Api.UploadPrefix), u.Config.Cloud.CloudName, api.BuildPath(urlPath))
 }
 
 func getAssetType(requestParams interface{}) string {

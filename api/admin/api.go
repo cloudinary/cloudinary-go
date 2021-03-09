@@ -60,7 +60,7 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 		body = bytes.NewBuffer(jsonReq)
 	}
 	req, err := http.NewRequest(method,
-		fmt.Sprintf("%v/%v/%v", api.BaseUrl(a.Config.Api.UploadPrefix), a.Config.Account.CloudName, api.BuildPath(path)),
+		fmt.Sprintf("%v/%v/%v", api.BaseUrl(a.Config.Api.UploadPrefix), a.Config.Cloud.CloudName, api.BuildPath(path)),
 		body,
 	)
 	if err != nil {
@@ -77,7 +77,7 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 
 	req.Header.Set("User-Agent", api.UserAgent)
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	req.SetBasicAuth(a.Config.Account.ApiKey, a.Config.Account.ApiSecret)
+	req.SetBasicAuth(a.Config.Cloud.ApiKey, a.Config.Cloud.ApiSecret)
 
 	req = req.WithContext(ctx)
 

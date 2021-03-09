@@ -13,19 +13,19 @@ var ctx = context.Background()
 func TestCloudinary_CreateInstance(t *testing.T) {
 	c, _ := New()
 
-	if c.Config.Account.CloudName == "" {
+	if c.Config.Cloud.CloudName == "" {
 		t.Error("Please set up CLOUDINARY_URL environment variable to run the test.")
 	}
 
 	c, _ = NewFromUrl("cloudinary://key:secret@test123")
 
-	if c.Config.Account.CloudName != "test123" {
+	if c.Config.Cloud.CloudName != "test123" {
 		t.Error("Failed creating Cloudinary instance from Cloudinary URL.")
 	}
 
 	c, _ = NewFromParams("test123", "key", "secret")
 
-	if c.Config.Account.CloudName != "test123" {
+	if c.Config.Cloud.CloudName != "test123" {
 		t.Error("Failed creating Cloudinary instance from parameters.")
 	}
 }

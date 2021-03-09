@@ -10,8 +10,8 @@ import (
 
 // Configuration is the main configuration struct.
 type Configuration struct {
-	Account Account
-	Api     Api
+	Cloud Cloud
+	Api   Api
 }
 
 // New returns a new Configuration instance from the environment variable
@@ -34,7 +34,7 @@ func NewFromUrl(cldUrlStr string) (*Configuration, error) {
 // NewFromParams returns a new Configuration instance from the provided parameters.
 func NewFromParams(cloud string, key string, secret string) (*Configuration, error) {
 	conf := &Configuration{
-		Account: Account{
+		Cloud: Cloud{
 			CloudName: cloud,
 			ApiKey:    key,
 			ApiSecret: secret,
