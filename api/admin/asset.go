@@ -150,8 +150,7 @@ type UpdateAssetParams struct {
 // https://cloudinary.com/documentation/admin_api#update_details_of_an_existing_resource
 func (a *Api) UpdateAsset(ctx context.Context, params UpdateAssetParams) (*AssetResult, error) {
 	res := &AssetResult{}
-	_, err := a.post(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType,
-		params.PublicID), params, res)
+	_, err := a.post(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType, params.PublicID), params, res)
 
 	return res, err
 }

@@ -14,7 +14,7 @@ const (
 	DownloadBackup  api.EndPoint = "download_backup"
 )
 
-type ArchiveFormat string
+type ArchiveFormat = string
 
 const (
 	Zip ArchiveFormat = "zip"
@@ -30,7 +30,7 @@ const (
 
 // CreateArchiveParams struct
 type CreateArchiveParams struct {
-	AllowMissing            bool             `json:"allow_mising,omitempty"`
+	AllowMissing            bool             `json:"allow_missing,omitempty"`
 	Async                   bool             `json:"async,omitempty"`
 	ExpiresAt               *time.Time       `json:"expires_at,omitempty"`
 	FlattenFolders          bool             `json:"flatten_folders,omitempty"`

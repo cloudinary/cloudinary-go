@@ -71,9 +71,9 @@ type StreamingProfileRepresentation struct {
 type StreamingProfileRepresentations []RawStreamingProfileRepresentation
 
 // Server expects to get a string of a json encoded array
-func (sprs StreamingProfileRepresentations) MarshalJSON() ([]byte, error) {
-	sprsa := ([]RawStreamingProfileRepresentation)(sprs)
-	paramsJsonObj, _ := json.Marshal(sprsa)
+func (spRepresentations StreamingProfileRepresentations) MarshalJSON() ([]byte, error) {
+	spRepresentationsArray := ([]RawStreamingProfileRepresentation)(spRepresentations)
+	paramsJsonObj, _ := json.Marshal(spRepresentationsArray)
 
 	return []byte(strconv.Quote(string(paramsJsonObj))), nil
 }

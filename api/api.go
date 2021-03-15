@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-type EndPoint string
+type EndPoint = string
 
 const Version = "0.2.0"
 
@@ -35,13 +35,10 @@ type AssetType string
 
 func (a AssetType) String() string {
 	if a == "" {
-		a = Image
+		return string(Image)
 	}
-	return string(a)
-}
 
-func (e EndPoint) String() string {
-	return string(e)
+	return string(a)
 }
 
 const (
@@ -56,8 +53,9 @@ type DeliveryType string
 
 func (d DeliveryType) String() string {
 	if d == "" {
-		d = Upload
+		return string(Upload)
 	}
+
 	return string(d)
 }
 
@@ -94,8 +92,10 @@ const (
 type Option map[string]interface{}
 
 type Coordinates [][]int
+// CldApiArray is not just an alias, in addition it has a custom MarshalJSON() for serialisation purposes.
 type CldApiArray []string
 
+// CldApiMap is not just an alias, in addition it has a custom MarshalJSON() for serialisation purposes.
 type CldApiMap map[string]string
 type Metadata map[string]interface{}
 
@@ -221,6 +221,7 @@ func IsValidUrl(urlCandidate string) bool {
 	if err != nil {
 		return false
 	}
+
 	return true
 }
 

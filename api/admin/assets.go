@@ -96,7 +96,7 @@ type AssetsByContextParams struct {
 	Direction   string        `json:"direction,omitempty"`
 }
 
-// AssetsByContext sists assets with the specified contextual metadata.
+// AssetsByContext lists assets with the specified contextual metadata.
 //
 // This method does not return matching deleted assets, even if they have been backed up.
 //
