@@ -5,7 +5,7 @@ Cloudinary is a cloud service that offers a solution to a web application's enti
 
 Easily upload images to the cloud. Automatically perform smart image resizing, cropping and conversion without
 installing any complex software. Integrate Facebook or Twitter profile image extraction in a snap, in any dimension and
-style to match your website's graphics requirements. Images are seamlessly delivered through a fast CDN, and much much
+style to match your website's graphics requirements. Images are seamlessly delivered through a fast CDN, and much-much
 more.
 
 Cloudinary offers comprehensive APIs and administration capabilities and is easy to integrate with any web application,
@@ -36,15 +36,15 @@ using the CLOUDINARY_URL environment variable / system property.
 
 The entry point of the library is the Cloudinary struct.
 ```go
-    cld, _ := cloudinary.New()
+cld, _ := cloudinary.New()
 ```
 Here's an example of setting the configuration parameters programatically:
 ```go
-cld, _ := cloudinary.NewFromParams('n07t21i7','123456789012345', 'abcdeghijklmnopqrstuvwxyz12')
+cld, _ := cloudinary.NewFromParams("n07t21i7", "123456789012345", "abcdeghijklmnopqrstuvwxyz12")
 ```
 Another example of setting the configuration parameters by providing the CLOUDINARY_URL value:
 ```go
-cld, _ := cloudinary.NewFromUrl('cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7')
+cld, _ := cloudinary.NewFromUrl("cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7")
 ```
 ### Upload
 
@@ -80,6 +80,7 @@ log.Println(resp.SecureURL)
 
 Additional resources are available at:
 
+* [Package documentation](https://pkg.go.dev/github.com/cloudinary/cloudinary-go)
 * [Website](https://cloudinary.com)
 * [Interactive demo](https://demo.cloudinary.com/default)
 * [Knowledge Base](https://support.cloudinary.com/hc/en-us)
