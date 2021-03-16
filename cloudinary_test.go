@@ -23,6 +23,11 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 		t.Error("Failed creating Cloudinary instance from Cloudinary URL.")
 	}
 
+	c, err := NewFromUrl("")
+	if err == nil || err.Error() != "must provide CLOUDINARY_URL" {
+		t.Error("Error expected, got: ", err)
+	}
+
 	c, _ = NewFromParams("test123", "key", "secret")
 
 	if c.Config.Cloud.CloudName != "test123" {
