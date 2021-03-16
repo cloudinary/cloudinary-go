@@ -54,7 +54,7 @@ Cloudinary is very simple.
 The following example uploads a local JPG to the cloud:
 
 ```go
-resp, err := cld.Upload.Upload(ctx, "my_picture.jpg", uploader.UploadParams{});
+resp, err := cld.Upload.Upload(ctx, "my_picture.jpg", uploader.UploadParams{})
 ```
 
 The uploaded image is assigned a randomly generated public ID. The image is immediately available for a download through
@@ -74,6 +74,88 @@ if err != nil {...}
 log.Println(resp.SecureURL)
 
 // https://res.cloudinary.com/demo/image/upload/sample_remote.jpg
+```
+
+### Complete SDK Example
+```go
+package main
+
+import (
+	"context"
+	"github.com/cloudinary/cloudinary-go"
+	"github.com/cloudinary/cloudinary-go/api/admin"
+	"github.com/cloudinary/cloudinary-go/api/admin/search"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"log"
+)
+
+func main() {
+	// Start by creating a new instance of Cloudinary using CLOUDINARY_URL environment variable.
+	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromUrl().
+	var cld, err = cloudinary.New()
+	if err != nil {
+		log.Fatalf("Failed to intialize Cloudinary, %v", err)
+	}
+
+	var ctx = context.Background()
+
+	// Upload an image to your Cloudinary account from a specified URL.
+	//
+	// Alternatively you can provide a path to a local file on your filesystem, base64 encoded string, io.Reader and more.
+	// For additional information see:
+	// https://cloudinary.com/documentation/upload_images
+	//
+	// Upload can be greatly customized by specifying uploader.UploadParams, in this case we set the Public ID of the
+	// uploaded asset to "logo".
+	uploadResult, err := cld.Upload.Upload(
+		ctx,
+		"https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png",
+		uploader.UploadParams{PublicID: "logo"})
+	if err != nil {
+		log.Fatalf("Failed to upload file, %v\n", err)
+	}
+
+	log.Println(uploadResult.SecureURL)
+	// Prints something like:
+	// https://res.cloudinary.com/<your cloud name>/image/upload/v1615875158/logo.png
+
+	// uploadResult contains other useful information about the asset, like Width, Height, Format, etc.
+	// See uploader.UploadResult struct for more details.
+
+	// Now we can use Admin Api to see the details about the asset.
+	// The request can be customised by providing AssetParams.
+	asset, err := cld.Admin.Asset(ctx, admin.AssetParams{PublicID: "logo"})
+	if err != nil {
+		log.Fatalf("Failed to get asset details, %v\n", err)
+	}
+
+	// Print some basic information about the asset.
+	log.Printf("Public ID: %v, URL: %v\n", asset.PublicID, asset.SecureURL)
+	// Prints something like:
+	// Public ID: logo, URL: https://res.cloudinary.com/<your cloud name>/image/upload/v1615875158/logo.png
+
+	// Cloudinary also provides a very flexible Search Api for filtering and retrieving information on all the assets
+	// in your account with the help of query expressions in a Lucene-like query language.
+	searchQuery := search.Query{
+		Expression: "resource_type:image AND uploaded_at>1d AND bytes<1m",
+		SortBy:     []search.SortByField{{"created_at": search.Descending}},
+		MaxResults: 30,
+	}
+
+	searchResult, err := cld.Admin.Search(ctx, searchQuery)
+
+	if err != nil {
+		log.Fatalf("Failed to search for assets, %v\n", err)
+	}
+
+	log.Printf("Assets found: %v\n", searchResult.TotalCount)
+
+	for _, asset := range searchResult.Assets {
+		log.Printf("Public ID: %v, URL: %v, Etag: %v\n", asset.PublicID, asset.SecureURL, asset.Etag)
+	}
+	// Prints something like:
+	// Public ID: logo, URL: https://res.cloudinary.com/<your cloud name>/image/upload/v1615875158/logo.png, Etag: 534e8213b282f8c2a53b600090149d08
+}
 ```
 
 ## Additional resources ##########################################################

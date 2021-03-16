@@ -8,9 +8,10 @@ import (
 	"github.com/cloudinary/cloudinary-go/api"
 )
 
-// UploadParams struct
+// UploadParams struct allows to customize upload behaviour.
+// For additional information about each one of the parameters please use the link below.
 //
-// http://cloudinary.com/documentation/image_upload_api_reference#api_example_1
+// https://cloudinary.com/documentation/image_upload_api_reference#upload_optional_parameters
 type UploadParams struct {
 	PublicID                string           `json:"public_id,omitempty"`
 	PublicIds               api.CldApiArray  `json:"public_ids,omitempty"`
