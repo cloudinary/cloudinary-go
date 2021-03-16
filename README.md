@@ -101,12 +101,14 @@ func main() {
 
 	// Upload an image to your Cloudinary account from a specified URL.
 	//
-	// Alternatively you can provide a path to a local file on your filesystem, base64 encoded string, io.Reader and more.
+	// Alternatively you can provide a path to a local file on your filesystem,
+	// base64 encoded string, io.Reader and more.
+	//
 	// For additional information see:
 	// https://cloudinary.com/documentation/upload_images
 	//
-	// Upload can be greatly customized by specifying uploader.UploadParams, in this case we set the Public ID of the
-	// uploaded asset to "logo".
+	// Upload can be greatly customized by specifying uploader.UploadParams,
+	// in this case we set the Public ID of the uploaded asset to "logo".
 	uploadResult, err := cld.Upload.Upload(
 		ctx,
 		"https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png",
@@ -131,11 +133,10 @@ func main() {
 
 	// Print some basic information about the asset.
 	log.Printf("Public ID: %v, URL: %v\n", asset.PublicID, asset.SecureURL)
-	// Prints something like:
-	// Public ID: logo, URL: https://res.cloudinary.com/<your cloud name>/image/upload/v1615875158/logo.png
 
-	// Cloudinary also provides a very flexible Search Api for filtering and retrieving information on all the assets
-	// in your account with the help of query expressions in a Lucene-like query language.
+	// Cloudinary also provides a very flexible Search Api for filtering and retrieving
+	// information on all the assets in your account with the help of query expressions
+	// in a Lucene-like query language.
 	searchQuery := search.Query{
 		Expression: "resource_type:image AND uploaded_at>1d AND bytes<1m",
 		SortBy:     []search.SortByField{{"created_at": search.Descending}},
@@ -153,8 +154,6 @@ func main() {
 	for _, asset := range searchResult.Assets {
 		log.Printf("Public ID: %v, URL: %v, Etag: %v\n", asset.PublicID, asset.SecureURL, asset.Etag)
 	}
-	// Prints something like:
-	// Public ID: logo, URL: https://res.cloudinary.com/<your cloud name>/image/upload/v1615875158/logo.png, Etag: 534e8213b282f8c2a53b600090149d08
 }
 ```
 
