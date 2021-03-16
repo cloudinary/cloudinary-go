@@ -69,7 +69,7 @@ log.Println(resp.SecureURL)
 You can also specify your own public ID:
 
 ```go
-resp, err := cld.Upload.Upload(ctx, "my_picture.jpg", uploader.UploadParams{PublicID: "sample_remote.jpg"});
+resp, err := cld.Upload.Upload(ctx, "my_picture.jpg", uploader.UploadParams{PublicID: "sample_remote"});
 if err != nil {...}
 log.Println(resp.SecureURL)
 
@@ -121,7 +121,7 @@ func main() {
 	// Prints something like:
 	// https://res.cloudinary.com/<your cloud name>/image/upload/v1615875158/logo.png
 
-	// uploadResult contains other useful information about the asset, like Width, Height, Format, etc.
+	// uploadResult contains useful information about the asset, like Width, Height, Format, etc.
 	// See uploader.UploadResult struct for more details.
 
 	// Now we can use Admin Api to see the details about the asset.
@@ -152,9 +152,10 @@ func main() {
 	log.Printf("Assets found: %v\n", searchResult.TotalCount)
 
 	for _, asset := range searchResult.Assets {
-		log.Printf("Public ID: %v, URL: %v, Etag: %v\n", asset.PublicID, asset.SecureURL, asset.Etag)
+		log.Printf("Public ID: %v, URL: %v\n", asset.PublicID, asset.SecureURL)
 	}
 }
+
 ```
 
 ## Additional resources ##########################################################

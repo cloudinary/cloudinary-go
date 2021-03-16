@@ -41,7 +41,7 @@ func main() {
 	// Prints something like:
 	// https://res.cloudinary.com/<your cloud name>/image/upload/v1615875158/logo.png
 
-	// uploadResult contains other useful information about the asset, like Width, Height, Format, etc.
+	// uploadResult contains useful information about the asset, like Width, Height, Format, etc.
 	// See uploader.UploadResult struct for more details.
 
 	// Now we can use Admin Api to see the details about the asset.
@@ -72,6 +72,6 @@ func main() {
 	log.Printf("Assets found: %v\n", searchResult.TotalCount)
 
 	for _, asset := range searchResult.Assets {
-		log.Printf("Public ID: %v, URL: %v, Etag: %v\n", asset.PublicID, asset.SecureURL, asset.Etag)
+		log.Printf("Public ID: %v, URL: %v\n", asset.PublicID, asset.SecureURL)
 	}
 }
