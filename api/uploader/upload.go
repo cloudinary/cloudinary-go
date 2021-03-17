@@ -4,12 +4,16 @@
 package uploader
 
 import (
-	"bufio"
 	"bytes"
 	"context"
+	"crypto/sha1"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/config"
+	"github.com/google/uuid"
 	"io"
 	"io/ioutil"
 	"mime/multipart"
@@ -17,10 +21,8 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"strconv"
 	"time"
-
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/config"
 )
 
 // Upload Api main struct
@@ -95,18 +97,28 @@ func (u *Api) postForm(ctx context.Context, urlPath interface{}, formParams url.
 		return nil, err
 	}
 
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(u.Config.Api.Timeout)*time.Second)
+	defer cancel()
+
 	return u.postBody(ctx, urlPath, bodyBuf, nil)
 }
 
 func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Values) ([]byte, error) {
-	formParams, err := u.signRequest(formParams)
-	if err != nil {
-		return nil, err
+	unsigned, _ := strconv.ParseBool(formParams.Get("unsigned"))
+
+	if !unsigned {
+		var err error
+		formParams, err = u.signRequest(formParams)
+		if err != nil {
+			return nil, err
+		}
 	}
+
 	uploadEndpoint := api.BuildPath(api.Auto, Upload)
 	switch fileValue := file.(type) {
 	case string:
 		if !api.IsLocalFilePath(file) {
+			// Can be URL, Base64 encoded string, etc.
 			formParams.Add("file", fileValue)
 
 			return u.postForm(ctx, uploadEndpoint, formParams)
@@ -114,7 +126,7 @@ func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Val
 			return u.postLocalFile(ctx, uploadEndpoint, fileValue, formParams)
 		}
 	case io.Reader:
-		return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams)
+		return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams, map[string]string{}, 0)
 	default:
 		return nil, errors.New("unsupported file type")
 	}
@@ -126,24 +138,56 @@ func (u *Api) postLocalFile(ctx context.Context, urlPath string, filePath string
 	if err != nil {
 		return nil, err
 	}
+
+	defer api.DeferredClose(file)
+
 	fi, err := file.Stat()
 	if err != nil {
 		return nil, err
 	}
-	bufferedReader := bufio.NewReader(file)
 
-	defer api.DeferredClose(file)
+	if fi.Size() > u.Config.Api.ChunkSize {
+		return u.postLargeFile(ctx, urlPath, file, formParams)
+	}
 
-	return u.postIOReader(ctx, urlPath, bufferedReader, fi.Name(), formParams)
+	return u.postIOReader(ctx, urlPath, file, fi.Name(), formParams, map[string]string{}, 0)
 }
 
-func (u *Api) postIOReader(ctx context.Context, urlPath string, reader io.Reader, name string, formParams url.Values) ([]byte, error) {
+func (u *Api) postLargeFile(ctx context.Context, urlPath string, file *os.File, formParams url.Values) ([]byte, error) {
+	fi, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+
+	headers := map[string]string{
+		"X-Unique-Upload-Id": randomPublicId(),
+	}
+
+	var res []byte
+
+	fileSize := fi.Size()
+	var currPos int64 = 0
+	for currPos < fileSize {
+		currChunkSize := min(fileSize-currPos, u.Config.Api.ChunkSize)
+
+		headers["Content-Range"] = fmt.Sprintf("bytes %v-%v/%v", currPos, currPos+currChunkSize-1, fileSize)
+
+		res, err = u.postIOReader(ctx, urlPath, file, fi.Name(), formParams, headers, currChunkSize)
+		if err != nil {
+			return nil, err
+		}
+
+		currPos += currChunkSize
+	}
+
+	return res, nil
+}
+
+func (u *Api) postIOReader(ctx context.Context, urlPath string, reader io.Reader, name string, formParams url.Values, headers map[string]string, chunkSize int64) ([]byte, error) {
 	bodyBuf := new(bytes.Buffer)
 	formWriter := multipart.NewWriter(bodyBuf)
 
-	headers := map[string]string{
-		"Content-Type": formWriter.FormDataContentType(),
-	}
+	headers["Content-Type"] = formWriter.FormDataContentType()
 
 	for key, val := range formParams {
 		_ = formWriter.WriteField(key, val[0])
@@ -153,7 +197,12 @@ func (u *Api) postIOReader(ctx context.Context, urlPath string, reader io.Reader
 	if err != nil {
 		return nil, err
 	}
-	_, err = io.Copy(partWriter, reader)
+
+	if chunkSize != 0 {
+		_, err = io.CopyN(partWriter, reader, chunkSize)
+	} else {
+		_, err = io.Copy(partWriter, reader)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -161,6 +210,12 @@ func (u *Api) postIOReader(ctx context.Context, urlPath string, reader io.Reader
 	err = formWriter.Close()
 	if err != nil {
 		return nil, err
+	}
+
+	if u.Config.Api.UploadTimeout != 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, time.Duration(u.Config.Api.UploadTimeout)*time.Second)
+		defer cancel()
 	}
 
 	return u.postBody(ctx, urlPath, bodyBuf, headers)
@@ -179,9 +234,6 @@ func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 	for key, val := range headers {
 		req.Header.Add(key, val)
 	}
-
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(u.Config.Api.Timeout)*time.Second)
-	defer cancel()
 
 	req = req.WithContext(ctx)
 
@@ -207,4 +259,20 @@ func getAssetType(requestParams interface{}) string {
 	}
 
 	return assetType
+}
+
+// randomPublicId generates a random public ID string, which is the first 16 characters of sha1 of uuid.
+func randomPublicId() string {
+	hash := sha1.New()
+	hash.Write([]byte(uuid.NewString()))
+
+	return hex.EncodeToString(hash.Sum(nil))[0:16]
+}
+
+// min returns minimum of two integers
+func min(a, b int64) int64 {
+	if a < b {
+		return a
+	}
+	return b
 }
