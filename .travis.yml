@@ -1,4 +1,8 @@
 language: go
 
+before_script: >
+  export CLOUDINARY_URL=$(bash scripts/get_test_cloud.sh);
+  echo cloud_name: "$(echo $CLOUDINARY_URL | cut -d'@' -f2)"
+
 script:
   - go test -v ./...
