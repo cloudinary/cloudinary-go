@@ -2,6 +2,7 @@
 package config
 
 import (
+	"errors"
 	"net/url"
 	"os"
 
@@ -21,6 +22,10 @@ func New() (*Configuration, error) {
 
 // NewFromUrl returns a new Configuration instance from a cloudinary url.
 func NewFromUrl(cldUrlStr string) (*Configuration, error) {
+	if cldUrlStr == "" {
+		return nil, errors.New("must provide CLOUDINARY_URL")
+	}
+
 	cldUrl, err := url.Parse(cldUrlStr)
 	if err != nil {
 		return nil, err

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/api"
@@ -101,6 +102,20 @@ func TestUploader_UploadBase64Image(t *testing.T) {
 	if resp == nil || resp.PublicID != publicID {
 		t.Error(resp)
 	}
+}
+
+func TestUploader_Timeout(t *testing.T) {
+	var originalTimeout = uploadApi.Config.Api.Timeout
+
+	uploadApi.Config.Api.Timeout = 0 // should timeout immediately
+
+	_, err := uploadApi.Upload(ctx, LogoUrl, UploadParams{})
+
+	if err == nil || !strings.HasSuffix(err.Error(), "context deadline exceeded") {
+		t.Error("Expected context timeout did not happen")
+	}
+
+	uploadApi.Config.Api.Timeout = originalTimeout
 }
 
 func UploadTestAsset(t *testing.T, publicID string) {

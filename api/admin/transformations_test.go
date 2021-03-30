@@ -2,8 +2,6 @@ package admin
 
 import (
 	"testing"
-
-	"github.com/cloudinary/cloudinary-go/transformation"
 )
 
 const TName = "go_transformation"
@@ -36,7 +34,7 @@ func TestTransformations_Get(t *testing.T) {
 		t.Error(lResp, err)
 	}
 
-	resp, err := adminApi.GetTransformation(ctx, GetTransformationParams{Transformation: transformation.RawTransformation(lResp.Transformations[0].Name)})
+	resp, err := adminApi.GetTransformation(ctx, GetTransformationParams{Transformation: lResp.Transformations[0].Name})
 
 	if err != nil || len(resp.Info) < 1 {
 		t.Error(resp, err)

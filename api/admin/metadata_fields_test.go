@@ -207,8 +207,7 @@ func TestAdmin_MetadataFieldsCleanup(t *testing.T) {
 	for _, extID := range mdIDs {
 		resp, err := adminApi.DeleteMetadataField(ctx, DeleteMetadataFieldParams{FieldExternalId: extID})
 		if err != nil || resp.Message != "ok" {
-			log.Println(err)
-			log.Println(resp)
+			log.Println(err, resp)
 		}
 	}
 }

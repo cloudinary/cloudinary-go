@@ -3,8 +3,8 @@ package transformation
 
 // This is a placeholder for a Transformation struct.
 
-type Action map[string]interface{}
+type Action = map[string]interface{}
 
-type Transformation []Action
+type Transformation = []Action
 
-type RawTransformation string
+type RawTransformation = string
