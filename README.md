@@ -44,7 +44,7 @@ cld, _ := cloudinary.NewFromParams("n07t21i7", "123456789012345", "abcdeghijklmn
 ```
 Another example of setting the configuration parameters by providing the CLOUDINARY_URL value:
 ```go
-cld, _ := cloudinary.NewFromUrl("cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7")
+cld, _ := cloudinary.NewFromURL("cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7")
 ```
 ### Upload
 
