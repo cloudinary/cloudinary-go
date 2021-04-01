@@ -3,7 +3,7 @@ Cloudinary Go SDK
 
 Cloudinary is a cloud service for managing your web application's entire media management pipeline. Easily upload images and videos to the cloud using Cloudinary's comprehensive APIs and administration capabilities and easily integrate with your web application, existing or new.
 
-For Go, Cloudinary provides a module for simplifying the integration even further. Take a look at the [SDK guide](https://cloudinary.com/documentation/go_integration) for full documentation or for a high-level understanding of Cloudinary, see our [getting started guide](https://cloudinary.com/documentation/how_to_integrate_cloudinary).
+For Go, Cloudinary provides a module for simplifying the integration even further. This Readme provides the basic information needed to get started with the Cloudinary Go SDK. For full documentation, take a look at the [SDK guide](https://cloudinary.com/documentation/go_integration). For a high-level introduction on Cloudinary and a step-by-step walk through of how to integrate Cloudinary in your application, see our [getting started guide](https://cloudinary.com/documentation/how_to_integrate_cloudinary).
 
 ## Setup
 
