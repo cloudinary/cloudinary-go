@@ -1,52 +1,60 @@
 Cloudinary Go SDK
 ==========
 
-Cloudinary is a cloud service that offers a solution to a web application's entire image management pipeline.
+Cloudinary is a cloud service for managing your web application's entire media management pipeline. Easily upload images and videos to the cloud using Cloudinary's comprehensive APIs and administration capabilities and easily integrate with your web application, existing or new.
 
-Easily upload images to the cloud. Automatically perform smart image resizing, cropping and conversion without
-installing any complex software. Integrate Facebook or Twitter profile image extraction in a snap, in any dimension and
-style to match your website's graphics requirements. Images are seamlessly delivered through a fast CDN, and much-much
-more.
+For Go, Cloudinary provides a module for simplifying the integration even further. Take a look at the [SDK guide](https://cloudinary.com/documentation/go_integration) for full documentation or for a high-level understanding of Cloudinary, see our [getting started guide](https://cloudinary.com/documentation/how_to_integrate_cloudinary).
 
-Cloudinary offers comprehensive APIs and administration capabilities and is easy to integrate with any web application,
-existing or new.
+## Setup
 
-Cloudinary provides URL and HTTP based APIs that can be easily integrated with any Web development framework.
+### Installation
 
-For Go, Cloudinary provides a module for simplifying the integration even further.
-
-## Setup ######################################################################
-
-To install Cloudinary Go SDK, use `go get`:
+To install the Cloudinary Go SDK, use the `go get` command:
 
 ```
 go get github.com/cloudinary/cloudinary-go
 ```
 
-## Usage
-
 ### Configuration
 
-Each request for building a URL of a remote cloud resource must have the `CloudName` parameter set. Each request to our
-secure APIs (e.g., image uploads, eager sprite generation) must have the `ApiKey` and `ApiSecret` parameters set.
-See [API, URLs and access identifiers](http://cloudinary.com/documentation/api_and_access_identifiers) for more details.
+For requests to our secure APIs (e.g., image uploads, asset administration) you must have the `ApiKey` and `ApiSecret` parameters set.
+You can find your account-specific configuration credentials in the **Dashboard** page of the [account console](https://cloudinary.com/console).
 
-Setting the `CloudName`, `ApiKey` and `ApiSecret` parameters can be done by initializing the Cloudinary object, or by
+Setting your `CloudName`, `ApiKey` and `ApiSecret` parameters can be done by initializing the Cloudinary object, or by
 using the CLOUDINARY_URL environment variable / system property.
 
 The entry point of the library is the Cloudinary struct.
+
 ```go
 cld, _ := cloudinary.New()
 ```
+
 Here's an example of setting the configuration parameters programatically:
 ```go
 cld, _ := cloudinary.NewFromParams("n07t21i7", "123456789012345", "abcdeghijklmnopqrstuvwxyz12")
 ```
-Another example of setting the configuration parameters by providing the CLOUDINARY_URL value:
+
+You can also set the configuration parameters by providing the CLOUDINARY_URL value:
 ```go
 cld, _ := cloudinary.NewFromUrl("cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7")
 ```
-### Upload
+
+**Learn more**: [Go configuration](https://cloudinary.com/documentation/go_integration#configuration)
+
+
+### Update 
+
+To update the Cloudinary Go SDK to the latest version, use the `go get` command with the `-u` option:
+
+```
+go get -u github.com/cloudinary/cloudinary-go
+```
+
+
+## Usage
+
+
+### Upload 
 
 Assuming you have your Cloudinary configuration parameters defined (`CloudName`, `ApiKey`, `ApiSecret`), uploading to
 Cloudinary is very simple.
@@ -75,6 +83,9 @@ log.Println(resp.SecureURL)
 
 // https://res.cloudinary.com/demo/image/upload/sample_remote.jpg
 ```
+
+**Learn more**: [Go upload](https://cloudinary.com/documentation/go_image_and_video_upload)
+
 
 ### Complete SDK Example
 ```go
@@ -158,39 +169,33 @@ func main() {
 
 ```
 
-## Additional resources ##########################################################
+## Contributing 
+
+Please feel free to submit issues, fork the repository and send pull requests!
+
+When submitting an issue, we ask that you please include a complete test function that demonstrates the issue.
+
+## Additional resources
 
 Additional resources are available at:
 
-* [Package documentation](https://pkg.go.dev/github.com/cloudinary/cloudinary-go)
+* [Package reference documentation](https://pkg.go.dev/github.com/cloudinary/cloudinary-go)
+* [SDK Documentation](https://cloudinary.com/documentation/go_integration)
+* [Upload API documentation](https://cloudinary.com/documentation/upload_images)
 * [Website](https://cloudinary.com)
 * [Interactive demo](https://demo.cloudinary.com/default)
 * [Knowledge Base](https://support.cloudinary.com/hc/en-us)
-* [Documentation](https://cloudinary.com/documentation)
-* [Upload API documentation](https://cloudinary.com/documentation/upload_images)
 
-## Support
+## Community and Support
+
+Impact the product, hear updates, test drive new features and more!
+Join [here](https://www.facebook.com/groups/CloudinaryCommunity).
 
 You can [open an issue through GitHub](https://github.com/cloudinary/cloudinary-go/issues).
 
 Stay tuned for updates, tips and tutorials: [Blog](https://cloudinary.com/blog)
 , [Twitter](https://twitter.com/cloudinary), [Facebook](https://www.facebook.com/Cloudinary).
 
-## Join the Community ###########################################################
-
-Impact the product, hear updates, test drive new features and more!
-Join [here](https://www.facebook.com/groups/CloudinaryCommunity).
-
-## Staying up to date  ##########################################################
-
-To update Cloudinary Go SDK to the latest version, use `go get -u github.com/cloudinary/cloudinary-go`.
-
-## Contributing  ################################################################
-
-Please feel free to submit issues, fork the repository and send pull requests!
-
-When submitting an issue, we ask that you please include a complete test function that demonstrates the issue.
-
-## License ######################################################################
+## License 
 
 Released under the MIT license. 
