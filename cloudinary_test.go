@@ -17,13 +17,13 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 		t.Error("Please set up CLOUDINARY_URL environment variable to run the test.")
 	}
 
-	c, _ = NewFromUrl("cloudinary://key:secret@test123")
+	c, _ = NewFromURL("cloudinary://key:secret@test123")
 
 	if c.Config.Cloud.CloudName != "test123" {
 		t.Error("Failed creating Cloudinary instance from Cloudinary URL.")
 	}
 
-	c, err := NewFromUrl("")
+	c, err := NewFromURL("")
 	if err == nil || err.Error() != "must provide CLOUDINARY_URL" {
 		t.Error("Error expected, got: ", err)
 	}

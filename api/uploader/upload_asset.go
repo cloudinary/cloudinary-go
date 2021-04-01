@@ -17,6 +17,7 @@ type UploadParams struct {
 	PublicIds               api.CldApiArray  `json:"public_ids,omitempty"`
 	UseFilename             bool             `json:"use_filename,omitempty"`
 	UniqueFilename          bool             `json:"unique_filename,omitempty"`
+	FilenameOverride        string           `json:"filename_override,omitempty"`
 	Folder                  string           `json:"folder,omitempty"`
 	Overwrite               bool             `json:"overwrite,omitempty"`
 	ResourceType            string           `json:"resource_type,omitempty"`

@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// Start by creating a new instance of Cloudinary using CLOUDINARY_URL environment variable.
-	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromUrl().
+	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromURL().
 	var cld, err = cloudinary.New()
 	if err != nil {
 		log.Fatalf("Failed to intialize Cloudinary, %v", err)

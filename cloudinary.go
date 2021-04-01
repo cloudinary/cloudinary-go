@@ -22,9 +22,9 @@ func New() (*Cloudinary, error) {
 	return NewFromConfiguration(*c)
 }
 
-// NewFromUrl returns a new Cloudinary instance from a cloudinary url.
-func NewFromUrl(cloudinaryUrl string) (*Cloudinary, error) {
-	c, err := config.NewFromUrl(cloudinaryUrl)
+// NewFromURL returns a new Cloudinary instance from a cloudinary url.
+func NewFromURL(cloudinaryURL string) (*Cloudinary, error) {
+	c, err := config.NewFromUrl(cloudinaryURL)
 	if err != nil {
 		return nil, err
 	}

@@ -217,8 +217,8 @@ func DeferredClose(c io.Closer) {
 
 // IsValidUrl checks whether urlCandidate string is a valid URL.
 func IsValidUrl(urlCandidate string) bool {
-	_, err := url.ParseRequestURI(urlCandidate)
-	if err != nil {
+	urlStruct, err := url.Parse(urlCandidate)
+	if err != nil || urlStruct.Scheme == ""{
 		return false
 	}
 
