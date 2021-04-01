@@ -1,30 +1,15 @@
-package admin
+package admin_test
 
 import (
 	"context"
-	"math/rand"
-	"os"
-	"strconv"
 	"strings"
 	"testing"
-	"time"
+
+	"github.com/cloudinary/cloudinary-go/api/admin"
 )
 
 var ctx = context.Background()
-var adminApi, _ = New()
-
-var testSuffix = getTestSuffix()
-
-func getTestSuffix() string {
-	testSuffix := os.Getenv("TRAVIS_JOB_ID")
-
-	if testSuffix == "" {
-		rand.Seed(time.Now().UnixNano())
-		testSuffix = strconv.Itoa(rand.Intn(999999))
-	}
-
-	return testSuffix
-}
+var adminApi, _ = admin.New()
 
 func TestApi_Timeout(t *testing.T) {
 	var originalTimeout = adminApi.Config.Api.Timeout

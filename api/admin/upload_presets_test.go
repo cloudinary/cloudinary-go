@@ -1,9 +1,10 @@
-package admin
+package admin_test
 
 import (
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/api/admin"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 )
 
@@ -11,7 +12,7 @@ const UPName = "go-upload-preset"
 
 func TestUploadPresets_Create(t *testing.T) {
 
-	params := CreateUploadPresetParams{
+	params := admin.CreateUploadPresetParams{
 		Name:         UPName,
 		Unsigned:     true,
 		Live:         true,
@@ -26,7 +27,7 @@ func TestUploadPresets_Create(t *testing.T) {
 }
 
 func TestUploadPresets_List(t *testing.T) {
-	resp, err := adminApi.ListUploadPresets(ctx, ListUploadPresetsParams{})
+	resp, err := adminApi.ListUploadPresets(ctx, admin.ListUploadPresetsParams{})
 
 	if err != nil || len(resp.Presets) < 1 {
 		t.Error(resp, err)
@@ -34,7 +35,7 @@ func TestUploadPresets_List(t *testing.T) {
 }
 
 func TestUploadPresets_Get(t *testing.T) {
-	resp, err := adminApi.GetUploadPreset(ctx, GetUploadPresetParams{Name: UPName})
+	resp, err := adminApi.GetUploadPreset(ctx, admin.GetUploadPresetParams{Name: UPName})
 
 	if err != nil {
 		t.Error(resp, err)
@@ -42,7 +43,7 @@ func TestUploadPresets_Get(t *testing.T) {
 }
 
 func TestUploadPresets_Update(t *testing.T) {
-	updateUPParams := UpdateUploadPresetParams{
+	updateUPParams := admin.UpdateUploadPresetParams{
 		Name:         UPName,
 		Unsigned:     false,
 		Live:         false,
@@ -55,7 +56,7 @@ func TestUploadPresets_Update(t *testing.T) {
 		t.Error(resp, err)
 	}
 
-	gResp, err := adminApi.GetUploadPreset(ctx, GetUploadPresetParams{Name: UPName})
+	gResp, err := adminApi.GetUploadPreset(ctx, admin.GetUploadPresetParams{Name: UPName})
 
 	if err != nil {
 		t.Error(gResp, err)
@@ -63,7 +64,7 @@ func TestUploadPresets_Update(t *testing.T) {
 }
 
 func TestUploadPresets_Delete(t *testing.T) {
-	resp, err := adminApi.DeleteUploadPreset(ctx, DeleteUploadPresetParams{Name: UPName})
+	resp, err := adminApi.DeleteUploadPreset(ctx, admin.DeleteUploadPresetParams{Name: UPName})
 
 	if err != nil || resp.Message != "deleted" {
 		t.Error(resp, err)

@@ -1,8 +1,9 @@
-package admin
+package admin_test
 
 import (
-	"github.com/cloudinary/cloudinary-go/api/admin/search"
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api/admin/search"
 )
 
 func TestSearch_SearchQuery(t *testing.T) {

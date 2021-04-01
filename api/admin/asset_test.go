@@ -1,12 +1,17 @@
-package admin
+package admin_test
 
 import (
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api/admin"
+	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 )
 
 func TestAsset_Asset(t *testing.T) {
-	resp, err := adminApi.Asset(ctx, AssetParams{
-		PublicID:              "sample",
+	cldtest.UploadTestAsset(t, cldtest.PublicID)
+
+	resp, err := adminApi.Asset(ctx, admin.AssetParams{
+		PublicID:              cldtest.PublicID,
 		Exif:                  true,
 		Colors:                true,
 		Faces:                 true,
@@ -25,12 +30,12 @@ func TestAsset_Asset(t *testing.T) {
 }
 
 func TestAsset_UpdateAsset(t *testing.T) {
-	resp, err := adminApi.UpdateAsset(ctx, UpdateAssetParams{
-		PublicID: "sample",
-		Tags:     []string{"tagA", "tagB"},
+	resp, err := adminApi.UpdateAsset(ctx, admin.UpdateAssetParams{
+		PublicID: cldtest.PublicID,
+		Tags:     []string{"tagA", "tagB", "TagC"},
 	})
 
-	if err != nil || len(resp.Tags) != 2 {
+	if err != nil || len(resp.Tags) != 3 {
 		t.Error(resp, err)
 	}
 }
