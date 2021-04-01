@@ -1,4 +1,4 @@
-package uploader
+package uploader_test
 
 import (
 	"context"
@@ -10,57 +10,49 @@ import (
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 )
 
 var ctx = context.Background()
-var uploadApi, _ = New()
+var uploadApi, _ = uploader.New()
 
-const LogoUrl = "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png"
-const LogoFilePath = "testdata/cloudinary_logo.png"
-const Base64Image = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-const publicID = "go_test_image"
-const publicID2 = "go_test_image_2"
 const largeImagePublicID = "go_test_large_image"
 const largeImageSize = 5880138
 const largeChunkSize = 5243000
 const largeImageWidth = 1400
 const largeImageHeight = 1400
-const tag1 = "go_tag1"
-const tag2 = "go_tag2"
-
-var tags = api.CldApiArray{tag1, tag2}
-var cContext = api.CldApiMap{"go-context-key": "go-context-value"}
 
 func TestUploader_UploadLocalPath(t *testing.T) {
-	params := UploadParams{
-		PublicID:              publicID,
+	params := uploader.UploadParams{
+		PublicID:              cldtest.PublicID,
 		QualityAnalysis:       true,
 		AccessibilityAnalysis: true,
 		CinemagraphAnalysis:   true,
 		Overwrite:             true,
 	}
 
-	resp, err := uploadApi.Upload(ctx, LogoFilePath, params)
+	resp, err := uploadApi.Upload(ctx, cldtest.ImageFilePath, params)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if resp == nil || resp.PublicID != publicID {
+	if resp == nil || resp.PublicID != cldtest.PublicID {
 		t.Error(resp)
 	}
 }
 
 func TestUploader_UploadIOReader(t *testing.T) {
-	file, err := os.Open(LogoFilePath)
+	file, err := os.Open(cldtest.ImageFilePath)
 	if err != nil {
 		t.Error(fmt.Printf("unable to open a file: %v\n", err))
 	}
 
 	defer api.DeferredClose(file)
 
-	params := UploadParams{
-		PublicID:              publicID,
+	params := uploader.UploadParams{
+		PublicID:              cldtest.PublicID,
 		QualityAnalysis:       true,
 		AccessibilityAnalysis: true,
 		CinemagraphAnalysis:   true,
@@ -72,41 +64,41 @@ func TestUploader_UploadIOReader(t *testing.T) {
 		t.Error(err)
 	}
 
-	if resp == nil || resp.PublicID != publicID {
+	if resp == nil || resp.PublicID != cldtest.PublicID {
 		t.Error(resp)
 	}
 }
 
 func TestUploader_UploadUrl(t *testing.T) {
-	params := UploadParams{
-		PublicID:  publicID,
+	params := uploader.UploadParams{
+		PublicID:  cldtest.PublicID,
 		Overwrite: true,
 	}
 
-	resp, err := uploadApi.Upload(ctx, LogoUrl, params)
+	resp, err := uploadApi.Upload(ctx, cldtest.LogoUrl, params)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if resp == nil || resp.PublicID != publicID {
+	if resp == nil || resp.PublicID != cldtest.PublicID {
 		t.Error(resp)
 	}
 }
 
 func TestUploader_UploadBase64Image(t *testing.T) {
-	params := UploadParams{
-		PublicID:  publicID,
+	params := uploader.UploadParams{
+		PublicID:  cldtest.PublicID,
 		Overwrite: true,
 	}
 
-	resp, err := uploadApi.Upload(ctx, Base64Image, params)
+	resp, err := uploadApi.Upload(ctx, cldtest.Base64Image, params)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if resp == nil || resp.PublicID != publicID {
+	if resp == nil || resp.PublicID != cldtest.PublicID {
 		t.Error(resp)
 	}
 }
@@ -123,7 +115,7 @@ func TestUploader_UploadLargeFile(t *testing.T) {
 		}
 	}()
 
-	params := UploadParams{
+	params := uploader.UploadParams{
 		PublicID:  largeImagePublicID,
 		Overwrite: true,
 	}
@@ -135,7 +127,7 @@ func TestUploader_UploadLargeFile(t *testing.T) {
 	}
 
 	// FIXME: destroy in teardown when available
-	_, _ = uploadApi.Destroy(ctx, DestroyParams{PublicID: largeImagePublicID})
+	_, _ = uploadApi.Destroy(ctx, uploader.DestroyParams{PublicID: largeImagePublicID})
 
 	if resp == nil ||
 		resp.PublicID != largeImagePublicID ||
@@ -151,31 +143,13 @@ func TestUploader_Timeout(t *testing.T) {
 
 	uploadApi.Config.Api.Timeout = 0 // should timeout immediately
 
-	_, err := uploadApi.Upload(ctx, LogoUrl, UploadParams{})
+	_, err := uploadApi.Upload(ctx, cldtest.LogoUrl, uploader.UploadParams{})
 
 	if err == nil || !strings.HasSuffix(err.Error(), "context deadline exceeded") {
 		t.Error("Expected context timeout did not happen")
 	}
 
 	uploadApi.Config.Api.Timeout = originalTimeout
-}
-
-func UploadTestAsset(t *testing.T, publicID string) {
-	params := UploadParams{
-		PublicID:  publicID,
-		Overwrite: true,
-		Tags:      tags,
-	}
-
-	resp, err := uploadApi.Upload(ctx, LogoUrl, params)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	if resp == nil || resp.PublicID != publicID {
-		t.Error(resp)
-	}
 }
 
 func populateLargeImage() string {
@@ -185,7 +159,7 @@ func populateLargeImage() string {
 		"\xFC\x00\x00\x00\x00\x00\x00\x00\x00fff\xFC\x00\x00\x00\x00\x00\x00\x00\x00\xC4\xF5(\xFF\x00\x00\x00" +
 		"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 
-	tmpFile, err := ioutil.TempFile("testdata", largeImagePublicID+".*.bmp")
+	tmpFile, err := ioutil.TempFile(cldtest.TestDataDir(), largeImagePublicID+".*.bmp")
 	if err != nil {
 		log.Fatal(err)
 	}

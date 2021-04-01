@@ -1,15 +1,18 @@
-package uploader
+package uploader_test
 
 import (
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 )
 
 func TestUploader_Creative(t *testing.T) {
-	UploadTestAsset(t, publicID)
-	UploadTestAsset(t, publicID2)
+	cldtest.UploadTestAsset(t, cldtest.PublicID)
+	cldtest.UploadTestAsset(t, cldtest.PublicID2)
 
-	params := GenerateSpriteParams{
-		Tag: tag1,
+	params := uploader.GenerateSpriteParams{
+		Tag: cldtest.Tag1,
 	}
 
 	resp, err := uploadApi.GenerateSprite(ctx, params)
@@ -22,8 +25,8 @@ func TestUploader_Creative(t *testing.T) {
 		t.Error(resp)
 	}
 
-	mParams := MultiParams{
-		Tag: tag1,
+	mParams := uploader.MultiParams{
+		Tag: cldtest.Tag1,
 	}
 
 	mResp, err := uploadApi.Multi(ctx, mParams)
@@ -32,12 +35,12 @@ func TestUploader_Creative(t *testing.T) {
 		t.Error(err)
 	}
 
-	if mResp == nil || mResp.PublicID != tag1 {
+	if mResp == nil || mResp.PublicID != cldtest.Tag1 {
 		t.Error(mResp)
 	}
 
-	eParams := ExplodeParams{
-		PublicID: tag1,
+	eParams := uploader.ExplodeParams{
+		PublicID: cldtest.Tag1,
 		Type:     "multi",
 	}
 

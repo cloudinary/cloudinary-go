@@ -1,8 +1,10 @@
-package admin
+package admin_test
 
 import (
 	"testing"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/api/admin"
 )
 
 func TestAdmin_Ping(t *testing.T) {
@@ -14,7 +16,7 @@ func TestAdmin_Ping(t *testing.T) {
 }
 
 func TestAdmin_Usage(t *testing.T) {
-	resp, err := adminApi.Usage(ctx, UsageParams{})
+	resp, err := adminApi.Usage(ctx, admin.UsageParams{})
 
 	if err != nil || len(resp.Plan) < 1 {
 		t.Error(err, resp)
@@ -22,7 +24,7 @@ func TestAdmin_Usage(t *testing.T) {
 }
 
 func TestAdmin_UsageYesterday(t *testing.T) {
-	resp, err := adminApi.Usage(ctx, UsageParams{Date: time.Now().AddDate(0, 0, -1)})
+	resp, err := adminApi.Usage(ctx, admin.UsageParams{Date: time.Now().AddDate(0, 0, -1)})
 
 	if err != nil || len(resp.Plan) < 1 {
 		t.Error(err, resp)
@@ -30,14 +32,14 @@ func TestAdmin_UsageYesterday(t *testing.T) {
 }
 
 func TestAdmin_Tags(t *testing.T) {
-	resp, err := adminApi.Tags(ctx, TagsParams{})
+	resp, err := adminApi.Tags(ctx, admin.TagsParams{})
 
 	if err != nil || len(resp.Tags) < 1 {
 		t.Error(err, resp)
 	}
 
 	if resp.NextCursor != "" {
-		resp2, err := adminApi.Tags(ctx, TagsParams{NextCursor: resp.NextCursor})
+		resp2, err := adminApi.Tags(ctx, admin.TagsParams{NextCursor: resp.NextCursor})
 
 		if err != nil || len(resp2.Tags) < 1 {
 			t.Error(err, resp)

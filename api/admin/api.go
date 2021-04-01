@@ -95,6 +95,9 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 	defer api.DeferredClose(resp.Body)
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 
 	//log.println(string(bodyBytes)) FIXME: find a good logger
 
