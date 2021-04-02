@@ -15,8 +15,8 @@ const (
 type ContextCommand string
 
 const (
-	AddContext       ContextCommand = "add"
-	RemoveAllContext ContextCommand = "remove_all"
+	addContext       ContextCommand = "add"
+	removeAllContext ContextCommand = "remove_all"
 )
 
 // AddContextParams struct
@@ -32,7 +32,7 @@ type AddContextParams struct {
 // https://cloudinary.com/documentation/image_upload_api_reference#context_method
 func (u *Api) AddContext(ctx context.Context, params AddContextParams) (*AddContextResult, error) {
 	res := &AddContextResult{}
-	err := u.callContextApi(ctx, AddContext, params, res)
+	err := u.callContextApi(ctx, addContext, params, res)
 
 	return res, err
 }
@@ -59,7 +59,7 @@ type RemoveAllContextParams struct {
 // https://cloudinary.com/documentation/image_upload_api_reference#context_method
 func (u *Api) RemoveAllContext(ctx context.Context, params RemoveAllContextParams) (*RemoveAllContextResult, error) {
 	res := &RemoveAllContextResult{}
-	err := u.callContextApi(ctx, RemoveAllContext, params, res)
+	err := u.callContextApi(ctx, removeAllContext, params, res)
 
 	return res, err
 }

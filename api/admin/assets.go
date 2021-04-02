@@ -12,18 +12,18 @@ import (
 )
 
 const (
-	Assets        api.EndPoint = "resources"
-	DerivedAssets api.EndPoint = "derived_resources"
-	Tags          api.EndPoint = "tags"
-	Context       api.EndPoint = "context"
-	Moderations   api.EndPoint = "moderations"
-	Restore       api.EndPoint = "restore"
+	assets        api.EndPoint = "resources"
+	derivedAssets api.EndPoint = "derived_resources"
+	tags          api.EndPoint = "tags"
+	cldContext    api.EndPoint = "context"
+	moderations   api.EndPoint = "moderations"
+	restore       api.EndPoint = "restore"
 )
 
 // AssetTypes lists available asset types.
 func (a *Api) AssetTypes(ctx context.Context) (*AssetTypesResult, error) {
 	res := &AssetTypesResult{}
-	_, err := a.get(ctx, Assets, nil, res)
+	_, err := a.get(ctx, assets, nil, res)
 
 	return res, err
 }
@@ -50,7 +50,7 @@ type AssetsParams struct {
 //https://cloudinary.com/documentation/admin_api#get_resources
 func (a *Api) Assets(ctx context.Context, params AssetsParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
-	_, err := a.get(ctx, api.BuildPath(Assets, params.AssetType), params, res)
+	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType), params, res)
 
 	return res, err
 }
@@ -79,7 +79,7 @@ type AssetsByTagParams struct {
 // https://cloudinary.com/documentation/admin_api#get_resources_by_tag
 func (a *Api) AssetsByTag(ctx context.Context, params AssetsByTagParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
-	_, err := a.get(ctx, api.BuildPath(Assets, params.AssetType, Tags, params.Tag), params, res)
+	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, tags, params.Tag), params, res)
 
 	return res, err
 }
@@ -103,7 +103,7 @@ type AssetsByContextParams struct {
 // https://cloudinary.com/documentation/admin_api#get_resources_by_context
 func (a *Api) AssetsByContext(ctx context.Context, params AssetsByContextParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
-	_, err := a.get(ctx, api.BuildPath(Assets, params.AssetType, Context), params, res)
+	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, cldContext), params, res)
 
 	return res, err
 }
@@ -125,7 +125,7 @@ type AssetsByModerationParams struct {
 // https://cloudinary.com/documentation/admin_api#get_resources_in_moderation_queues
 func (a *Api) AssetsByModeration(ctx context.Context, params AssetsByModerationParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
-	_, err := a.get(ctx, api.BuildPath(Assets, params.AssetType, Moderations, params.Kind, params.Status), params, res)
+	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, moderations, params.Kind, params.Status), params, res)
 
 	return res, err
 }
@@ -144,7 +144,7 @@ type AssetsByIDsParams struct {
 // https://cloudinary.com/documentation/admin_api#get_resources
 func (a *Api) AssetsByIDs(ctx context.Context, params AssetsByIDsParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
-	_, err := a.get(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType), params, res)
+	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
 
 	return res, err
 }
@@ -161,7 +161,7 @@ type RestoreAssetsParams struct {
 // https://cloudinary.com/documentation/admin_api#restore_resources
 func (a *Api) RestoreAssets(ctx context.Context, params RestoreAssetsParams) (*RestoreAssetsResult, error) {
 	res := &RestoreAssetsResult{}
-	_, err := a.post(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType, Restore), params, res)
+	_, err := a.post(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType, restore), params, res)
 
 	return res, err
 }
@@ -183,7 +183,7 @@ type DeleteAssetsParams struct {
 // https://cloudinary.com/documentation/admin_api#delete_resources
 func (a *Api) DeleteAssets(ctx context.Context, params DeleteAssetsParams) (*DeleteAssetsResult, error) {
 	res := &DeleteAssetsResult{}
-	_, err := a.delete(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType), params, res)
+	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
 
 	return res, err
 }
@@ -210,7 +210,7 @@ type DeleteAssetsByPrefixParams struct {
 // https://cloudinary.com/documentation/admin_api#delete_resources
 func (a *Api) DeleteAssetsByPrefix(ctx context.Context, params DeleteAssetsByPrefixParams) (*DeleteAssetsResult, error) {
 	res := &DeleteAssetsResult{}
-	_, err := a.delete(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType), params, res)
+	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
 
 	return res, err
 }
@@ -231,7 +231,7 @@ type DeleteAssetsByTagParams struct {
 // https://cloudinary.com/documentation/admin_api#delete_resources_by_tags
 func (a *Api) DeleteAssetsByTag(ctx context.Context, params DeleteAssetsByTagParams) (*DeleteAssetsResult, error) {
 	res := &DeleteAssetsResult{}
-	_, err := a.delete(ctx, api.BuildPath(Assets, params.AssetType, Tags, params.Tag), params, res)
+	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, tags, params.Tag), params, res)
 
 	return res, err
 }
@@ -255,7 +255,7 @@ func (a *Api) DeleteAllAssets(ctx context.Context, params DeleteAllAssetsParams)
 	params.All = true
 
 	res := &DeleteAssetsResult{}
-	_, err := a.delete(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType), params, res)
+	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
 
 	return res, err
 }
@@ -272,7 +272,7 @@ type DeleteDerivedAssetsParams struct {
 // https://cloudinary.com/documentation/admin_api##delete_resources
 func (a *Api) DeleteDerivedAssets(ctx context.Context, params DeleteDerivedAssetsParams) (*DeleteAssetsResult, error) {
 	res := &DeleteAssetsResult{}
-	_, err := a.delete(ctx, api.BuildPath(DerivedAssets), params, res)
+	_, err := a.delete(ctx, api.BuildPath(derivedAssets), params, res)
 
 	return res, err
 }
@@ -291,7 +291,7 @@ func (a *Api) DeleteDerivedAssetsByTransformation(ctx context.Context, params De
 	params.KeepOriginal = true
 
 	res := &DeleteAssetsResult{}
-	_, err := a.delete(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType), params, res)
+	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
 
 	return res, err
 }

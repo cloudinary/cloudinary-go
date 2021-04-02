@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	Tags api.EndPoint = "tags"
+	tags api.EndPoint = "tags"
 )
 
 type TagCommand string
@@ -123,5 +123,5 @@ func (u *Api) callTagsApi(ctx context.Context, command TagCommand, requestParams
 
 	formParams.Add("command", fmt.Sprintf("%v", command))
 
-	return u.callUploadApiWithParams(ctx, api.BuildPath(getAssetType(requestParams), Tags), formParams, result)
+	return u.callUploadApiWithParams(ctx, api.BuildPath(getAssetType(requestParams), tags), formParams, result)
 }

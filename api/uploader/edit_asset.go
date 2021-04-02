@@ -8,11 +8,11 @@ import (
 )
 
 const (
-	Upload   api.EndPoint = "upload"
-	Destroy  api.EndPoint = "destroy"
-	Rename   api.EndPoint = "rename"
-	Explicit api.EndPoint = "explicit"
-	Metadata api.EndPoint = "metadata"
+	upload   api.EndPoint = "upload"
+	destroy  api.EndPoint = "destroy"
+	rename   api.EndPoint = "rename"
+	explicit api.EndPoint = "explicit"
+	metadata api.EndPoint = "metadata"
 )
 
 // DestroyParams struct
@@ -32,7 +32,7 @@ type DestroyParams struct {
 // https://cloudinary.com/documentation/image_upload_api_reference#destroy_method
 func (u *Api) Destroy(ctx context.Context, params DestroyParams) (*DestroyResult, error) {
 	res := &DestroyResult{}
-	err := u.callUploadApi(ctx, Destroy, params, res)
+	err := u.callUploadApi(ctx, destroy, params, res)
 
 	return res, err
 }
@@ -63,7 +63,7 @@ type RenameParams struct {
 // https://cloudinary.com/documentation/image_upload_api_reference#rename_method
 func (u *Api) Rename(ctx context.Context, params RenameParams) (*RenameResult, error) {
 	res := &RenameResult{}
-	err := u.callUploadApi(ctx, Rename, params, res)
+	err := u.callUploadApi(ctx, rename, params, res)
 
 	return res, err
 }
@@ -80,7 +80,7 @@ type ExplicitParams = UploadParams
 // https://cloudinary.com/documentation/image_upload_api_reference#explicit_method
 func (u *Api) Explicit(ctx context.Context, params ExplicitParams) (*ExplicitResult, error) {
 	res := &ExplicitResult{}
-	err := u.callUploadApi(ctx, Explicit, params, res)
+	err := u.callUploadApi(ctx, explicit, params, res)
 
 	return res, err
 }
@@ -104,7 +104,7 @@ type UpdateMetadataParams struct {
 // https://cloudinary.com/documentation/image_upload_api_reference#metadata_method
 func (u *Api) UpdateMetadata(ctx context.Context, params RenameParams) (*UpdateMetadataResult, error) {
 	res := &UpdateMetadataResult{}
-	err := u.callUploadApi(ctx, Metadata, params, res)
+	err := u.callUploadApi(ctx, metadata, params, res)
 
 	return res, err
 }

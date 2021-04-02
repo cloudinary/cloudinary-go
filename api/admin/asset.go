@@ -38,7 +38,7 @@ type AssetParams struct {
 //https://cloudinary.com/documentation/admin_api#get_the_details_of_a_single_resource
 func (a *Api) Asset(ctx context.Context, params AssetParams) (*AssetResult, error) {
 	res := &AssetResult{}
-	_, err := a.get(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType,
+	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType,
 		params.PublicID), params, res)
 
 	return res, err
@@ -150,7 +150,7 @@ type UpdateAssetParams struct {
 // https://cloudinary.com/documentation/admin_api#update_details_of_an_existing_resource
 func (a *Api) UpdateAsset(ctx context.Context, params UpdateAssetParams) (*AssetResult, error) {
 	res := &AssetResult{}
-	_, err := a.post(ctx, api.BuildPath(Assets, params.AssetType, params.DeliveryType, params.PublicID), params, res)
+	_, err := a.post(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType, params.PublicID), params, res)
 
 	return res, err
 }

@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	MetadataFields    api.EndPoint = "metadata_fields"
-	DataSource        api.EndPoint = "datasource"
-	DataSourceRestore api.EndPoint = "datasource_restore"
+	metadataFields    api.EndPoint = "metadata_fields"
+	dataSource        api.EndPoint = "datasource"
+	dataSourceRestore api.EndPoint = "datasource_restore"
 )
 
 // ListMetadataFields lists all metadata field definitions.
@@ -19,7 +19,7 @@ const (
 // https://cloudinary.com/documentation/admin_api#get_metadata_fields
 func (a *Api) ListMetadataFields(ctx context.Context) (*ListMetadataFieldsResult, error) {
 	res := &ListMetadataFieldsResult{}
-	_, err := a.get(ctx, MetadataFields, nil, res)
+	_, err := a.get(ctx, metadataFields, nil, res)
 
 	return res, err
 }
@@ -39,7 +39,7 @@ type MetadataFieldByFieldIdParams struct {
 // https://cloudinary.com/documentation/admin_api#get_a_metadata_field_by_external_id
 func (a *Api) MetadataFieldByFieldId(ctx context.Context, params MetadataFieldByFieldIdParams) (*MetadataFieldByFieldIdResult, error) {
 	res := &MetadataFieldByFieldIdResult{}
-	_, err := a.get(ctx, api.BuildPath(MetadataFields, params.FieldExternalId), params, res)
+	_, err := a.get(ctx, api.BuildPath(metadataFields, params.FieldExternalId), params, res)
 
 	return res, err
 }
@@ -55,7 +55,7 @@ type MetadataFieldByFieldIdResult struct {
 // https://cloudinary.com/documentation/admin_api#create_a_metadata_field
 func (a *Api) AddMetadataField(ctx context.Context, params metadata.Field) (*AddMetadataFieldResult, error) {
 	res := &AddMetadataFieldResult{}
-	_, err := a.post(ctx, MetadataFields, params, res)
+	_, err := a.post(ctx, metadataFields, params, res)
 
 	return res, err
 }
@@ -78,7 +78,7 @@ type UpdateMetadataFieldParams struct {
 // https://cloudinary.com/documentation/admin_api#update_a_metadata_field_by_external_id
 func (a *Api) UpdateMetadataField(ctx context.Context, params UpdateMetadataFieldParams) (*UpdateMetadataFieldResult, error) {
 	res := &UpdateMetadataFieldResult{}
-	_, err := a.put(ctx, api.BuildPath(MetadataFields, params.FieldExternalId), params, res)
+	_, err := a.put(ctx, api.BuildPath(metadataFields, params.FieldExternalId), params, res)
 
 	return res, err
 }
@@ -100,7 +100,7 @@ type DeleteMetadataFieldParams struct {
 // https://cloudinary.com/documentation/admin_api#delete_a_metadata_field_by_external_id
 func (a *Api) DeleteMetadataField(ctx context.Context, params DeleteMetadataFieldParams) (*DeleteMetadataFieldResult, error) {
 	res := &DeleteMetadataFieldResult{}
-	_, err := a.delete(ctx, api.BuildPath(MetadataFields, params.FieldExternalId), params, res)
+	_, err := a.delete(ctx, api.BuildPath(metadataFields, params.FieldExternalId), params, res)
 
 	return res, err
 }
@@ -125,7 +125,7 @@ type DeleteDataSourceEntriesParams struct {
 // https://cloudinary.com/documentation/admin_api#delete_entries_in_a_metadata_field_datasource
 func (a *Api) DeleteDataSourceEntries(ctx context.Context, params DeleteDataSourceEntriesParams) (*DeleteDataSourceEntriesResult, error) {
 	res := &DeleteDataSourceEntriesResult{}
-	_, err := a.delete(ctx, api.BuildPath(MetadataFields, params.FieldExternalId, DataSource), params, res)
+	_, err := a.delete(ctx, api.BuildPath(metadataFields, params.FieldExternalId, dataSource), params, res)
 
 	return res, err
 }
@@ -150,7 +150,7 @@ type UpdateMetadataFieldDataSourceParams struct {
 // https://cloudinary.com/documentation/admin_api#update_a_metadata_field_datasource
 func (a *Api) UpdateMetadataFieldDataSource(ctx context.Context, params UpdateMetadataFieldDataSourceParams) (*UpdateMetadataFieldDataSourceResult, error) {
 	res := &UpdateMetadataFieldDataSourceResult{}
-	_, err := a.put(ctx, api.BuildPath(MetadataFields, params.FieldExternalId, DataSource), params, res)
+	_, err := a.put(ctx, api.BuildPath(metadataFields, params.FieldExternalId, dataSource), params, res)
 
 	return res, err
 }
@@ -174,7 +174,7 @@ type RestoreDatasourceEntriesParams struct {
 // https://cloudinary.com/documentation/admin_api#restore_entries_in_a_metadata_field_datasource
 func (a *Api) RestoreDatasourceEntries(ctx context.Context, params RestoreDatasourceEntriesParams) (*RestoreDatasourceEntriesResult, error) {
 	res := &RestoreDatasourceEntriesResult{}
-	_, err := a.post(ctx, api.BuildPath(MetadataFields, params.FieldExternalId, DataSourceRestore), params, res)
+	_, err := a.post(ctx, api.BuildPath(metadataFields, params.FieldExternalId, dataSourceRestore), params, res)
 
 	return res, err
 }

@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	StreamingProfiles api.EndPoint = "streaming_profiles"
+	streamingProfiles api.EndPoint = "streaming_profiles"
 )
 
 // ListStreamingProfiles lists streaming profiles including built-in and custom profiles.
@@ -22,11 +22,12 @@ const (
 // https://cloudinary.com/documentation/admin_api#get_adaptive_streaming_profiles
 func (a *Api) ListStreamingProfiles(ctx context.Context) (*ListStreamingProfilesResult, error) {
 	res := &ListStreamingProfilesResult{}
-	_, err := a.get(ctx, StreamingProfiles, nil, res)
+	_, err := a.get(ctx, streamingProfiles, nil, res)
 
 	return res, err
 }
 
+// ListStreamingProfilesResult represents the result of listing of streaming profiles.
 type ListStreamingProfilesResult struct {
 	Data  []StreamingProfile `json:"data"`
 	Error api.ErrorResp      `json:"error,omitempty"`
@@ -47,7 +48,7 @@ type GetStreamingProfileParams struct {
 // https://cloudinary.com/documentation/admin_api#get_details_of_a_single_streaming_profile
 func (a *Api) GetStreamingProfile(ctx context.Context, params GetStreamingProfileParams) (*GetStreamingProfileResult, error) {
 	res := &GetStreamingProfileResult{}
-	_, err := a.get(ctx, api.BuildPath(StreamingProfiles, params.Name), params, res)
+	_, err := a.get(ctx, api.BuildPath(streamingProfiles, params.Name), params, res)
 
 	return res, err
 }
@@ -93,7 +94,7 @@ type CreateStreamingProfileParams struct {
 // https://cloudinary.com/documentation/admin_api#create_a_streaming_profile
 func (a *Api) CreateStreamingProfile(ctx context.Context, params CreateStreamingProfileParams) (*GetStreamingProfileResult, error) {
 	res := &GetStreamingProfileResult{}
-	_, err := a.post(ctx, api.BuildPath(StreamingProfiles), params, res)
+	_, err := a.post(ctx, api.BuildPath(streamingProfiles), params, res)
 
 	return res, err
 }
@@ -111,7 +112,7 @@ type UpdateStreamingProfileParams struct {
 // https://cloudinary.com/documentation/admin_api#update_an_existing_streaming_profile
 func (a *Api) UpdateStreamingProfile(ctx context.Context, params UpdateStreamingProfileParams) (*GetStreamingProfileResult, error) {
 	res := &GetStreamingProfileResult{}
-	_, err := a.put(ctx, api.BuildPath(StreamingProfiles, params.Name), params, res)
+	_, err := a.put(ctx, api.BuildPath(streamingProfiles, params.Name), params, res)
 
 	return res, err
 }
@@ -129,7 +130,7 @@ type DeleteStreamingProfileParams struct {
 // https://cloudinary.com/documentation/admin_api#delete_or_revert_the_specified_streaming_profile
 func (a *Api) DeleteStreamingProfile(ctx context.Context, params DeleteStreamingProfileParams) (*DeleteStreamingProfileResult, error) {
 	res := &DeleteStreamingProfileResult{}
-	_, err := a.delete(ctx, api.BuildPath(StreamingProfiles, params.Name), params, res)
+	_, err := a.delete(ctx, api.BuildPath(streamingProfiles, params.Name), params, res)
 
 	return res, err
 }

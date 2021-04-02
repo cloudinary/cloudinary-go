@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	Transformations api.EndPoint = "transformations"
+	transformations api.EndPoint = "transformations"
 )
 
 type ListTransformationsParams struct {
@@ -26,7 +26,7 @@ type ListTransformationsParams struct {
 // https://cloudinary.com/documentation/admin_api#get_transformations
 func (a *Api) ListTransformations(ctx context.Context, params ListTransformationsParams) (*ListTransformationsResult, error) {
 	res := &ListTransformationsResult{}
-	_, err := a.get(ctx, Transformations, params, res)
+	_, err := a.get(ctx, transformations, params, res)
 
 	return res, err
 }
@@ -54,7 +54,7 @@ type GetTransformationParams struct {
 // https://cloudinary.com/documentation/admin_api#get_transformation_details
 func (a *Api) GetTransformation(ctx context.Context, params GetTransformationParams) (*GetTransformationResult, error) {
 	res := &GetTransformationResult{}
-	_, err := a.get(ctx, api.BuildPath(Transformations), params, res)
+	_, err := a.get(ctx, api.BuildPath(transformations), params, res)
 
 	return res, err
 }
@@ -90,7 +90,7 @@ type CreateTransformationParams struct {
 // https://cloudinary.com/documentation/admin_api#create_named_transformation
 func (a *Api) CreateTransformation(ctx context.Context, params CreateTransformationParams) (*TransformationResult, error) {
 	res := &TransformationResult{}
-	_, err := a.post(ctx, api.BuildPath(Transformations), params, res)
+	_, err := a.post(ctx, api.BuildPath(transformations), params, res)
 
 	return res, err
 }
@@ -111,7 +111,7 @@ type UpdateTransformationParams struct {
 // https://cloudinary.com/documentation/admin_api#update_transformation
 func (a *Api) UpdateTransformation(ctx context.Context, params UpdateTransformationParams) (*TransformationResult, error) {
 	res := &TransformationResult{}
-	_, err := a.put(ctx, api.BuildPath(Transformations), params, res)
+	_, err := a.put(ctx, api.BuildPath(transformations), params, res)
 
 	return res, err
 }
@@ -128,7 +128,7 @@ type DeleteTransformationParams struct {
 // https://cloudinary.com/documentation/admin_api#delete_transformation
 func (a *Api) DeleteTransformation(ctx context.Context, params DeleteTransformationParams) (*TransformationResult, error) {
 	res := &TransformationResult{}
-	_, err := a.delete(ctx, api.BuildPath(Transformations), params, res)
+	_, err := a.delete(ctx, api.BuildPath(transformations), params, res)
 
 	return res, err
 }

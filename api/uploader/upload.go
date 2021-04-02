@@ -114,7 +114,7 @@ func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Val
 		}
 	}
 
-	uploadEndpoint := api.BuildPath(api.Auto, Upload)
+	uploadEndpoint := api.BuildPath(api.Auto, upload)
 	switch fileValue := file.(type) {
 	case string:
 		if !api.IsLocalFilePath(file) {

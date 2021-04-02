@@ -20,12 +20,12 @@ import (
 	"github.com/cloudinary/cloudinary-go/api/admin/search"
 )
 
-const SearchEndPoint api.EndPoint = "resources/search"
+const searchEndPoint api.EndPoint = "resources/search"
 
 // Search executes the search API request.
 func (a *Api) Search(ctx context.Context, searchQuery search.Query) (*SearchResult, error) {
 	res := &SearchResult{}
-	_, err := a.post(ctx, api.BuildPath(SearchEndPoint), searchQuery, res)
+	_, err := a.post(ctx, api.BuildPath(searchEndPoint), searchQuery, res)
 
 	return res, err
 }

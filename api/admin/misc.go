@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	Ping  api.EndPoint = "ping"
-	Usage api.EndPoint = "usage"
+	ping  api.EndPoint = "ping"
+	usage api.EndPoint = "usage"
 )
 
 // Ping tests the reachability of the Cloudinary API.
@@ -18,11 +18,12 @@ const (
 // https://cloudinary.com/documentation/admin_api#ping
 func (a *Api) Ping(ctx context.Context) (*PingResult, error) {
 	res := &PingResult{}
-	_, err := a.get(ctx, Ping, nil, res)
+	_, err := a.get(ctx, ping, nil, res)
 
 	return res, err
 }
 
+// PingResult represents the result of the Ping request.
 type PingResult struct {
 	Status   string        `json:"status"`
 	Error    api.ErrorResp `json:"error,omitempty"`
@@ -46,7 +47,7 @@ func (a *Api) Usage(ctx context.Context, params UsageParams) (*UsageResult, erro
 		date = params.Date.Format("02-01-2006")
 	}
 	res := &UsageResult{}
-	_, err := a.get(ctx, api.BuildPath(Usage, date), params, res)
+	_, err := a.get(ctx, api.BuildPath(usage, date), params, res)
 
 	return res, err
 }
@@ -100,7 +101,7 @@ type TagsParams struct {
 // https://cloudinary.com/documentation/admin_api#get_tags
 func (a *Api) Tags(ctx context.Context, params TagsParams) (*TagsResult, error) {
 	res := &TagsResult{}
-	_, err := a.get(ctx, api.BuildPath(Tags, params.AssetType), params, res)
+	_, err := a.get(ctx, api.BuildPath(tags, params.AssetType), params, res)
 
 	return res, err
 }

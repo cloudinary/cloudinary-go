@@ -63,7 +63,7 @@ func TestUploader_DownloadFolder(t *testing.T) {
 	}
 
 	folderURL, _ := uploadApi.DownloadFolder(folder, params)
-	assert.Contains(t, folderURL, uploader.GenerateArchive)
+	assert.Contains(t, folderURL, "generate_archive")
 	assert.Contains(t, folderURL, folder)
 	assert.Contains(t, folderURL, params.TargetPublicId)
 	assert.Contains(t, folderURL, api.All)
@@ -82,5 +82,5 @@ func TestUploader_DownloadBackedUpAsset(t *testing.T) {
 	downloadURL, _ := uploadApi.DownloadBackedUpAsset(params)
 	assert.Contains(t, downloadURL, "asset_id")
 	assert.Contains(t, downloadURL, "version_id")
-	assert.Contains(t, downloadURL, uploader.DownloadBackup)
+	assert.Contains(t, downloadURL, "download_backup")
 }

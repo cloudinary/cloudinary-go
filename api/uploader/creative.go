@@ -8,10 +8,10 @@ import (
 )
 
 const (
-	Sprite  api.EndPoint = "sprite"
-	Multi   api.EndPoint = "multi"
-	Explode api.EndPoint = "explode"
-	Text    api.EndPoint = "text"
+	sprite  api.EndPoint = "sprite"
+	multi   api.EndPoint = "multi"
+	explode api.EndPoint = "explode"
+	text    api.EndPoint = "text"
 )
 
 // GenerateSpriteParams struct
@@ -32,7 +32,7 @@ type GenerateSpriteParams struct {
 // https://cloudinary.com/documentation/image_upload_api_reference#sprite_method
 func (u *Api) GenerateSprite(ctx context.Context, params GenerateSpriteParams) (*GenerateSpriteResult, error) {
 	res := &GenerateSpriteResult{}
-	err := u.callUploadApi(ctx, Sprite, params, res)
+	err := u.callUploadApi(ctx, sprite, params, res)
 
 	return res, err
 }
@@ -73,7 +73,7 @@ type MultiParams struct {
 // https://cloudinary.com/documentation/image_upload_api_reference#multi_method
 func (u *Api) Multi(ctx context.Context, params MultiParams) (*MultiResult, error) {
 	res := &MultiResult{}
-	err := u.callUploadApi(ctx, Multi, params, res)
+	err := u.callUploadApi(ctx, multi, params, res)
 
 	return res, err
 }
@@ -107,7 +107,7 @@ type ExplodeParams struct {
 func (u *Api) Explode(ctx context.Context, params ExplodeParams) (*ExplodeResult, error) {
 	params.Transformation = "pg_all" // Transformation must contain exactly one "pg_all" transformation parameter
 	res := &ExplodeResult{}
-	err := u.callUploadApi(ctx, Explode, params, res)
+	err := u.callUploadApi(ctx, explode, params, res)
 
 	return res, err
 }

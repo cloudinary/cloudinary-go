@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	GenerateArchive api.EndPoint = "generate_archive"
-	DownloadBackup  api.EndPoint = "download_backup"
+	generateArchive api.EndPoint = "generate_archive"
+	downloadBackup  api.EndPoint = "download_backup"
 )
 
 type ArchiveFormat = string
@@ -56,7 +56,7 @@ type CreateArchiveParams struct {
 // CreateArchive creates a new archive in the server and returns information in JSON format.
 func (u *Api) CreateArchive(ctx context.Context, params CreateArchiveParams) (*CreateArchiveResult, error) {
 	res := &CreateArchiveResult{}
-	err := u.callUploadApi(ctx, GenerateArchive, params, res)
+	err := u.callUploadApi(ctx, generateArchive, params, res)
 
 	return res, err
 }
@@ -105,7 +105,7 @@ func (u *Api) DownloadArchiveUrl(params CreateArchiveParams) (string, error) {
 
 	assetType := getAssetType(params)
 
-	archiveEndpointURL := u.getUploadURL(api.BuildPath(assetType, GenerateArchive))
+	archiveEndpointURL := u.getUploadURL(api.BuildPath(assetType, generateArchive))
 
 	urlStruct, err := url.Parse(archiveEndpointURL)
 	if err != nil {
@@ -151,7 +151,7 @@ func (u *Api) DownloadBackedUpAsset(params DownloadABackedUpAssetParams) (string
 		return "", err
 	}
 
-	urlStruct, err := url.Parse(u.getUploadURL(DownloadBackup))
+	urlStruct, err := url.Parse(u.getUploadURL(downloadBackup))
 	if err != nil {
 		return "", err
 	}

@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	UploadPresets api.EndPoint = "upload_presets"
+	uploadPresets api.EndPoint = "upload_presets"
 )
 
 type ListUploadPresetsParams struct {
@@ -24,7 +24,7 @@ type ListUploadPresetsParams struct {
 // https://cloudinary.com/documentation/admin_api#get_upload_presets
 func (a *Api) ListUploadPresets(ctx context.Context, params ListUploadPresetsParams) (*ListUploadPresetsResult, error) {
 	res := &ListUploadPresetsResult{}
-	_, err := a.get(ctx, UploadPresets, params, res)
+	_, err := a.get(ctx, uploadPresets, params, res)
 
 	return res, err
 }
@@ -50,7 +50,7 @@ type GetUploadPresetParams struct {
 // https://cloudinary.com/documentation/admin_api#get_the_details_of_a_single_upload_preset
 func (a *Api) GetUploadPreset(ctx context.Context, params GetUploadPresetParams) (*GetUploadPresetResult, error) {
 	res := &GetUploadPresetResult{}
-	_, err := a.get(ctx, api.BuildPath(UploadPresets, params.Name), params, res)
+	_, err := a.get(ctx, api.BuildPath(uploadPresets, params.Name), params, res)
 
 	return res, err
 }
@@ -75,7 +75,7 @@ type CreateUploadPresetParams struct {
 // https://cloudinary.com/documentation/admin_api#create_an_upload_preset
 func (a *Api) CreateUploadPreset(ctx context.Context, params CreateUploadPresetParams) (*CreateUploadPresetResult, error) {
 	res := &CreateUploadPresetResult{}
-	_, err := a.post(ctx, api.BuildPath(UploadPresets), params, res)
+	_, err := a.post(ctx, api.BuildPath(uploadPresets), params, res)
 
 	return res, err
 }
@@ -99,7 +99,7 @@ type UpdateUploadPresetParams struct {
 // https://cloudinary.com/documentation/admin_api#update_an_upload_preset
 func (a *Api) UpdateUploadPreset(ctx context.Context, params UpdateUploadPresetParams) (*UploadPresetResult, error) {
 	res := &UploadPresetResult{}
-	_, err := a.put(ctx, api.BuildPath(UploadPresets, params.Name), params, res)
+	_, err := a.put(ctx, api.BuildPath(uploadPresets, params.Name), params, res)
 
 	return res, err
 }
@@ -118,7 +118,7 @@ type DeleteUploadPresetParams struct {
 // https://cloudinary.com/documentation/admin_api#delete_an_upload_preset
 func (a *Api) DeleteUploadPreset(ctx context.Context, params DeleteUploadPresetParams) (*UploadPresetResult, error) {
 	res := &UploadPresetResult{}
-	_, err := a.delete(ctx, api.BuildPath(UploadPresets, params.Name), params, res)
+	_, err := a.delete(ctx, api.BuildPath(uploadPresets, params.Name), params, res)
 
 	return res, err
 }

@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	Folders api.EndPoint = "folders"
+	folders api.EndPoint = "folders"
 )
 
 type RootFoldersParams struct {
@@ -23,7 +23,7 @@ type RootFoldersParams struct {
 // https://cloudinary.com/documentation/admin_api#get_root_folders
 func (a *Api) RootFolders(ctx context.Context, params RootFoldersParams) (*FoldersResult, error) {
 	res := &FoldersResult{}
-	_, err := a.get(ctx, Folders, params, res)
+	_, err := a.get(ctx, folders, params, res)
 
 	return res, err
 }
@@ -53,7 +53,7 @@ type SubFoldersParams struct {
 // https://cloudinary.com/documentation/admin_api#get_subfolders
 func (a *Api) SubFolders(ctx context.Context, params SubFoldersParams) (*FoldersResult, error) {
 	res := &FoldersResult{}
-	_, err := a.get(ctx, api.BuildPath(Folders, params.Folder), params, res)
+	_, err := a.get(ctx, api.BuildPath(folders, params.Folder), params, res)
 
 	return res, err
 }
@@ -67,7 +67,7 @@ type CreateFolderParams struct {
 // https://cloudinary.com/documentation/admin_api#create_folder
 func (a *Api) CreateFolder(ctx context.Context, params CreateFolderParams) (*CreateFolderResult, error) {
 	res := &CreateFolderResult{}
-	_, err := a.post(ctx, api.BuildPath(Folders, params.Folder), params, res)
+	_, err := a.post(ctx, api.BuildPath(folders, params.Folder), params, res)
 
 	return res, err
 }
@@ -90,7 +90,7 @@ type DeleteFolderParams struct {
 // https://cloudinary.com/documentation/admin_api#delete_folder
 func (a *Api) DeleteFolder(ctx context.Context, params DeleteFolderParams) (*DeleteFolderResult, error) {
 	res := &DeleteFolderResult{}
-	_, err := a.delete(ctx, api.BuildPath(Folders, params.Folder), params, res)
+	_, err := a.delete(ctx, api.BuildPath(folders, params.Folder), params, res)
 
 	return res, err
 }
