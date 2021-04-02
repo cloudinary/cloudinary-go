@@ -17,18 +17,18 @@ func TestFolders_CreateFolder(t *testing.T) {
 	}
 }
 
-func TestFolders_DeleteFolder(t *testing.T) {
-	resp, err := adminApi.DeleteFolder(ctx, admin.DeleteFolderParams{Folder: testFolder})
-
-	if err != nil || len(resp.Deleted) < 1 {
-		t.Error(resp, err)
-	}
-}
-
 func TestFolders_RootFolders(t *testing.T) {
 	resp, err := adminApi.RootFolders(ctx, admin.RootFoldersParams{MaxResults: 5})
 
 	if err != nil || resp.TotalCount < 1 {
+		t.Error(resp, err)
+	}
+}
+
+func TestFolders_DeleteFolder(t *testing.T) {
+	resp, err := adminApi.DeleteFolder(ctx, admin.DeleteFolderParams{Folder: testFolder})
+
+	if err != nil || len(resp.Deleted) < 1 {
 		t.Error(resp, err)
 	}
 }

@@ -1,0 +1,14 @@
+language: go
+
+go:
+  - 1.13.x
+  - 1.14.x
+  - 1.15.x
+  - 1.16.x
+
+before_script: >
+  export CLOUDINARY_URL=$(bash scripts/get_test_cloud.sh);
+  echo cloud_name: "$(echo $CLOUDINARY_URL | cut -d'@' -f2)"
+
+script:
+  - go test -v ./...

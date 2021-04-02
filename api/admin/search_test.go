@@ -8,7 +8,7 @@ import (
 
 func TestSearch_SearchQuery(t *testing.T) {
 	sq := search.Query{
-		Expression: "format:jpg",
+		Expression: "format:png",
 		WithField:  []string{search.TagsField, search.ContextField, search.ImageMetadataField, search.ImageAnalysisField},
 		SortBy:     []search.SortByField{{"created_at": search.Descending}},
 		MaxResults: 2,
