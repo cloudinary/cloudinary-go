@@ -92,6 +92,7 @@ const (
 type Option map[string]interface{}
 
 type Coordinates [][]int
+
 // CldApiArray is not just an alias, in addition it has a custom MarshalJSON() for serialisation purposes.
 type CldApiArray []string
 
@@ -218,7 +219,7 @@ func DeferredClose(c io.Closer) {
 // IsValidUrl checks whether urlCandidate string is a valid URL.
 func IsValidUrl(urlCandidate string) bool {
 	urlStruct, err := url.Parse(urlCandidate)
-	if err != nil || urlStruct.Scheme == ""{
+	if err != nil || urlStruct.Scheme == "" {
 		return false
 	}
 

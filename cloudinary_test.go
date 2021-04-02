@@ -37,11 +37,11 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 
 func TestCloudinary_Upload(t *testing.T) {
 	params := uploader.UploadParams{
-		PublicID: "test_image",
-		Eager: "w_500,h_500",
+		PublicID:       "test_image",
+		Eager:          "w_500,h_500",
 		UniqueFilename: false,
-		UseFilename: true,
-		Overwrite: true,
+		UseFilename:    true,
+		Overwrite:      true,
 	}
 
 	resp, err := c.Upload.Upload(ctx, "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png", params)
