@@ -23,13 +23,14 @@ import (
 const searchEndPoint api.EndPoint = "resources/search"
 
 // Search executes the search API request.
-func (a *Api) Search(ctx context.Context, searchQuery search.Query) (*SearchResult, error) {
+func (a *API) Search(ctx context.Context, searchQuery search.Query) (*SearchResult, error) {
 	res := &SearchResult{}
 	_, err := a.post(ctx, api.BuildPath(searchEndPoint), searchQuery, res)
 
 	return res, err
 }
 
+// SearchResult is the result of Search.
 type SearchResult struct {
 	TotalCount int           `json:"total_count"`
 	Time       int           `json:"time"`
@@ -37,6 +38,7 @@ type SearchResult struct {
 	Error      api.ErrorResp `json:"error,omitempty"`
 }
 
+// SearchAsset represents the details of a single asset that was found.
 type SearchAsset struct {
 	PublicID      string              `json:"public_id"`
 	Folder        string              `json:"folder"`
@@ -66,6 +68,7 @@ type SearchAsset struct {
 	UploadedBy    SearchUser          `json:"uploaded_by"`
 }
 
+// ImageAnalysis contains details about image analysis.
 type ImageAnalysis struct {
 	FaceCount         int                `json:"face_count"`
 	Faces             [][]int            `json:"faces"`
@@ -76,6 +79,7 @@ type ImageAnalysis struct {
 	Colors            map[string]float64 `json:"colors"`
 }
 
+// SearchUser contains details about the user.
 type SearchUser struct {
 	AccessKey string `json:"access_key"`
 }

@@ -6,7 +6,7 @@ Contributions are welcome and greatly appreciated!
 
 - Make sure that the bug was not already reported by searching in GitHub under [Issues](https://github.com/cloudinary/cloudinary-go) and the Cloudinary [Support forms](https://support.cloudinary.com).
 - If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/cloudinary/cloudinary-go/issues/new/choose).
-  Be sure to include a **title and clear description**, as relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
+  Be sure to include a **title and clear description**, as relevant information as possible, and a **code sample**, or an **executable test case** demonstrating the expected behavior that is not occurring.
 - If you require assistance in the implementation of cloudinary-go please [submit a request](https://support.cloudinary.com/hc/en-us/requests/new) on Cloudinary's site.
 
 ## Requesting a feature
@@ -91,7 +91,7 @@ git commit
 ```
 
 
-> Please squash your commits into a single commit when appropriate. This simplifies future cherry picks and keeps the git log clean.
+> Please squash your commits into a single commit when appropriate. This simplifies future cherry-picks and keeps the git log clean.
 
 #### Push
 

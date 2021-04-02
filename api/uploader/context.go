@@ -9,20 +9,20 @@ import (
 )
 
 const (
-	Context api.EndPoint = "context"
+	cldContext api.EndPoint = "context"
 )
 
-type ContextCommand string
+type contextCommand string
 
 const (
-	addContext       ContextCommand = "add"
-	removeAllContext ContextCommand = "remove_all"
+	addContext       contextCommand = "add"
+	removeAllContext contextCommand = "remove_all"
 )
 
-// AddContextParams struct
+// AddContextParams are the parameters for AddContext.
 type AddContextParams struct {
-	Context      api.CldApiMap   `json:"context,omitempty"`
-	PublicIDs    api.CldApiArray `json:"public_ids"`
+	Context      api.CldAPIMap   `json:"context,omitempty"`
+	PublicIDs    api.CldAPIArray `json:"public_ids"`
 	Type         string          `json:"type,omitempty"`
 	ResourceType string          `json:"-"`
 }
@@ -30,17 +30,17 @@ type AddContextParams struct {
 // AddContext adds context metadata as key-value pairs to the the specified assets.
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#context_method
-func (u *Api) AddContext(ctx context.Context, params AddContextParams) (*AddContextResult, error) {
+func (u *API) AddContext(ctx context.Context, params AddContextParams) (*AddContextResult, error) {
 	res := &AddContextResult{}
-	err := u.callContextApi(ctx, addContext, params, res)
+	err := u.callContextAPI(ctx, addContext, params, res)
 
 	return res, err
 }
 
-type AddContextResult struct {
-	ContextResult
-}
+// AddContextResult is the result of AddContext.
+type AddContextResult = ContextResult
 
+// ContextResult is the result of Context APIs.
 type ContextResult struct {
 	PublicIds []string      `json:"public_ids"`
 	Error     api.ErrorResp `json:"error,omitempty"`
@@ -49,7 +49,7 @@ type ContextResult struct {
 
 // RemoveAllContextParams struct
 type RemoveAllContextParams struct {
-	PublicIDs    api.CldApiArray `json:"public_ids"`
+	PublicIDs    api.CldAPIArray `json:"public_ids"`
 	Type         string          `json:"type,omitempty"`
 	ResourceType string          `json:"-"`
 }
@@ -57,19 +57,18 @@ type RemoveAllContextParams struct {
 // RemoveAllContext removes all context metadata from the specified assets.
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#context_method
-func (u *Api) RemoveAllContext(ctx context.Context, params RemoveAllContextParams) (*RemoveAllContextResult, error) {
+func (u *API) RemoveAllContext(ctx context.Context, params RemoveAllContextParams) (*RemoveAllContextResult, error) {
 	res := &RemoveAllContextResult{}
-	err := u.callContextApi(ctx, removeAllContext, params, res)
+	err := u.callContextAPI(ctx, removeAllContext, params, res)
 
 	return res, err
 }
 
-type RemoveAllContextResult struct {
-	ContextResult
-}
+// RemoveAllContextResult is the result of RemoveAllContext.
+type RemoveAllContextResult = ContextResult
 
-// callContextApi is an internal method that is used to call to the context API.
-func (u *Api) callContextApi(ctx context.Context, command ContextCommand, requestParams interface{}, result interface{}) error {
+// callContextAPI is an internal method that is used to call to the context API.
+func (u *API) callContextAPI(ctx context.Context, command contextCommand, requestParams interface{}, result interface{}) error {
 	formParams, err := api.StructToParams(requestParams)
 	if err != nil {
 		return err
@@ -77,5 +76,5 @@ func (u *Api) callContextApi(ctx context.Context, command ContextCommand, reques
 
 	formParams.Add("command", fmt.Sprintf("%v", command))
 
-	return u.callUploadApiWithParams(ctx, api.BuildPath(getAssetType(requestParams), Context), formParams, result)
+	return u.callUploadAPIWithParams(ctx, api.BuildPath(getAssetType(requestParams), cldContext), formParams, result)
 }

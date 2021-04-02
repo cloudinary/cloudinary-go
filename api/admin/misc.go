@@ -16,7 +16,7 @@ const (
 // Ping tests the reachability of the Cloudinary API.
 //
 // https://cloudinary.com/documentation/admin_api#ping
-func (a *Api) Ping(ctx context.Context) (*PingResult, error) {
+func (a *API) Ping(ctx context.Context) (*PingResult, error) {
 	res := &PingResult{}
 	_, err := a.get(ctx, ping, nil, res)
 
@@ -30,6 +30,7 @@ type PingResult struct {
 	Response http.Response
 }
 
+// UsageParams are the parameters for Usage.
 type UsageParams struct {
 	Date time.Time `json:"-"`
 }
@@ -41,7 +42,7 @@ type UsageParams struct {
 // Note that numbers are updated periodically.
 //
 // https://cloudinary.com/documentation/admin_api#usage
-func (a *Api) Usage(ctx context.Context, params UsageParams) (*UsageResult, error) {
+func (a *API) Usage(ctx context.Context, params UsageParams) (*UsageResult, error) {
 	date := ""
 	if !params.Date.IsZero() {
 		date = params.Date.Format("02-01-2006")
@@ -52,6 +53,7 @@ func (a *Api) Usage(ctx context.Context, params UsageParams) (*UsageResult, erro
 	return res, err
 }
 
+// UsageResult is the result of Usage.
 type UsageResult struct {
 	Plan            string `json:"plan"`
 	LastUpdated     string `json:"last_updated"`
@@ -89,6 +91,7 @@ type UsageResult struct {
 	Response interface{}
 }
 
+// TagsParams are the parameters for Tags.
 type TagsParams struct {
 	AssetType  api.AssetType `json:"-"`                     // The type of asset.
 	NextCursor string        `json:"next_cursor,omitempty"` // The cursor used for pagination.
@@ -99,13 +102,14 @@ type TagsParams struct {
 // Tags lists all the tags currently used for a specified asset type.
 //
 // https://cloudinary.com/documentation/admin_api#get_tags
-func (a *Api) Tags(ctx context.Context, params TagsParams) (*TagsResult, error) {
+func (a *API) Tags(ctx context.Context, params TagsParams) (*TagsResult, error) {
 	res := &TagsResult{}
 	_, err := a.get(ctx, api.BuildPath(tags, params.AssetType), params, res)
 
 	return res, err
 }
 
+// TagsResult is the result of Tags.
 type TagsResult struct {
 	Tags       []string      `json:"tags"`
 	NextCursor string        `json:"next_cursor"`

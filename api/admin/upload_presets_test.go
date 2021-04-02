@@ -16,10 +16,10 @@ func TestUploadPresets_Create(t *testing.T) {
 		Name:         UPName,
 		Unsigned:     true,
 		Live:         true,
-		UploadParams: uploader.UploadParams{Tags: api.CldApiArray{"go-tag1", "go-tag2"}},
+		UploadParams: uploader.UploadParams{Tags: api.CldAPIArray{"go-tag1", "go-tag2"}},
 	}
 
-	resp, err := adminApi.CreateUploadPreset(ctx, params)
+	resp, err := adminAPI.CreateUploadPreset(ctx, params)
 
 	if err != nil || resp.Message != "created" {
 		t.Error(resp, err)
@@ -27,7 +27,7 @@ func TestUploadPresets_Create(t *testing.T) {
 }
 
 func TestUploadPresets_List(t *testing.T) {
-	resp, err := adminApi.ListUploadPresets(ctx, admin.ListUploadPresetsParams{})
+	resp, err := adminAPI.ListUploadPresets(ctx, admin.ListUploadPresetsParams{})
 
 	if err != nil || len(resp.Presets) < 1 {
 		t.Error(resp, err)
@@ -35,7 +35,7 @@ func TestUploadPresets_List(t *testing.T) {
 }
 
 func TestUploadPresets_Get(t *testing.T) {
-	resp, err := adminApi.GetUploadPreset(ctx, admin.GetUploadPresetParams{Name: UPName})
+	resp, err := adminAPI.GetUploadPreset(ctx, admin.GetUploadPresetParams{Name: UPName})
 
 	if err != nil {
 		t.Error(resp, err)
@@ -47,16 +47,16 @@ func TestUploadPresets_Update(t *testing.T) {
 		Name:         UPName,
 		Unsigned:     false,
 		Live:         false,
-		UploadParams: uploader.UploadParams{Tags: api.CldApiArray{"go-tag3", "go-tag4"}},
+		UploadParams: uploader.UploadParams{Tags: api.CldAPIArray{"go-tag3", "go-tag4"}},
 	}
 
-	resp, err := adminApi.UpdateUploadPreset(ctx, updateUPParams)
+	resp, err := adminAPI.UpdateUploadPreset(ctx, updateUPParams)
 
 	if err != nil || resp.Message != "updated" {
 		t.Error(resp, err)
 	}
 
-	gResp, err := adminApi.GetUploadPreset(ctx, admin.GetUploadPresetParams{Name: UPName})
+	gResp, err := adminAPI.GetUploadPreset(ctx, admin.GetUploadPresetParams{Name: UPName})
 
 	if err != nil {
 		t.Error(gResp, err)
@@ -64,7 +64,7 @@ func TestUploadPresets_Update(t *testing.T) {
 }
 
 func TestUploadPresets_Delete(t *testing.T) {
-	resp, err := adminApi.DeleteUploadPreset(ctx, admin.DeleteUploadPresetParams{Name: UPName})
+	resp, err := adminAPI.DeleteUploadPreset(ctx, admin.DeleteUploadPresetParams{Name: UPName})
 
 	if err != nil || resp.Message != "deleted" {
 		t.Error(resp, err)

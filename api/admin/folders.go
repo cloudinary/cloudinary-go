@@ -13,6 +13,7 @@ const (
 	folders api.EndPoint = "folders"
 )
 
+// RootFoldersParams are the parameters for RootFolders.
 type RootFoldersParams struct {
 	MaxResults int    `json:"max_results,omitempty"`
 	NextCursor string `json:"next_cursor,omitempty"`
@@ -21,13 +22,14 @@ type RootFoldersParams struct {
 // RootFolders lists all root folders.
 //
 // https://cloudinary.com/documentation/admin_api#get_root_folders
-func (a *Api) RootFolders(ctx context.Context, params RootFoldersParams) (*FoldersResult, error) {
+func (a *API) RootFolders(ctx context.Context, params RootFoldersParams) (*FoldersResult, error) {
 	res := &FoldersResult{}
 	_, err := a.get(ctx, folders, params, res)
 
 	return res, err
 }
 
+// FoldersResult is the result of RootFolders, SubFolders.
 type FoldersResult struct {
 	Folders    []FolderResult `json:"folders"`
 	TotalCount int            `json:"total_count"`
@@ -35,11 +37,13 @@ type FoldersResult struct {
 	Error      api.ErrorResp  `json:"error,omitempty"`
 }
 
+// FolderResult contains details of a single folder.
 type FolderResult struct {
 	Name string `json:"name"`
 	Path string `json:"path"`
 }
 
+// SubFoldersParams are the parameters for SubFolders.
 type SubFoldersParams struct {
 	Folder     string `json:"-"`
 	MaxResults int    `json:"max_results,omitempty"`
@@ -51,13 +55,14 @@ type SubFoldersParams struct {
 // Returns the name and path of all the sub-folders of a specified parent folder. Limited to 2000 results.
 //
 // https://cloudinary.com/documentation/admin_api#get_subfolders
-func (a *Api) SubFolders(ctx context.Context, params SubFoldersParams) (*FoldersResult, error) {
+func (a *API) SubFolders(ctx context.Context, params SubFoldersParams) (*FoldersResult, error) {
 	res := &FoldersResult{}
 	_, err := a.get(ctx, api.BuildPath(folders, params.Folder), params, res)
 
 	return res, err
 }
 
+// CreateFolderParams are the parameters for CreateFolder.
 type CreateFolderParams struct {
 	Folder string `json:"-"` // The full path of the new folder to create.
 }
@@ -65,13 +70,14 @@ type CreateFolderParams struct {
 // CreateFolder creates a new empty folder.
 //
 // https://cloudinary.com/documentation/admin_api#create_folder
-func (a *Api) CreateFolder(ctx context.Context, params CreateFolderParams) (*CreateFolderResult, error) {
+func (a *API) CreateFolder(ctx context.Context, params CreateFolderParams) (*CreateFolderResult, error) {
 	res := &CreateFolderResult{}
 	_, err := a.post(ctx, api.BuildPath(folders, params.Folder), params, res)
 
 	return res, err
 }
 
+// CreateFolderResult is the result of CreateFolder.
 type CreateFolderResult struct {
 	Success bool          `json:"success"`
 	Path    string        `json:"path"`
@@ -79,6 +85,7 @@ type CreateFolderResult struct {
 	Error   api.ErrorResp `json:"error,omitempty"`
 }
 
+// DeleteFolderParams are the parameters for DeleteFolder.
 type DeleteFolderParams struct {
 	Folder string `json:"-"` // The full path of the empty folder to delete.
 }
@@ -88,13 +95,14 @@ type DeleteFolderParams struct {
 // The specified folder cannot contain any assets, but can have empty descendant sub-folders.
 //
 // https://cloudinary.com/documentation/admin_api#delete_folder
-func (a *Api) DeleteFolder(ctx context.Context, params DeleteFolderParams) (*DeleteFolderResult, error) {
+func (a *API) DeleteFolder(ctx context.Context, params DeleteFolderParams) (*DeleteFolderResult, error) {
 	res := &DeleteFolderResult{}
 	_, err := a.delete(ctx, api.BuildPath(folders, params.Folder), params, res)
 
 	return res, err
 }
 
+// DeleteFolderResult is the result of DeleteFolder.
 type DeleteFolderResult struct {
 	Deleted []string      `json:"deleted"`
 	Error   api.ErrorResp `json:"error,omitempty"`

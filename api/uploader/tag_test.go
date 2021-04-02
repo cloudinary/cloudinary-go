@@ -16,7 +16,7 @@ func TestUploader_Tag(t *testing.T) {
 		Tag:       cldtest.Tag1,
 	}
 
-	resp, err := uploadApi.AddTag(ctx, params)
+	resp, err := uploadAPI.AddTag(ctx, params)
 
 	if err != nil {
 		t.Error(err)
@@ -31,7 +31,7 @@ func TestUploader_Tag(t *testing.T) {
 		Tag:       cldtest.Tag1,
 	}
 
-	rResp, err := uploadApi.RemoveTag(ctx, rParams)
+	rResp, err := uploadAPI.RemoveTag(ctx, rParams)
 
 	if err != nil {
 		t.Error(err)
@@ -42,10 +42,10 @@ func TestUploader_Tag(t *testing.T) {
 	}
 	// FIXME: add some tags :) before removing
 	raParams := uploader.RemoveAllTagsParams{
-		PublicIDs: api.CldApiArray{cldtest.PublicID},
+		PublicIDs: api.CldAPIArray{cldtest.PublicID},
 	}
 
-	raResp, err := uploadApi.RemoveAllTags(ctx, raParams)
+	raResp, err := uploadAPI.RemoveAllTags(ctx, raParams)
 
 	if err != nil {
 		t.Error(err)
@@ -56,11 +56,11 @@ func TestUploader_Tag(t *testing.T) {
 	}
 
 	reParams := uploader.ReplaceTagParams{
-		PublicIDs: api.CldApiArray{cldtest.PublicID},
+		PublicIDs: api.CldAPIArray{cldtest.PublicID},
 		Tag:       cldtest.Tag2,
 	}
 
-	reResp, err := uploadApi.ReplaceTag(ctx, reParams)
+	reResp, err := uploadAPI.ReplaceTag(ctx, reParams)
 
 	if err != nil {
 		t.Error(err)

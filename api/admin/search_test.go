@@ -14,7 +14,7 @@ func TestSearch_SearchQuery(t *testing.T) {
 		MaxResults: 2,
 	}
 
-	resp, err := adminApi.Search(ctx, sq)
+	resp, err := adminAPI.Search(ctx, sq)
 
 	if err != nil || resp.TotalCount < 1 {
 		t.Error(resp, err)

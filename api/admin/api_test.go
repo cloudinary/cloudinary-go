@@ -9,18 +9,18 @@ import (
 )
 
 var ctx = context.Background()
-var adminApi, _ = admin.New()
+var adminAPI, _ = admin.New()
 
-func TestApi_Timeout(t *testing.T) {
-	var originalTimeout = adminApi.Config.Api.Timeout
+func TestAPI_Timeout(t *testing.T) {
+	var originalTimeout = adminAPI.Config.API.Timeout
 
-	adminApi.Config.Api.Timeout = 0 // should timeout immediately
+	adminAPI.Config.API.Timeout = 0 // should timeout immediately
 
-	_, err := adminApi.Ping(ctx)
+	_, err := adminAPI.Ping(ctx)
 
 	if err == nil || !strings.HasSuffix(err.Error(), "context deadline exceeded") {
 		t.Error("Expected context timeout did not happen")
 	}
 
-	adminApi.Config.Api.Timeout = originalTimeout
+	adminAPI.Config.API.Timeout = originalTimeout
 }
