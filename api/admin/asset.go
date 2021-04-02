@@ -11,6 +11,7 @@ import (
 	"github.com/cloudinary/cloudinary-go/api"
 )
 
+// AssetParams are the parameters for Asset.
 type AssetParams struct {
 	AssetType             api.AssetType    `json:"-"`
 	DeliveryType          api.DeliveryType `json:"-"`
@@ -29,14 +30,14 @@ type AssetParams struct {
 	DerivedNextCursor     string           `json:"derived_next_cursor,omitempty"`
 }
 
-//Returns the details of the specified asset and all its derived resources.
+// Asset returns the details of the specified asset and all its derived resources.
 //
-//Note that if you only need details about the original resource,
-//you can also use the uploader.Upload or uploader.Explicit methods, which return the same information and
-//are not rate limited.
+// Note that if you only need details about the original resource,
+// you can also use the uploader.Upload or uploader.Explicit methods, which return the same information and
+// are not rate limited.
 //
 //https://cloudinary.com/documentation/admin_api#get_the_details_of_a_single_resource
-func (a *Api) Asset(ctx context.Context, params AssetParams) (*AssetResult, error) {
+func (a *API) Asset(ctx context.Context, params AssetParams) (*AssetResult, error) {
 	res := &AssetResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType,
 		params.PublicID), params, res)
@@ -44,6 +45,7 @@ func (a *Api) Asset(ctx context.Context, params AssetParams) (*AssetResult, erro
 	return res, err
 }
 
+// AssetResult is the result of the Asset.
 type AssetResult struct {
 	AssetID               string                      `json:"asset_id"`
 	PublicID              string                      `json:"public_id"`
@@ -84,6 +86,7 @@ type AssetResult struct {
 	Error                 api.ErrorResp               `json:"error,omitempty"`
 }
 
+// QualityAnalysisResult contains the details about quality analysis.
 type QualityAnalysisResult struct {
 	JpegQuality       float64 `json:"jpeg_quality"`
 	JpegChroma        float64 `json:"jpeg_chroma"`
@@ -101,6 +104,7 @@ type QualityAnalysisResult struct {
 	Resolution        float64 `json:"resolution"`
 }
 
+// AccessibilityAnalysisResult contains the details about accessibility analysis.
 type AccessibilityAnalysisResult struct {
 	ColorblindAccessibilityAnalysis struct {
 		DistinctEdges      float64  `json:"distinct_edges"`
@@ -110,17 +114,21 @@ type AccessibilityAnalysisResult struct {
 	ColorblindAccessibilityScore float64 `json:"colorblind_accessibility_score"`
 }
 
+// CinemagraphAnalysisResult contains the details about cinemagraph analysis.
 type CinemagraphAnalysisResult struct {
 	CinemagraphScore float64 `json:"cinemagraph_score"`
 }
 
+// ImageMetadataResult contains the image metadata.
 type ImageMetadataResult map[string]string
 
+// PredominantResult contains the details about predominant colors.
 type PredominantResult struct {
 	Google     [][]interface{} `json:"google"`
 	Cloudinary [][]interface{} `json:"cloudinary"`
 }
 
+// UpdateAssetParams are the parameters for UpdateAsset.
 type UpdateAssetParams struct {
 	AssetType         api.AssetType        `json:"-"`
 	DeliveryType      api.DeliveryType     `json:"-"`
@@ -134,9 +142,9 @@ type UpdateAssetParams struct {
 	AutoTagging       float64              `json:"auto_tagging,omitempty"`
 	BackgroundRemoval string               `json:"background_removal,omitempty"`
 	QualityOverride   int                  `json:"quality_override,omitempty"`
-	NotificationUrl   string               `json:"notification_url,omitempty"`
-	Tags              api.CldApiArray      `json:"tags,omitempty,omitempty"`
-	Context           api.CldApiMap        `json:"context,omitempty"`
+	NotificationURL   string               `json:"notification_url,omitempty"`
+	Tags              api.CldAPIArray      `json:"tags,omitempty,omitempty"`
+	Context           api.CldAPIMap        `json:"context,omitempty"`
 	FaceCoordinates   api.Coordinates      `json:"face_coordinates,omitempty"`
 	CustomCoordinates api.Coordinates      `json:"custom_coordinates,omitempty"`
 	AccessControl     interface{}          `json:"access_control,omitempty"`
@@ -148,7 +156,7 @@ type UpdateAssetParams struct {
 // most attributes of an existing asset using the uploader.Explicit method, which is not rate limited.
 //
 // https://cloudinary.com/documentation/admin_api#update_details_of_an_existing_resource
-func (a *Api) UpdateAsset(ctx context.Context, params UpdateAssetParams) (*AssetResult, error) {
+func (a *API) UpdateAsset(ctx context.Context, params UpdateAssetParams) (*AssetResult, error) {
 	res := &AssetResult{}
 	_, err := a.post(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType, params.PublicID), params, res)
 

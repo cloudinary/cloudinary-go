@@ -17,7 +17,7 @@ func TestUploader_Explicit(t *testing.T) {
 		Tags:     cldtest.Tags,
 	}
 
-	resp, err := uploadApi.Explicit(ctx, params)
+	resp, err := uploadAPI.Explicit(ctx, params)
 
 	if err != nil {
 		t.Error(err)
@@ -37,7 +37,7 @@ func TestUploader_Edit(t *testing.T) {
 		Overwrite:    true,
 	}
 
-	resp, err := uploadApi.Rename(ctx, params)
+	resp, err := uploadAPI.Rename(ctx, params)
 
 	if err != nil {
 		t.Error(err)
@@ -51,7 +51,7 @@ func TestUploader_Edit(t *testing.T) {
 		PublicID: cldtest.PublicID2,
 	}
 
-	dResp, err := uploadApi.Destroy(ctx, dParams)
+	dResp, err := uploadAPI.Destroy(ctx, dParams)
 
 	if err != nil {
 		t.Error(err)

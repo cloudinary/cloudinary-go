@@ -12,11 +12,11 @@ func TestUploader_Context(t *testing.T) {
 	cldtest.UploadTestAsset(t, cldtest.PublicID)
 
 	params := uploader.AddContextParams{
-		PublicIDs: api.CldApiArray{cldtest.PublicID},
+		PublicIDs: api.CldAPIArray{cldtest.PublicID},
 		Context:   cldtest.CldContext,
 	}
 
-	resp, err := uploadApi.AddContext(ctx, params)
+	resp, err := uploadAPI.AddContext(ctx, params)
 
 	if err != nil {
 		t.Error(err)
@@ -27,10 +27,10 @@ func TestUploader_Context(t *testing.T) {
 	}
 
 	raParams := uploader.RemoveAllContextParams{
-		PublicIDs: api.CldApiArray{cldtest.PublicID},
+		PublicIDs: api.CldAPIArray{cldtest.PublicID},
 	}
 
-	raResp, err := uploadApi.RemoveAllContext(ctx, raParams)
+	raResp, err := uploadAPI.RemoveAllContext(ctx, raParams)
 
 	if err != nil {
 		t.Error(err)

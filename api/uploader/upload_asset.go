@@ -14,7 +14,7 @@ import (
 // https://cloudinary.com/documentation/image_upload_api_reference#upload_optional_parameters
 type UploadParams struct {
 	PublicID                string           `json:"public_id,omitempty"`
-	PublicIds               api.CldApiArray  `json:"public_ids,omitempty"`
+	PublicIds               api.CldAPIArray  `json:"public_ids,omitempty"`
 	UseFilename             bool             `json:"use_filename,omitempty"`
 	UniqueFilename          bool             `json:"unique_filename,omitempty"`
 	FilenameOverride        string           `json:"filename_override,omitempty"`
@@ -22,12 +22,12 @@ type UploadParams struct {
 	Overwrite               bool             `json:"overwrite,omitempty"`
 	ResourceType            string           `json:"resource_type,omitempty"`
 	Type                    api.DeliveryType `json:"type,omitempty"`
-	Tags                    api.CldApiArray  `json:"tags,omitempty"`
-	Context                 api.CldApiMap    `json:"context,omitempty"`
+	Tags                    api.CldAPIArray  `json:"tags,omitempty"`
+	Context                 api.CldAPIMap    `json:"context,omitempty"`
 	Metadata                api.Metadata     `json:"metadata,omitempty"`
 	Transformation          string           `json:"transformation,omitempty"`
 	Format                  string           `json:"format,omitempty"`
-	AllowedFormats          api.CldApiArray  `json:"allowed_formats,omitempty"`
+	AllowedFormats          api.CldAPIArray  `json:"allowed_formats,omitempty"`
 	Eager                   string           `json:"eager,omitempty"`
 	Eval                    string           `json:"eval,omitempty"`
 	Async                   bool             `json:"async,omitempty"`
@@ -73,7 +73,7 @@ type UploadParams struct {
 //   * a private storage bucket (S3 or Google Storage) URL of a whitelisted bucket
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#upload_method
-func (u *Api) Upload(ctx context.Context, file interface{}, uploadParams UploadParams) (*UploadResult, error) {
+func (u *API) Upload(ctx context.Context, file interface{}, uploadParams UploadParams) (*UploadResult, error) {
 	formParams, err := api.StructToParams(uploadParams)
 	if err != nil {
 		return nil, err
@@ -94,6 +94,7 @@ func (u *Api) Upload(ctx context.Context, file interface{}, uploadParams UploadP
 	return upload, nil
 }
 
+// Eager contains information about eagerly transformed derived assets.
 type Eager struct {
 	Transformation string `json:"transformation"`
 	Width          int    `json:"width"`
@@ -104,7 +105,7 @@ type Eager struct {
 	SecureURL      string `json:"secure_url"`
 }
 
-// UploadResult image success response struct
+// UploadResult image success response struct.
 type UploadResult struct {
 	AssetID          string          `json:"asset_id"`
 	PublicID         string          `json:"public_id"`
@@ -116,7 +117,7 @@ type UploadResult struct {
 	Format           string          `json:"format"`
 	ResourceType     string          `json:"resource_type"`
 	CreatedAt        time.Time       `json:"created_at"`
-	Tags             api.CldApiArray `json:"tags,omitempty"`
+	Tags             api.CldAPIArray `json:"tags,omitempty"`
 	Pages            int             `json:"pages,omitempty"`
 	Bytes            int             `json:"bytes"`
 	Type             string          `json:"type"`
@@ -125,7 +126,7 @@ type UploadResult struct {
 	URL              string          `json:"url"`
 	SecureURL        string          `json:"secure_url"`
 	AccessMode       string          `json:"access_mode"`
-	Context          api.CldApiMap   `json:"context,omitempty"`
+	Context          api.CldAPIMap   `json:"context,omitempty"`
 	Metadata         api.Metadata    `json:"metadata,omitempty"`
 	Overwritten      bool            `json:"overwritten"`
 	OriginalFilename string          `json:"original_filename"`
@@ -138,7 +139,7 @@ type UploadResult struct {
 // The upload is not signed so an upload preset is required.
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#unsigned_upload_syntax
-func (u *Api) UnsignedUpload(ctx context.Context, file string, uploadPreset string, uploadParams UploadParams) (*UploadResult, error) {
+func (u *API) UnsignedUpload(ctx context.Context, file string, uploadPreset string, uploadParams UploadParams) (*UploadResult, error) {
 	uploadParams.Unsigned = true
 	uploadParams.UploadPreset = uploadPreset
 

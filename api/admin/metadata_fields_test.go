@@ -50,7 +50,7 @@ var dataSource2 = metadata.DataSource{
 }
 
 func TestAdmin_AddMetadataField(t *testing.T) {
-	resp, err := adminApi.AddMetadataField(ctx, metadataField)
+	resp, err := adminAPI.AddMetadataField(ctx, metadataField)
 
 	if err != nil {
 		t.Error(err)
@@ -68,8 +68,8 @@ func TestAdmin_AddMetadataField(t *testing.T) {
 func TestAdmin_UpdateMetadataField(t *testing.T) {
 	metadataField.Label = cldtest.UniqueID("GoUpdatedColors")
 
-	resp, err := adminApi.UpdateMetadataField(ctx, admin.UpdateMetadataFieldParams{
-		FieldExternalId: metadataField.ExternalID,
+	resp, err := adminAPI.UpdateMetadataField(ctx, admin.UpdateMetadataFieldParams{
+		FieldExternalID: metadataField.ExternalID,
 		Field:           metadataField,
 	})
 
@@ -83,16 +83,16 @@ func TestAdmin_UpdateMetadataField(t *testing.T) {
 }
 
 func TestAdmin_ListMetadataFields(t *testing.T) {
-	resp, err := adminApi.ListMetadataFields(ctx)
+	resp, err := adminAPI.ListMetadataFields(ctx)
 
 	if err != nil || len(resp.MetadataFields) < 1 {
 		t.Error(resp)
 	}
 }
 
-func TestAdmin_MetadataFieldByFieldId(t *testing.T) {
-	params := admin.MetadataFieldByFieldIdParams{FieldExternalId: metadataField.ExternalID}
-	resp, err := adminApi.MetadataFieldByFieldId(ctx, params)
+func TestAdmin_MetadataFieldByFieldID(t *testing.T) {
+	params := admin.MetadataFieldByFieldIDParams{FieldExternalID: metadataField.ExternalID}
+	resp, err := adminAPI.MetadataFieldByFieldID(ctx, params)
 
 	if err != nil || resp.ExternalID != metadataField.ExternalID {
 		t.Error(err, resp)
@@ -100,8 +100,8 @@ func TestAdmin_MetadataFieldByFieldId(t *testing.T) {
 }
 
 func TestAdmin_UpdateMetadataFieldDataSource(t *testing.T) {
-	resp, err := adminApi.UpdateMetadataFieldDataSource(ctx, admin.UpdateMetadataFieldDataSourceParams{
-		FieldExternalId: metadataField.ExternalID,
+	resp, err := adminAPI.UpdateMetadataFieldDataSource(ctx, admin.UpdateMetadataFieldDataSourceParams{
+		FieldExternalID: metadataField.ExternalID,
 		DataSource:      dataSource2,
 	})
 
@@ -111,8 +111,8 @@ func TestAdmin_UpdateMetadataFieldDataSource(t *testing.T) {
 }
 
 func TestAdmin_DeleteDataSourceEntries(t *testing.T) {
-	resp, err := adminApi.DeleteDataSourceEntries(ctx, admin.DeleteDataSourceEntriesParams{
-		FieldExternalId:    metadataField.ExternalID,
+	resp, err := adminAPI.DeleteDataSourceEntries(ctx, admin.DeleteDataSourceEntriesParams{
+		FieldExternalID:    metadataField.ExternalID,
 		EntriesExternalIDs: []string{"go_color3", "go_color4"},
 	})
 
@@ -122,8 +122,8 @@ func TestAdmin_DeleteDataSourceEntries(t *testing.T) {
 }
 
 func TestAdmin_RestoreMetadataFieldDataSource(t *testing.T) {
-	resp, err := adminApi.RestoreDatasourceEntries(ctx, admin.RestoreDatasourceEntriesParams{
-		FieldExternalId:    metadataField.ExternalID,
+	resp, err := adminAPI.RestoreDatasourceEntries(ctx, admin.RestoreDatasourceEntriesParams{
+		FieldExternalID:    metadataField.ExternalID,
 		EntriesExternalIDs: []string{"go_color3", "go_color4"},
 	})
 
@@ -133,7 +133,7 @@ func TestAdmin_RestoreMetadataFieldDataSource(t *testing.T) {
 }
 
 func TestAdmin_DeleteMetadataField(t *testing.T) {
-	resp, err := adminApi.DeleteMetadataField(ctx, admin.DeleteMetadataFieldParams{FieldExternalId: metadataField.ExternalID})
+	resp, err := adminAPI.DeleteMetadataField(ctx, admin.DeleteMetadataFieldParams{FieldExternalID: metadataField.ExternalID})
 
 	if err != nil || resp.Message != "ok" {
 		t.Error(err, resp)
@@ -188,7 +188,7 @@ func TestAdmin_AddMetadataFields(t *testing.T) {
 		dateMetadataField,
 		enumMetadataField,
 	} {
-		resp, err := adminApi.AddMetadataField(ctx, f)
+		resp, err := adminAPI.AddMetadataField(ctx, f)
 
 		if err != nil {
 			t.Error(err)
@@ -207,7 +207,7 @@ func TestAdmin_AddMetadataFields(t *testing.T) {
 //FIXME; find a good library with a proper TearDown method
 func TestAdmin_MetadataFieldsCleanup(t *testing.T) {
 	for _, extID := range mdIDs {
-		resp, err := adminApi.DeleteMetadataField(ctx, admin.DeleteMetadataFieldParams{FieldExternalId: extID})
+		resp, err := adminAPI.DeleteMetadataField(ctx, admin.DeleteMetadataFieldParams{FieldExternalID: extID})
 		if err != nil || resp.Message != "ok" {
 			log.Println(err, resp)
 		}

@@ -13,7 +13,7 @@ type Query struct {
 	// You can specify more than one aggregate parameter.
 	// For aggregation fields without discrete values, the results are divided into categories.
 	Aggregate []Aggregation `json:"aggregate,omitempty"`
-	//WithField contains names of additional asset attributes to include for each asset in the response.
+	// WithField contains names of additional asset attributes to include for each asset in the response.
 	WithField []WithField `json:"with_field,omitempty"`
 	// MaxResults is the maximum number of results to return. Default 50. Maximum 500.
 	MaxResults int `json:"max_results,omitempty"`
@@ -22,31 +22,47 @@ type Query struct {
 	NextCursor string `json:"next_cursor,omitempty"`
 }
 
+// Aggregation is the aggregation field.
 type Aggregation = string
 
 const (
-	AssetType    Aggregation = "resource_type"
-	DeliveryType             = "type"
-	Pixels                   = "pixels"   // Pixels only the image assets in the response are aggregated.
-	Duration                 = "duration" // Duration only the video assets in the response are aggregated.
-	Format                   = "format"
-	Bytes                    = "bytes"
+	// AssetType aggregation field.
+	AssetType Aggregation = "resource_type"
+	// DeliveryType aggregation field.
+	DeliveryType = "type"
+	// Pixels aggregation field. Only the image assets in the response are aggregated.
+	Pixels = "pixels"
+	// Duration aggregation field. Only the video assets in the response are aggregated.
+	Duration = "duration"
+	// Format aggregation field.
+	Format = "format"
+	// Bytes aggregation field.
+	Bytes = "bytes"
 )
 
+// WithField is the name of the addition filed to include in result.
 type WithField = string
 
 const (
-	ContextField       WithField = "context"
-	TagsField                    = "tags"
-	ImageMetadataField           = "image_metadata"
-	ImageAnalysisField           = "image_analysis"
+	// ContextField is the context field.
+	ContextField WithField = "context"
+	// TagsField is the tags field.
+	TagsField = "tags"
+	// ImageMetadataField is the image metadata field.
+	ImageMetadataField = "image_metadata"
+	// ImageAnalysisField is the image analysis field.
+	ImageAnalysisField = "image_analysis"
 )
 
+// Direction is the sorting direction.
 type Direction string
 
 const (
-	Ascending  Direction = "asc"
-	Descending           = "desc"
+	// Ascending direction.
+	Ascending Direction = "asc"
+	// Descending direction.
+	Descending = "desc"
 )
 
+// SortByField is the the field to sort by and direction.
 type SortByField map[string]Direction

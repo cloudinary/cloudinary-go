@@ -15,7 +15,7 @@ import (
 )
 
 var ctx = context.Background()
-var uploadApi, _ = uploader.New()
+var uploadAPI, _ = uploader.New()
 
 const largeImagePublicID = "go_test_large_image"
 const largeImageSize = 5880138
@@ -32,7 +32,7 @@ func TestUploader_UploadLocalPath(t *testing.T) {
 		Overwrite:             true,
 	}
 
-	resp, err := uploadApi.Upload(ctx, cldtest.ImageFilePath, params)
+	resp, err := uploadAPI.Upload(ctx, cldtest.ImageFilePath, params)
 
 	if err != nil {
 		t.Error(err)
@@ -58,7 +58,7 @@ func TestUploader_UploadIOReader(t *testing.T) {
 		CinemagraphAnalysis:   true,
 	}
 
-	resp, err := uploadApi.Upload(ctx, file, params)
+	resp, err := uploadAPI.Upload(ctx, file, params)
 
 	if err != nil {
 		t.Error(err)
@@ -69,13 +69,13 @@ func TestUploader_UploadIOReader(t *testing.T) {
 	}
 }
 
-func TestUploader_UploadUrl(t *testing.T) {
+func TestUploader_UploadURL(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:  cldtest.PublicID,
 		Overwrite: true,
 	}
 
-	resp, err := uploadApi.Upload(ctx, cldtest.LogoUrl, params)
+	resp, err := uploadAPI.Upload(ctx, cldtest.LogoURL, params)
 
 	if err != nil {
 		t.Error(err)
@@ -92,7 +92,7 @@ func TestUploader_UploadBase64Image(t *testing.T) {
 		Overwrite: true,
 	}
 
-	resp, err := uploadApi.Upload(ctx, cldtest.Base64Image, params)
+	resp, err := uploadAPI.Upload(ctx, cldtest.Base64Image, params)
 
 	if err != nil {
 		t.Error(err)
@@ -104,7 +104,7 @@ func TestUploader_UploadBase64Image(t *testing.T) {
 }
 
 func TestUploader_UploadLargeFile(t *testing.T) {
-	uploadApi.Config.Api.ChunkSize = largeChunkSize
+	uploadAPI.Config.API.ChunkSize = largeChunkSize
 
 	largeImage := populateLargeImage()
 
@@ -120,14 +120,14 @@ func TestUploader_UploadLargeFile(t *testing.T) {
 		Overwrite: true,
 	}
 
-	resp, err := uploadApi.Upload(ctx, largeImage, params)
+	resp, err := uploadAPI.Upload(ctx, largeImage, params)
 
 	if err != nil {
 		t.Error(err)
 	}
 
 	// FIXME: destroy in teardown when available
-	_, _ = uploadApi.Destroy(ctx, uploader.DestroyParams{PublicID: largeImagePublicID})
+	_, _ = uploadAPI.Destroy(ctx, uploader.DestroyParams{PublicID: largeImagePublicID})
 
 	if resp == nil ||
 		resp.PublicID != largeImagePublicID ||
@@ -139,17 +139,17 @@ func TestUploader_UploadLargeFile(t *testing.T) {
 }
 
 func TestUploader_Timeout(t *testing.T) {
-	var originalTimeout = uploadApi.Config.Api.Timeout
+	var originalTimeout = uploadAPI.Config.API.Timeout
 
-	uploadApi.Config.Api.Timeout = 0 // should timeout immediately
+	uploadAPI.Config.API.Timeout = 0 // should timeout immediately
 
-	_, err := uploadApi.Upload(ctx, cldtest.LogoUrl, uploader.UploadParams{})
+	_, err := uploadAPI.Upload(ctx, cldtest.LogoURL, uploader.UploadParams{})
 
 	if err == nil || !strings.HasSuffix(err.Error(), "context deadline exceeded") {
 		t.Error("Expected context timeout did not happen")
 	}
 
-	uploadApi.Config.Api.Timeout = originalTimeout
+	uploadAPI.Config.API.Timeout = originalTimeout
 }
 
 func populateLargeImage() string {

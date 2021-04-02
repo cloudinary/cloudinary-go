@@ -32,10 +32,10 @@ go get github.com/cloudinary/cloudinary-go
 ### Configuration
 
 Each request for building a URL of a remote cloud resource must have the `CloudName` parameter set. Each request to our
-secure APIs (e.g., image uploads, eager sprite generation) must have the `ApiKey` and `ApiSecret` parameters set.
+secure APIs (e.g., image uploads, eager sprite generation) must have the `APIKey` and `APISecret` parameters set.
 See [API, URLs and access identifiers](http://cloudinary.com/documentation/api_and_access_identifiers) for more details.
 
-Setting the `CloudName`, `ApiKey` and `ApiSecret` parameters can be done by initializing the Cloudinary object, or by
+Setting the `CloudName`, `APIKey` and `APISecret` parameters can be done by initializing the Cloudinary object, or by
 using the CLOUDINARY_URL environment variable / system property.
 
 The entry point of the library is the Cloudinary struct.
@@ -52,7 +52,7 @@ cld, _ := cloudinary.NewFromURL("cloudinary://123456789012345:abcdeghijklmnopqrs
 ```
 ### Upload
 
-Assuming you have your Cloudinary configuration parameters defined (`CloudName`, `ApiKey`, `ApiSecret`), uploading to
+Assuming you have your Cloudinary configuration parameters defined (`CloudName`, `APIKey`, `APISecret`), uploading to
 Cloudinary is very simple.
 
 The following example uploads a local JPG to the cloud:
@@ -95,7 +95,7 @@ import (
 
 func main() {
 	// Start by creating a new instance of Cloudinary using CLOUDINARY_URL environment variable.
-	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromUrl().
+	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromURL().
 	var cld, err = cloudinary.New()
 	if err != nil {
 		log.Fatalf("Failed to intialize Cloudinary, %v", err)
@@ -128,7 +128,7 @@ func main() {
 	// uploadResult contains useful information about the asset, like Width, Height, Format, etc.
 	// See uploader.UploadResult struct for more details.
 
-	// Now we can use Admin Api to see the details about the asset.
+	// Now we can use Admin API to see the details about the asset.
 	// The request can be customised by providing AssetParams.
 	asset, err := cld.Admin.Asset(ctx, admin.AssetParams{PublicID: "logo"})
 	if err != nil {
@@ -138,7 +138,7 @@ func main() {
 	// Print some basic information about the asset.
 	log.Printf("Public ID: %v, URL: %v\n", asset.PublicID, asset.SecureURL)
 
-	// Cloudinary also provides a very flexible Search Api for filtering and retrieving
+	// Cloudinary also provides a very flexible Search API for filtering and retrieving
 	// information on all the assets in your account with the help of query expressions
 	// in a Lucene-like query language.
 	searchQuery := search.Query{

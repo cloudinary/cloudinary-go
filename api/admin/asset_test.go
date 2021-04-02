@@ -10,7 +10,7 @@ import (
 func TestAsset_Asset(t *testing.T) {
 	cldtest.UploadTestAsset(t, cldtest.PublicID)
 
-	resp, err := adminApi.Asset(ctx, admin.AssetParams{
+	resp, err := adminAPI.Asset(ctx, admin.AssetParams{
 		PublicID:              cldtest.PublicID,
 		Exif:                  true,
 		Colors:                true,
@@ -30,7 +30,7 @@ func TestAsset_Asset(t *testing.T) {
 }
 
 func TestAsset_UpdateAsset(t *testing.T) {
-	resp, err := adminApi.UpdateAsset(ctx, admin.UpdateAssetParams{
+	resp, err := adminAPI.UpdateAsset(ctx, admin.UpdateAssetParams{
 		PublicID: cldtest.PublicID,
 		Tags:     []string{"tagA", "tagB", "TagC"},
 	})

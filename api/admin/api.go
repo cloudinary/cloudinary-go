@@ -17,43 +17,44 @@ import (
 	"github.com/cloudinary/cloudinary-go/config"
 )
 
-type Api struct {
+// API is the Admin API struct.
+type API struct {
 	Config config.Configuration
 	client http.Client
 }
 
-// New creates a new Admin Api instance from the environment variable (CLOUDINARY_URL).
-func New() (*Api, error) {
+// New creates a new Admin API instance from the environment variable (CLOUDINARY_URL).
+func New() (*API, error) {
 	c, err := config.New()
 	if err != nil {
 		return nil, err
 	}
-	return &Api{
+	return &API{
 		Config: *c,
 		client: http.Client{},
 	}, nil
 }
 
-func (a *Api) get(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
-	return a.callApi(ctx, http.MethodGet, path, requestParams, result)
+func (a *API) get(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
+	return a.callAPI(ctx, http.MethodGet, path, requestParams, result)
 }
 
-func (a *Api) post(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
-	return a.callApi(ctx, http.MethodPost, path, requestParams, result)
+func (a *API) post(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
+	return a.callAPI(ctx, http.MethodPost, path, requestParams, result)
 }
 
-func (a *Api) put(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
-	return a.callApi(ctx, http.MethodPut, path, requestParams, result)
+func (a *API) put(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
+	return a.callAPI(ctx, http.MethodPut, path, requestParams, result)
 }
 
-func (a *Api) delete(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
-	return a.callApi(ctx, http.MethodDelete, path, requestParams, result)
+func (a *API) delete(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
+	return a.callAPI(ctx, http.MethodDelete, path, requestParams, result)
 }
 
-func (a *Api) callApi(ctx context.Context, method string, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
+func (a *API) callAPI(ctx context.Context, method string, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
 	var body io.Reader = nil
 
-	// Populate body for POST/PUT/DELETE
+	// Populate body for POST/PUT/DELETE.
 	if method == http.MethodPost || method == http.MethodPut || method == http.MethodDelete {
 		jsonReq, err := json.Marshal(requestParams)
 		if err != nil {
@@ -62,7 +63,7 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 		body = bytes.NewBuffer(jsonReq)
 	}
 	req, err := http.NewRequest(method,
-		fmt.Sprintf("%v/%v/%v", api.BaseUrl(a.Config.Api.UploadPrefix), a.Config.Cloud.CloudName, api.BuildPath(path)),
+		fmt.Sprintf("%v/%v/%v", api.BaseURL(a.Config.API.UploadPrefix), a.Config.Cloud.CloudName, api.BuildPath(path)),
 		body,
 	)
 	if err != nil {
@@ -80,9 +81,9 @@ func (a *Api) callApi(ctx context.Context, method string, path interface{}, requ
 
 	req.Header.Set("User-Agent", api.UserAgent)
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	req.SetBasicAuth(a.Config.Cloud.ApiKey, a.Config.Cloud.ApiSecret)
+	req.SetBasicAuth(a.Config.Cloud.APIKey, a.Config.Cloud.APISecret)
 
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(a.Config.Api.Timeout)*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(a.Config.API.Timeout)*time.Second)
 	defer cancel()
 
 	req = req.WithContext(ctx)

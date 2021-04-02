@@ -25,40 +25,40 @@ import (
 	"time"
 )
 
-// Upload Api main struct
-type Api struct {
+// API is the Upload API main struct.
+type API struct {
 	Config config.Configuration
 	client http.Client
 }
 
-// New creates a new Admin Api instance from the environment variable.
-func New() (*Api, error) {
+// New creates a new Admin API instance from the environment variable.
+func New() (*API, error) {
 	c, err := config.New()
 	if err != nil {
 		return nil, err
 	}
-	return &Api{
+	return &API{
 		Config: *c,
 		client: http.Client{},
 	}, nil
 }
 
-func (u *Api) callUploadApi(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) error {
+func (u *API) callUploadAPI(ctx context.Context, path interface{}, requestParams interface{}, result interface{}) error {
 	formParams, err := api.StructToParams(requestParams)
 	if err != nil {
 		return err
 	}
 
-	return u.callUploadApiWithParams(ctx, api.BuildPath(getAssetType(requestParams), path), formParams, result)
+	return u.callUploadAPIWithParams(ctx, api.BuildPath(getAssetType(requestParams), path), formParams, result)
 }
 
-func (u *Api) callUploadApiWithParams(ctx context.Context, path string, formParams url.Values, result interface{}) error {
+func (u *API) callUploadAPIWithParams(ctx context.Context, path string, formParams url.Values, result interface{}) error {
 	resp, err := u.postAndSignForm(ctx, path, formParams)
 	if err != nil {
 		return err
 	}
 
-	//log.Println(string(resp)) FIXME: find a good logger
+	// log.Println(string(resp)) //FIXME: find a good logger
 
 	err = json.Unmarshal(resp, result)
 
@@ -66,7 +66,7 @@ func (u *Api) callUploadApiWithParams(ctx context.Context, path string, formPara
 
 }
 
-func (u *Api) postAndSignForm(ctx context.Context, urlPath string, formParams url.Values) ([]byte, error) {
+func (u *API) postAndSignForm(ctx context.Context, urlPath string, formParams url.Values) ([]byte, error) {
 	formParams, err := u.signRequest(formParams)
 	if err != nil {
 		return nil, err
@@ -75,35 +75,35 @@ func (u *Api) postAndSignForm(ctx context.Context, urlPath string, formParams ur
 	return u.postForm(ctx, urlPath, formParams)
 }
 
-func (u *Api) signRequest(requestParams url.Values) (url.Values, error) {
-	if u.Config.Cloud.ApiSecret == "" {
-		return nil, errors.New("must provide Api Secret")
+func (u *API) signRequest(requestParams url.Values) (url.Values, error) {
+	if u.Config.Cloud.APISecret == "" {
+		return nil, errors.New("must provide API Secret")
 	}
 
-	signature, err := api.SignParameters(requestParams, u.Config.Cloud.ApiSecret)
+	signature, err := api.SignParameters(requestParams, u.Config.Cloud.APISecret)
 	if err != nil {
 		return nil, err
 	}
 	requestParams.Add("signature", signature)
-	requestParams.Add("api_key", u.Config.Cloud.ApiKey)
+	requestParams.Add("api_key", u.Config.Cloud.APIKey)
 
 	return requestParams, nil
 }
 
-func (u *Api) postForm(ctx context.Context, urlPath interface{}, formParams url.Values) ([]byte, error) {
+func (u *API) postForm(ctx context.Context, urlPath interface{}, formParams url.Values) ([]byte, error) {
 	bodyBuf := new(bytes.Buffer)
 	_, err := bodyBuf.Write([]byte(formParams.Encode()))
 	if err != nil {
 		return nil, err
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(u.Config.Api.Timeout)*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(u.Config.API.Timeout)*time.Second)
 	defer cancel()
 
 	return u.postBody(ctx, urlPath, bodyBuf, nil)
 }
 
-func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Values) ([]byte, error) {
+func (u *API) postFile(ctx context.Context, file interface{}, formParams url.Values) ([]byte, error) {
 	unsigned, _ := strconv.ParseBool(formParams.Get("unsigned"))
 
 	if !unsigned {
@@ -122,9 +122,9 @@ func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Val
 			formParams.Add("file", fileValue)
 
 			return u.postForm(ctx, uploadEndpoint, formParams)
-		} else {
-			return u.postLocalFile(ctx, uploadEndpoint, fileValue, formParams)
 		}
+
+		return u.postLocalFile(ctx, uploadEndpoint, fileValue, formParams)
 	case io.Reader:
 		return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams, map[string]string{}, 0)
 	default:
@@ -133,7 +133,7 @@ func (u *Api) postFile(ctx context.Context, file interface{}, formParams url.Val
 }
 
 // postLocalFile creates a new file upload http request with optional extra params.
-func (u *Api) postLocalFile(ctx context.Context, urlPath string, filePath string, formParams url.Values) ([]byte, error) {
+func (u *API) postLocalFile(ctx context.Context, urlPath string, filePath string, formParams url.Values) ([]byte, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -146,21 +146,21 @@ func (u *Api) postLocalFile(ctx context.Context, urlPath string, filePath string
 		return nil, err
 	}
 
-	if fi.Size() > u.Config.Api.ChunkSize {
+	if fi.Size() > u.Config.API.ChunkSize {
 		return u.postLargeFile(ctx, urlPath, file, formParams)
 	}
 
 	return u.postIOReader(ctx, urlPath, file, fi.Name(), formParams, map[string]string{}, 0)
 }
 
-func (u *Api) postLargeFile(ctx context.Context, urlPath string, file *os.File, formParams url.Values) ([]byte, error) {
+func (u *API) postLargeFile(ctx context.Context, urlPath string, file *os.File, formParams url.Values) ([]byte, error) {
 	fi, err := file.Stat()
 	if err != nil {
 		return nil, err
 	}
 
 	headers := map[string]string{
-		"X-Unique-Upload-Id": randomPublicId(),
+		"X-Unique-Upload-Id": randomPublicID(),
 	}
 
 	var res []byte
@@ -168,7 +168,7 @@ func (u *Api) postLargeFile(ctx context.Context, urlPath string, file *os.File, 
 	fileSize := fi.Size()
 	var currPos int64 = 0
 	for currPos < fileSize {
-		currChunkSize := min(fileSize-currPos, u.Config.Api.ChunkSize)
+		currChunkSize := min(fileSize-currPos, u.Config.API.ChunkSize)
 
 		headers["Content-Range"] = fmt.Sprintf("bytes %v-%v/%v", currPos, currPos+currChunkSize-1, fileSize)
 
@@ -183,7 +183,7 @@ func (u *Api) postLargeFile(ctx context.Context, urlPath string, file *os.File, 
 	return res, nil
 }
 
-func (u *Api) postIOReader(ctx context.Context, urlPath string, reader io.Reader, name string, formParams url.Values, headers map[string]string, chunkSize int64) ([]byte, error) {
+func (u *API) postIOReader(ctx context.Context, urlPath string, reader io.Reader, name string, formParams url.Values, headers map[string]string, chunkSize int64) ([]byte, error) {
 	bodyBuf := new(bytes.Buffer)
 	formWriter := multipart.NewWriter(bodyBuf)
 
@@ -212,16 +212,16 @@ func (u *Api) postIOReader(ctx context.Context, urlPath string, reader io.Reader
 		return nil, err
 	}
 
-	if u.Config.Api.UploadTimeout != 0 {
+	if u.Config.API.UploadTimeout != 0 {
 		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, time.Duration(u.Config.Api.UploadTimeout)*time.Second)
+		ctx, cancel = context.WithTimeout(ctx, time.Duration(u.Config.API.UploadTimeout)*time.Second)
 		defer cancel()
 	}
 
 	return u.postBody(ctx, urlPath, bodyBuf, headers)
 }
 
-func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.Buffer, headers map[string]string) ([]byte, error) {
+func (u *API) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.Buffer, headers map[string]string) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPost,
 		u.getUploadURL(urlPath),
 		bodyBuf,
@@ -247,8 +247,8 @@ func (u *Api) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 	return ioutil.ReadAll(resp.Body)
 }
 
-func (u *Api) getUploadURL(urlPath interface{}) string {
-	return fmt.Sprintf("%v/%v/%v", api.BaseUrl(u.Config.Api.UploadPrefix), u.Config.Cloud.CloudName, api.BuildPath(urlPath))
+func (u *API) getUploadURL(urlPath interface{}) string {
+	return fmt.Sprintf("%v/%v/%v", api.BaseURL(u.Config.API.UploadPrefix), u.Config.Cloud.CloudName, api.BuildPath(urlPath))
 }
 
 func getAssetType(requestParams interface{}) string {
@@ -261,8 +261,8 @@ func getAssetType(requestParams interface{}) string {
 	return assetType
 }
 
-// randomPublicId generates a random public ID string, which is the first 16 characters of sha1 of uuid.
-func randomPublicId() string {
+// randomPublicID generates a random public ID string, which is the first 16 characters of sha1 of uuid.
+func randomPublicID() string {
 	hash := sha1.New()
 	hash.Write([]byte(uuid.NewString()))
 

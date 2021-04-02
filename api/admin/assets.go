@@ -21,18 +21,20 @@ const (
 )
 
 // AssetTypes lists available asset types.
-func (a *Api) AssetTypes(ctx context.Context) (*AssetTypesResult, error) {
+func (a *API) AssetTypes(ctx context.Context) (*AssetTypesResult, error) {
 	res := &AssetTypesResult{}
 	_, err := a.get(ctx, assets, nil, res)
 
 	return res, err
 }
 
+// AssetTypesResult is the result of the AssetTypes.
 type AssetTypesResult struct {
 	AssetTypes []string      `json:"resource_types"`
 	Error      api.ErrorResp `json:"error,omitempty"`
 }
 
+// AssetsParams are the parameters for Assets.
 type AssetsParams struct {
 	AssetType   api.AssetType `json:"-"`
 	Prefix      string        `json:"prefix,omitempty"`
@@ -48,19 +50,21 @@ type AssetsParams struct {
 // Assets lists all uploaded assets filtered by any specified AssetsParams.
 //
 //https://cloudinary.com/documentation/admin_api#get_resources
-func (a *Api) Assets(ctx context.Context, params AssetsParams) (*AssetsResult, error) {
+func (a *API) Assets(ctx context.Context, params AssetsParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType), params, res)
 
 	return res, err
 }
 
+// AssetsResult is the result of Assets.
 type AssetsResult struct {
 	Assets     []api.BriefAssetResult `json:"resources"`
 	NextCursor string                 `json:"next_cursor"`
 	Error      api.ErrorResp          `json:"error,omitempty"`
 }
 
+// AssetsByTagParams are the parameters for AssetsByTag.
 type AssetsByTagParams struct {
 	AssetType   api.AssetType `json:"-"`
 	Tag         string        `json:"-"`
@@ -77,13 +81,14 @@ type AssetsByTagParams struct {
 // This method does not return matching deleted assets, even if they have been backed up.
 //
 // https://cloudinary.com/documentation/admin_api#get_resources_by_tag
-func (a *Api) AssetsByTag(ctx context.Context, params AssetsByTagParams) (*AssetsResult, error) {
+func (a *API) AssetsByTag(ctx context.Context, params AssetsByTagParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, tags, params.Tag), params, res)
 
 	return res, err
 }
 
+// AssetsByContextParams are the parameters for AssetsByContext.
 type AssetsByContextParams struct {
 	AssetType   api.AssetType `json:"-"`
 	Key         string        `json:"key"`
@@ -101,13 +106,14 @@ type AssetsByContextParams struct {
 // This method does not return matching deleted assets, even if they have been backed up.
 //
 // https://cloudinary.com/documentation/admin_api#get_resources_by_context
-func (a *Api) AssetsByContext(ctx context.Context, params AssetsByContextParams) (*AssetsResult, error) {
+func (a *API) AssetsByContext(ctx context.Context, params AssetsByContextParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, cldContext), params, res)
 
 	return res, err
 }
 
+// AssetsByModerationParams are the parameters for AssetsByModeration.
 type AssetsByModerationParams struct {
 	AssetType   api.AssetType `json:"-"`
 	Kind        string        `json:"-"`
@@ -123,17 +129,18 @@ type AssetsByModerationParams struct {
 // AssetsByModeration lists assets currently in the specified moderation queue and status.
 //
 // https://cloudinary.com/documentation/admin_api#get_resources_in_moderation_queues
-func (a *Api) AssetsByModeration(ctx context.Context, params AssetsByModerationParams) (*AssetsResult, error) {
+func (a *API) AssetsByModeration(ctx context.Context, params AssetsByModerationParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, moderations, params.Kind, params.Status), params, res)
 
 	return res, err
 }
 
+// AssetsByIDsParams are the parameters for AssetsByIDs.
 type AssetsByIDsParams struct {
 	AssetType    api.AssetType    `json:"-"`
 	DeliveryType api.DeliveryType `json:"-"`
-	PublicIDs    api.CldApiArray  `json:"public_ids"`
+	PublicIDs    api.CldAPIArray  `json:"public_ids"`
 	Tags         bool             `json:"tags,omitempty"`
 	Context      bool             `json:"context,omitempty"`
 	Moderations  bool             `json:"moderations,omitempty"`
@@ -142,36 +149,39 @@ type AssetsByIDsParams struct {
 // AssetsByIDs lists assets with the specified public IDs.
 //
 // https://cloudinary.com/documentation/admin_api#get_resources
-func (a *Api) AssetsByIDs(ctx context.Context, params AssetsByIDsParams) (*AssetsResult, error) {
+func (a *API) AssetsByIDs(ctx context.Context, params AssetsByIDsParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
 
 	return res, err
 }
 
+// RestoreAssetsParams are the parameters for RestoreAssets.
 type RestoreAssetsParams struct {
 	AssetType    api.AssetType    `json:"-"`
 	DeliveryType api.DeliveryType `json:"-"`
-	PublicIDs    api.CldApiArray  `json:"public_ids"`
-	Versions     api.CldApiArray  `json:"versions"`
+	PublicIDs    api.CldAPIArray  `json:"public_ids"`
+	Versions     api.CldAPIArray  `json:"versions"`
 }
 
 // RestoreAssets reverts to the latest backed up version of the specified deleted assets.
 //
 // https://cloudinary.com/documentation/admin_api#restore_resources
-func (a *Api) RestoreAssets(ctx context.Context, params RestoreAssetsParams) (*RestoreAssetsResult, error) {
+func (a *API) RestoreAssets(ctx context.Context, params RestoreAssetsParams) (*RestoreAssetsResult, error) {
 	res := &RestoreAssetsResult{}
 	_, err := a.post(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType, restore), params, res)
 
 	return res, err
 }
 
+// RestoreAssetsResult is the result of RestoreAssets.
 type RestoreAssetsResult map[string]api.BriefAssetResult
 
+// DeleteAssetsParams are the parameters for DeleteAssets.
 type DeleteAssetsParams struct {
 	AssetType       api.AssetType    `json:"-"`
 	DeliveryType    api.DeliveryType `json:"-"`
-	PublicIDs       api.CldApiArray  `json:"public_ids"` // The public IDs of the assets to delete (up to 100).
+	PublicIDs       api.CldAPIArray  `json:"public_ids"` // The public IDs of the assets to delete (up to 100).
 	KeepOriginal    bool             `json:"keep_original,omitempty"`
 	Invalidate      bool             `json:"invalidate,omitempty"`
 	Transformations string           `json:"transformations,omitempty"`
@@ -181,13 +191,14 @@ type DeleteAssetsParams struct {
 // DeleteAssets deletes the specified assets.
 //
 // https://cloudinary.com/documentation/admin_api#delete_resources
-func (a *Api) DeleteAssets(ctx context.Context, params DeleteAssetsParams) (*DeleteAssetsResult, error) {
+func (a *API) DeleteAssets(ctx context.Context, params DeleteAssetsParams) (*DeleteAssetsResult, error) {
 	res := &DeleteAssetsResult{}
 	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
 
 	return res, err
 }
 
+// DeleteAssetsResult  is the result of DeleteAssets.
 type DeleteAssetsResult struct {
 	Deleted       map[string]string      `json:"deleted"`
 	DeletedCounts map[string]interface{} `json:"deleted_counts"`
@@ -195,10 +206,11 @@ type DeleteAssetsResult struct {
 	Error         api.ErrorResp          `json:"error,omitempty"`
 }
 
+// DeleteAssetsByPrefixParams are the parameters for DeleteAssetsByPrefix.
 type DeleteAssetsByPrefixParams struct {
 	AssetType       api.AssetType    `json:"-"`
 	DeliveryType    api.DeliveryType `json:"-"`
-	Prefix          api.CldApiArray  `json:"prefix"`
+	Prefix          api.CldAPIArray  `json:"prefix"`
 	KeepOriginal    bool             `json:"keep_original,omitempty"`
 	Invalidate      bool             `json:"invalidate,omitempty"`
 	Transformations string           `json:"transformations,omitempty"`
@@ -208,13 +220,14 @@ type DeleteAssetsByPrefixParams struct {
 // DeleteAssetsByPrefix deletes assets by prefix.
 //
 // https://cloudinary.com/documentation/admin_api#delete_resources
-func (a *Api) DeleteAssetsByPrefix(ctx context.Context, params DeleteAssetsByPrefixParams) (*DeleteAssetsResult, error) {
+func (a *API) DeleteAssetsByPrefix(ctx context.Context, params DeleteAssetsByPrefixParams) (*DeleteAssetsResult, error) {
 	res := &DeleteAssetsResult{}
 	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
 
 	return res, err
 }
 
+// DeleteAssetsByTagParams are the parameters for DeleteAssetsByTag.
 type DeleteAssetsByTagParams struct {
 	AssetType       api.AssetType `json:"-"`
 	Tag             string        `json:"-"`
@@ -229,13 +242,14 @@ type DeleteAssetsByTagParams struct {
 // Supports deleting up to a maximum of 1000 original assets in a single call.
 //
 // https://cloudinary.com/documentation/admin_api#delete_resources_by_tags
-func (a *Api) DeleteAssetsByTag(ctx context.Context, params DeleteAssetsByTagParams) (*DeleteAssetsResult, error) {
+func (a *API) DeleteAssetsByTag(ctx context.Context, params DeleteAssetsByTagParams) (*DeleteAssetsResult, error) {
 	res := &DeleteAssetsResult{}
 	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, tags, params.Tag), params, res)
 
 	return res, err
 }
 
+// DeleteAllAssetsParams are the parameters for DeleteAllAssets.
 type DeleteAllAssetsParams struct {
 	AssetType       api.AssetType    `json:"-"`
 	DeliveryType    api.DeliveryType `json:"-"`
@@ -251,7 +265,7 @@ type DeleteAllAssetsParams struct {
 // Supports deleting up to a maximum of 1000 original assets in a single call.
 //
 // https://cloudinary.com/documentation/admin_api#delete_resources
-func (a *Api) DeleteAllAssets(ctx context.Context, params DeleteAllAssetsParams) (*DeleteAssetsResult, error) {
+func (a *API) DeleteAllAssets(ctx context.Context, params DeleteAllAssetsParams) (*DeleteAssetsResult, error) {
 	params.All = true
 
 	res := &DeleteAssetsResult{}
@@ -260,8 +274,9 @@ func (a *Api) DeleteAllAssets(ctx context.Context, params DeleteAllAssetsParams)
 	return res, err
 }
 
+// DeleteDerivedAssetsParams are the parameters for DeleteDerivedAssets.
 type DeleteDerivedAssetsParams struct {
-	DerivedAssetIDs api.CldApiArray `json:"derived_resource_ids"`
+	DerivedAssetIDs api.CldAPIArray `json:"derived_resource_ids"`
 }
 
 // DeleteDerivedAssets deletes the specified derived resources by derived resource ID.
@@ -270,24 +285,25 @@ type DeleteDerivedAssetsParams struct {
 // the details of a single asset.
 //
 // https://cloudinary.com/documentation/admin_api##delete_resources
-func (a *Api) DeleteDerivedAssets(ctx context.Context, params DeleteDerivedAssetsParams) (*DeleteAssetsResult, error) {
+func (a *API) DeleteDerivedAssets(ctx context.Context, params DeleteDerivedAssetsParams) (*DeleteAssetsResult, error) {
 	res := &DeleteAssetsResult{}
 	_, err := a.delete(ctx, api.BuildPath(derivedAssets), params, res)
 
 	return res, err
 }
 
+// DeleteDerivedAssetsByTransformationParams are the parameters for DeleteDerivedAssetsByTransformation.
 type DeleteDerivedAssetsByTransformationParams struct {
 	AssetType       api.AssetType    `json:"-"`
 	DeliveryType    api.DeliveryType `json:"-"`
-	PublicIDs       api.CldApiArray  `json:"public_ids"`      // The public IDs for which you want to delete derived resources.
+	PublicIDs       api.CldAPIArray  `json:"public_ids"`      // The public IDs for which you want to delete derived resources.
 	Transformations string           `json:"transformations"` // The transformation(s) associated with the derived resources to delete.
 	KeepOriginal    bool             `json:"keep_original"`
 	Invalidate      bool             `json:"invalidate,omitempty"`
 }
 
 // DeleteDerivedAssetsByTransformation deletes derived resources identified by transformation and public_ids.
-func (a *Api) DeleteDerivedAssetsByTransformation(ctx context.Context, params DeleteDerivedAssetsByTransformationParams) (*DeleteAssetsResult, error) {
+func (a *API) DeleteDerivedAssetsByTransformation(ctx context.Context, params DeleteDerivedAssetsByTransformationParams) (*DeleteAssetsResult, error) {
 	params.KeepOriginal = true
 
 	res := &DeleteAssetsResult{}
