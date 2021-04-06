@@ -11,6 +11,7 @@ import (
 
 const (
 	generateArchive api.EndPoint = "generate_archive"
+	download        api.EndPoint = "download"
 	downloadBackup  api.EndPoint = "download_backup"
 )
 
@@ -160,6 +161,38 @@ func (u *API) DownloadBackedUpAsset(params DownloadBackedUpAssetParams) (string,
 	}
 
 	urlStruct, err := url.Parse(u.getUploadURL(downloadBackup))
+	if err != nil {
+		return "", err
+	}
+
+	urlStruct.RawQuery = queryParams.Encode()
+
+	return urlStruct.String(), nil
+}
+
+// PrivateDownloadUrlParams are the parameters for PrivateDownloadUrl.
+type PrivateDownloadUrlParams struct {
+	PublicID     string        `json:"public_id"`
+	Format       string        `json:"format"`
+	DeliveryType string        `json:"type,omitempty"`
+	Attachment   string        `json:"attachment,omitempty"`
+	ExpiresAt    *time.Time    `json:"expires_at,omitempty"`
+	ResourceType api.AssetType `json:"-"`
+}
+
+// PrivateDownloadUrl returns a URL that when invoked downloads the asset.
+func (u *API) PrivateDownloadUrl(params PrivateDownloadUrlParams) (string, error) {
+	queryParams, err := api.StructToParams(params)
+	if err != nil {
+		return "", err
+	}
+	queryParams, err = u.signRequest(queryParams)
+	if err != nil {
+		return "", err
+	}
+
+	assetType := getAssetType(params)
+	urlStruct, err := url.Parse(u.getUploadURL(api.BuildPath(assetType, download)))
 	if err != nil {
 		return "", err
 	}

@@ -84,3 +84,16 @@ func TestUploader_DownloadBackedUpAsset(t *testing.T) {
 	assert.Contains(t, downloadURL, "version_id")
 	assert.Contains(t, downloadURL, "download_backup")
 }
+
+func TestUploader_PrivateDownloadURL(t *testing.T) {
+	params := uploader.PrivateDownloadUrlParams{
+		PublicID: cldtest.PublicID,
+		Format:   "png",
+	}
+
+	privateDownloadURL, _ := uploadAPI.PrivateDownloadUrl(params)
+
+	assert.Contains(t, privateDownloadURL, "api_key")
+	assert.Contains(t, privateDownloadURL, "signature")
+	assert.Contains(t, privateDownloadURL, "timestamp")
+}
