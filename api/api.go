@@ -21,7 +21,7 @@ import (
 type EndPoint = string
 
 // Version is the Cloudinary Go package version.
-const Version = "0.2.0"
+const Version = "1.0.0"
 
 // UserAgent contains information about the SDK user agent. Passed to the Cloudinary servers.
 const UserAgent = "CloudinaryGo/" + Version
