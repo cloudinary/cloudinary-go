@@ -1,70 +1,72 @@
-package uploader
+package uploader_test
 
 import (
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 )
 
 func TestUploader_Tag(t *testing.T) {
-	UploadTestAsset(t, publicID)
+	cldtest.UploadTestAsset(t, cldtest.PublicID)
 
-	params := AddTagParams{
-		PublicIDs: api.CldApiArray{publicID},
-		Tag:       tag1,
+	params := uploader.AddTagParams{
+		PublicIDs: []string{cldtest.PublicID},
+		Tag:       cldtest.Tag1,
 	}
 
-	resp, err := uploadApi.AddTag(ctx, params)
+	resp, err := uploadAPI.AddTag(ctx, params)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if resp == nil || len(resp.PublicIds) != 1 || resp.PublicIds[0] != publicID {
+	if resp == nil || len(resp.PublicIds) != 1 || resp.PublicIds[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 
-	rParams := RemoveTagParams{
-		PublicIDs: api.CldApiArray{publicID},
-		Tag:       tag1,
+	rParams := uploader.RemoveTagParams{
+		PublicIDs: []string{cldtest.PublicID},
+		Tag:       cldtest.Tag1,
 	}
 
-	rResp, err := uploadApi.RemoveTag(ctx, rParams)
+	rResp, err := uploadAPI.RemoveTag(ctx, rParams)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if rResp == nil || len(rResp.PublicIds) != 1 || rResp.PublicIds[0] != publicID {
+	if rResp == nil || len(rResp.PublicIds) != 1 || rResp.PublicIds[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 	// FIXME: add some tags :) before removing
-	raParams := RemoveAllTagsParams{
-		PublicIDs: api.CldApiArray{publicID},
+	raParams := uploader.RemoveAllTagsParams{
+		PublicIDs: api.CldAPIArray{cldtest.PublicID},
 	}
 
-	raResp, err := uploadApi.RemoveAllTags(ctx, raParams)
+	raResp, err := uploadAPI.RemoveAllTags(ctx, raParams)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if raResp == nil || len(raResp.PublicIds) != 1 || raResp.PublicIds[0] != publicID {
+	if raResp == nil || len(raResp.PublicIds) != 1 || raResp.PublicIds[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 
-	reParams := ReplaceTagParams{
-		PublicIDs: api.CldApiArray{publicID},
-		Tag:       tag2,
+	reParams := uploader.ReplaceTagParams{
+		PublicIDs: api.CldAPIArray{cldtest.PublicID},
+		Tag:       cldtest.Tag2,
 	}
 
-	reResp, err := uploadApi.ReplaceTag(ctx, reParams)
+	reResp, err := uploadAPI.ReplaceTag(ctx, reParams)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if reResp == nil || len(reResp.PublicIds) != 1 || reResp.PublicIds[0] != publicID {
+	if reResp == nil || len(reResp.PublicIds) != 1 || reResp.PublicIds[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 }

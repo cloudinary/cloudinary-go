@@ -17,22 +17,30 @@ import (
 	"time"
 )
 
+// EndPoint represents the API endpoint.
 type EndPoint = string
 
+// Version is the Cloudinary Go package version.
 const Version = "0.2.0"
 
+// UserAgent contains information about the SDK user agent. Passed to the Cloudinary servers.
 const UserAgent = "CloudinaryGo/" + Version
 
+// apiVersion is the current Cloudinary API version.
 var apiVersion = "1_1"
 
-func BaseUrl(uploadPrefix string) string {
+// BaseURL is the base API url.
+func BaseURL(uploadPrefix string) string {
 	return fmt.Sprintf("%s/v%s", uploadPrefix, apiVersion)
 }
 
+// base64DataRegex is the regular expression for detecting base64 encoded strings.
 var base64DataRegex = regexp.MustCompile("^data:([\\w-]+/[\\w\\-+.]+)?(;[\\w-]+=[\\w-]+)*;base64,([a-zA-Z0-9/+\\n=]+)$")
 
+// AssetType is the type of the asset.
 type AssetType string
 
+// String serializes AssetType to string.
 func (a AssetType) String() string {
 	if a == "" {
 		return string(Image)
@@ -42,15 +50,22 @@ func (a AssetType) String() string {
 }
 
 const (
+	// Image is the image asset type.
 	Image AssetType = "image"
-	Video           = "video"
-	File            = "raw"
-	Auto            = "auto"
-	All             = "all"
+	// Video is the video asset type.
+	Video = "video"
+	// File is the raw asset type.
+	File = "raw"
+	// Auto is the auto asset type. Tells Cloudinary to automatically detect the type of the uploaded asset.
+	Auto = "auto"
+	// All is the all asset type. Used for downloading folders with all assets inside.
+	All = "all"
 )
 
+// DeliveryType is the delivery type of the asset.
 type DeliveryType string
 
+// String serializes DeliveryType to string.
 func (d DeliveryType) String() string {
 	if d == "" {
 		return string(Upload)
@@ -60,43 +75,69 @@ func (d DeliveryType) String() string {
 }
 
 const (
-	Upload          DeliveryType = "upload"
-	Private                      = "private"
-	Public                       = "public"
-	Authenticated                = "authenticated"
-	Fetch                        = "fetch"
-	Sprite                       = "sprite"
-	Text                         = "text"
-	Multi                        = "multi"
-	Facebook                     = "facebook"
-	Twitter                      = "twitter"
-	TwitterName                  = "twitter_name"
-	Gravatar                     = "gravatar"
-	Youtube                      = "youtube"
-	Hulu                         = "hulu"
-	Vimeo                        = "vimeo"
-	Animoto                      = "animoto"
-	Worldstarhiphop              = "worldstarhiphop"
-	Dailymotion                  = "dailymotion"
+	// Upload is the upload delivery type.
+	Upload DeliveryType = "upload"
+	// Private is the private delivery type.
+	Private = "private"
+	// Public is the  delivery type.
+	Public = "public"
+	// Authenticated is the  delivery type.
+	Authenticated = "authenticated"
+	// Fetch is the fetch delivery type.
+	Fetch = "fetch"
+	// Sprite is the sprite delivery type.
+	Sprite = "sprite"
+	// Text is the text delivery type.
+	Text = "text"
+	// Multi is the multi delivery type.
+	Multi = "multi"
+	// Facebook is the facebook delivery type.
+	Facebook = "facebook"
+	// Twitter is the twitter delivery type.
+	Twitter = "twitter"
+	// TwitterName is the twitter name delivery type.
+	TwitterName = "twitter_name"
+	// Gravatar is the gravatar delivery type.
+	Gravatar = "gravatar"
+	// Youtube is the youtube delivery type.
+	Youtube = "youtube"
+	// Hulu is the hulu delivery type.
+	Hulu = "hulu"
+	// Vimeo is the vimeo delivery type.
+	Vimeo = "vimeo"
+	// Animoto is the animoto delivery type.
+	Animoto = "animoto"
+	// Worldstarhiphop is the world star hip hop delivery type.
+	Worldstarhiphop = "worldstarhiphop"
+	// Dailymotion is the daily motion delivery type.
+	Dailymotion = "dailymotion"
 )
 
+// ModerationStatus is the moderation status of the asset.
 type ModerationStatus string
 
 const (
-	Pending  ModerationStatus = "pending"
-	Approved                  = "approved"
-	Rejected                  = "rejected"
+	// Pending is the pending moderation status.
+	Pending ModerationStatus = "pending"
+	// Approved is the approved moderation status.
+	Approved = "approved"
+	// Rejected is the rejected moderation status.
+	Rejected = "rejected"
 )
 
-// Option is the optional parameters custom struct
+// Option is the optional parameters custom struct.
 type Option map[string]interface{}
 
+// Coordinates represents coordinates on the asset.
 type Coordinates [][]int
-// CldApiArray is not just an alias, in addition it has a custom MarshalJSON() for serialisation purposes.
-type CldApiArray []string
 
-// CldApiMap is not just an alias, in addition it has a custom MarshalJSON() for serialisation purposes.
-type CldApiMap map[string]string
+// CldAPIArray is not just an alias, in addition it has a custom MarshalJSON() for serialisation purposes.
+type CldAPIArray []string
+
+// CldAPIMap is not just an alias, in addition it has a custom MarshalJSON() for serialisation purposes.
+type CldAPIMap map[string]string
+
+// Metadata is the Cloudinary structured metadata.
 type Metadata map[string]interface{}
 
 // BriefAssetResult represents a partial asset result that is returned when assets are listed.
@@ -116,17 +157,17 @@ type BriefAssetResult struct {
 	URL         string    `json:"url"`
 	SecureURL   string    `json:"secure_url"`
 	Tags        []string  `json:"tags,omitempty"`
-	Context     CldApiMap `json:"context,omitempty"`
+	Context     CldAPIMap `json:"context,omitempty"`
 	Metadata    Metadata  `json:"metadata,omitempty"`
 	Placeholder bool      `json:"placeholder,omitempty"`
 	Error       string    `json:"error,omitempty"`
 }
 
 // MarshalJSON writes a quoted string in the custom format.
-func (cldApiMap CldApiMap) MarshalJSON() ([]byte, error) {
+func (cldAPIMap CldAPIMap) MarshalJSON() ([]byte, error) {
 	// FIXME: handle escaping
 	var params []string
-	for name, value := range cldApiMap {
+	for name, value := range cldAPIMap {
 		params = append(params, strings.Join([]string{name, value}, "="))
 	}
 
@@ -134,8 +175,8 @@ func (cldApiMap CldApiMap) MarshalJSON() ([]byte, error) {
 }
 
 // MarshalJSON writes a quoted string in the custom format.
-func (cldApiArr CldApiArray) MarshalJSON() ([]byte, error) {
-	return []byte(strconv.Quote(strings.Join(cldApiArr[:], ","))), nil
+func (cldAPIArr CldAPIArray) MarshalJSON() ([]byte, error) {
+	return []byte(strconv.Quote(strings.Join(cldAPIArr[:], ","))), nil
 }
 
 // ErrorResp is the failed api request main struct.
@@ -183,8 +224,8 @@ func SignParameters(params url.Values, secret string) (string, error) {
 // StructToParams serializes struct to url.Values, which can be further sent to the http client.
 func StructToParams(inputStruct interface{}) (url.Values, error) {
 	var paramsMap map[string]interface{}
-	paramsJsonObj, _ := json.Marshal(inputStruct)
-	err := json.Unmarshal(paramsJsonObj, &paramsMap)
+	paramsJSONObj, _ := json.Marshal(inputStruct)
+	err := json.Unmarshal(paramsJSONObj, &paramsMap)
 	if err != nil {
 		return nil, err
 	}
@@ -215,10 +256,10 @@ func DeferredClose(c io.Closer) {
 	}
 }
 
-// IsValidUrl checks whether urlCandidate string is a valid URL.
-func IsValidUrl(urlCandidate string) bool {
-	_, err := url.ParseRequestURI(urlCandidate)
-	if err != nil {
+// IsValidURL checks whether urlCandidate string is a valid URL.
+func IsValidURL(urlCandidate string) bool {
+	urlStruct, err := url.Parse(urlCandidate)
+	if err != nil || urlStruct.Scheme == "" {
 		return false
 	}
 
@@ -237,7 +278,7 @@ func IsBase64Data(base64Candidate string) bool {
 func IsLocalFilePath(path interface{}) bool {
 	switch pathV := path.(type) {
 	case string:
-		return !(IsValidUrl(pathV) || IsBase64Data(pathV))
+		return !(IsValidURL(pathV) || IsBase64Data(pathV))
 	default:
 		return false
 	}

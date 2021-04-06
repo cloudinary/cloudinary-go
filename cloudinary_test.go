@@ -17,13 +17,13 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 		t.Error("Please set up CLOUDINARY_URL environment variable to run the test.")
 	}
 
-	c, _ = NewFromUrl("cloudinary://key:secret@test123")
+	c, _ = NewFromURL("cloudinary://key:secret@test123")
 
 	if c.Config.Cloud.CloudName != "test123" {
 		t.Error("Failed creating Cloudinary instance from Cloudinary URL.")
 	}
 
-	c, err := NewFromUrl("")
+	c, err := NewFromURL("")
 	if err == nil || err.Error() != "must provide CLOUDINARY_URL" {
 		t.Error("Error expected, got: ", err)
 	}
@@ -37,11 +37,11 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 
 func TestCloudinary_Upload(t *testing.T) {
 	params := uploader.UploadParams{
-		PublicID: "test_image",
-		Eager: "w_500,h_500",
+		PublicID:       "test_image",
+		Eager:          "w_500,h_500",
 		UniqueFilename: false,
-		UseFilename: true,
-		Overwrite: true,
+		UseFilename:    true,
+		Overwrite:      true,
 	}
 
 	resp, err := c.Upload.Upload(ctx, "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png", params)

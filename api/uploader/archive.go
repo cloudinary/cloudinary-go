@@ -10,57 +10,65 @@ import (
 )
 
 const (
-	GenerateArchive api.EndPoint = "generate_archive"
-	DownloadBackup  api.EndPoint = "download_backup"
+	generateArchive api.EndPoint = "generate_archive"
+	download        api.EndPoint = "download"
+	downloadBackup  api.EndPoint = "download_backup"
 )
 
+// ArchiveFormat is the supported archive format.
 type ArchiveFormat = string
 
 const (
+	// Zip archive format.
 	Zip ArchiveFormat = "zip"
+	// Tgz archive format.
 	Tgz ArchiveFormat = "tgz"
 )
 
+// ArchiveMode is the supported mode for Archive.
 type ArchiveMode string
 
 const (
-	CreateArchive   ArchiveMode = "create"
+	// CreateArchive creates the archive as a new asset in your cloud.
+	CreateArchive ArchiveMode = "create"
+	// DownloadArchive returns the archive contents in the response.
 	DownloadArchive ArchiveMode = "download"
 )
 
-// CreateArchiveParams struct
+// CreateArchiveParams are the parameters for CreateArchive.
 type CreateArchiveParams struct {
 	AllowMissing            bool             `json:"allow_missing,omitempty"`
 	Async                   bool             `json:"async,omitempty"`
 	ExpiresAt               *time.Time       `json:"expires_at,omitempty"`
 	FlattenFolders          bool             `json:"flatten_folders,omitempty"`
 	FlattenTransformations  bool             `json:"flatten_transformations,omitempty"`
-	FullyQualifiedPublicIds api.CldApiArray  `json:"fully_qualified_public_ids,omitempty"`
+	FullyQualifiedPublicIds api.CldAPIArray  `json:"fully_qualified_public_ids,omitempty"`
 	KeepDerived             bool             `json:"keep_derived,omitempty"`
 	Mode                    ArchiveMode      `json:"mode,omitempty"`
-	NotificationUrl         string           `json:"notification_url,omitempty"`
+	NotificationURL         string           `json:"notification_url,omitempty"`
 	Phash                   string           `json:"phash,omitempty"`
-	Prefixes                api.CldApiArray  `json:"prefixes,omitempty"`
-	PublicIds               api.CldApiArray  `json:"public_ids,omitempty"`
+	Prefixes                api.CldAPIArray  `json:"prefixes,omitempty"`
+	PublicIds               api.CldAPIArray  `json:"public_ids,omitempty"`
 	ResourceType            api.AssetType    `json:"-"`
 	SkipTransformationName  bool             `json:"skip_transformation_name,omitempty"`
 	TargetFormat            ArchiveFormat    `json:"target_format,omitempty"`
-	TargetPublicId          string           `json:"target_public_id,omitempty"`
-	TargetTags              api.CldApiArray  `json:"target_tags,omitempty"`
-	Tags                    api.CldApiArray  `json:"tags,omitempty"`
+	TargetPublicID          string           `json:"target_public_id,omitempty"`
+	TargetTags              api.CldAPIArray  `json:"target_tags,omitempty"`
+	Tags                    api.CldAPIArray  `json:"tags,omitempty"`
 	Transformations         string           `json:"transformations,omitempty"`
 	Type                    api.DeliveryType `json:"type,omitempty"`
 	UseOriginalFilename     bool             `json:"use_original_filename,omitempty"`
 }
 
 // CreateArchive creates a new archive in the server and returns information in JSON format.
-func (u *Api) CreateArchive(ctx context.Context, params CreateArchiveParams) (*CreateArchiveResult, error) {
+func (u *API) CreateArchive(ctx context.Context, params CreateArchiveParams) (*CreateArchiveResult, error) {
 	res := &CreateArchiveResult{}
-	err := u.callUploadApi(ctx, GenerateArchive, params, res)
+	err := u.callUploadAPI(ctx, generateArchive, params, res)
 
 	return res, err
 }
 
+// CreateArchiveResult is the result of CreateArchive.
 type CreateArchiveResult struct {
 	AssetID       string        `json:"asset_id"`
 	PublicID      string        `json:"public_id"`
@@ -84,14 +92,14 @@ type CreateArchiveResult struct {
 }
 
 // CreateZip creates a new zip archive in the server and returns information in JSON format.
-func (u *Api) CreateZip(ctx context.Context, params CreateArchiveParams) (*CreateArchiveResult, error) {
+func (u *API) CreateZip(ctx context.Context, params CreateArchiveParams) (*CreateArchiveResult, error) {
 	params.TargetFormat = Zip
 
 	return u.CreateArchive(ctx, params)
 }
 
-// DownloadArchiveUrl creates a URL that when invoked generates an archive and returns it.
-func (u *Api) DownloadArchiveUrl(params CreateArchiveParams) (string, error) {
+// DownloadArchiveURL creates a URL that when invoked generates an archive and returns it.
+func (u *API) DownloadArchiveURL(params CreateArchiveParams) (string, error) {
 	params.Mode = DownloadArchive
 
 	queryParams, err := api.StructToParams(params)
@@ -105,7 +113,7 @@ func (u *Api) DownloadArchiveUrl(params CreateArchiveParams) (string, error) {
 
 	assetType := getAssetType(params)
 
-	archiveEndpointURL := u.getUploadURL(api.BuildPath(assetType, GenerateArchive))
+	archiveEndpointURL := u.getUploadURL(api.BuildPath(assetType, generateArchive))
 
 	urlStruct, err := url.Parse(archiveEndpointURL)
 	if err != nil {
@@ -117,31 +125,32 @@ func (u *Api) DownloadArchiveUrl(params CreateArchiveParams) (string, error) {
 	return urlStruct.String(), nil
 }
 
-// DownloadZipUrl creates a URL that when invokes generates a zip archive and returns it.
-func (u *Api) DownloadZipUrl(params CreateArchiveParams) (string, error) {
+// DownloadZipURL creates a URL that when invokes generates a zip archive and returns it.
+func (u *API) DownloadZipURL(params CreateArchiveParams) (string, error) {
 	params.TargetFormat = Zip
 
-	return u.DownloadArchiveUrl(params)
+	return u.DownloadArchiveURL(params)
 }
 
 // DownloadFolder creates a URL that when invoked generates an archive of a folder.
-func (u *Api) DownloadFolder(folderPath string, params CreateArchiveParams) (string, error) {
-	params.Prefixes = api.CldApiArray{folderPath}
+func (u *API) DownloadFolder(folderPath string, params CreateArchiveParams) (string, error) {
+	params.Prefixes = api.CldAPIArray{folderPath}
 	if len(params.ResourceType) == 0 {
 		params.ResourceType = api.All
 	}
 
-	return u.DownloadArchiveUrl(params)
+	return u.DownloadArchiveURL(params)
 }
 
-type DownloadABackedUpAssetParams struct {
+// DownloadBackedUpAssetParams are the parameters for DownloadBackedUpAsset.
+type DownloadBackedUpAssetParams struct {
 	AssetID   string `json:"asset_id"`
 	VersionID string `json:"version_id,omitempty"`
 }
 
 // DownloadBackedUpAsset creates a URL that  allows downloading the backed-up asset
 // based on the asset ID and the version ID.
-func (u *Api) DownloadBackedUpAsset(params DownloadABackedUpAssetParams) (string, error) {
+func (u *API) DownloadBackedUpAsset(params DownloadBackedUpAssetParams) (string, error) {
 	queryParams, err := api.StructToParams(params)
 	if err != nil {
 		return "", err
@@ -151,7 +160,39 @@ func (u *Api) DownloadBackedUpAsset(params DownloadABackedUpAssetParams) (string
 		return "", err
 	}
 
-	urlStruct, err := url.Parse(u.getUploadURL(DownloadBackup))
+	urlStruct, err := url.Parse(u.getUploadURL(downloadBackup))
+	if err != nil {
+		return "", err
+	}
+
+	urlStruct.RawQuery = queryParams.Encode()
+
+	return urlStruct.String(), nil
+}
+
+// PrivateDownloadUrlParams are the parameters for PrivateDownloadUrl.
+type PrivateDownloadUrlParams struct {
+	PublicID     string        `json:"public_id"`
+	Format       string        `json:"format"`
+	DeliveryType string        `json:"type,omitempty"`
+	Attachment   string        `json:"attachment,omitempty"`
+	ExpiresAt    *time.Time    `json:"expires_at,omitempty"`
+	ResourceType api.AssetType `json:"-"`
+}
+
+// PrivateDownloadUrl returns a URL that when invoked downloads the asset.
+func (u *API) PrivateDownloadUrl(params PrivateDownloadUrlParams) (string, error) {
+	queryParams, err := api.StructToParams(params)
+	if err != nil {
+		return "", err
+	}
+	queryParams, err = u.signRequest(queryParams)
+	if err != nil {
+		return "", err
+	}
+
+	assetType := getAssetType(params)
+	urlStruct, err := url.Parse(u.getUploadURL(api.BuildPath(assetType, download)))
 	if err != nil {
 		return "", err
 	}

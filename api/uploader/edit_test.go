@@ -1,21 +1,23 @@
-package uploader
+package uploader_test
 
 import (
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 )
 
 func TestUploader_Explicit(t *testing.T) {
-	UploadTestAsset(t, publicID)
+	cldtest.UploadTestAsset(t, cldtest.PublicID)
 
-	params := ExplicitParams{
-		PublicID: publicID,
+	params := uploader.ExplicitParams{
+		PublicID: cldtest.PublicID,
 		Type:     api.Upload,
-		Tags:     tags,
+		Tags:     cldtest.Tags,
 	}
 
-	resp, err := uploadApi.Explicit(ctx, params)
+	resp, err := uploadAPI.Explicit(ctx, params)
 
 	if err != nil {
 		t.Error(err)
@@ -27,29 +29,29 @@ func TestUploader_Explicit(t *testing.T) {
 }
 
 func TestUploader_Edit(t *testing.T) {
-	UploadTestAsset(t, publicID)
+	cldtest.UploadTestAsset(t, cldtest.PublicID)
 
-	params := RenameParams{
-		FromPublicID: publicID,
-		ToPublicID:   publicID2,
+	params := uploader.RenameParams{
+		FromPublicID: cldtest.PublicID,
+		ToPublicID:   cldtest.PublicID2,
 		Overwrite:    true,
 	}
 
-	resp, err := uploadApi.Rename(ctx, params)
+	resp, err := uploadAPI.Rename(ctx, params)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if resp == nil || resp.PublicID != publicID2 {
+	if resp == nil || resp.PublicID != cldtest.PublicID2 {
 		t.Error(resp)
 	}
 
-	dParams := DestroyParams{
-		PublicID: publicID2,
+	dParams := uploader.DestroyParams{
+		PublicID: cldtest.PublicID2,
 	}
 
-	dResp, err := uploadApi.Destroy(ctx, dParams)
+	dResp, err := uploadAPI.Destroy(ctx, dParams)
 
 	if err != nil {
 		t.Error(err)

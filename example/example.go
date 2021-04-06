@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// Start by creating a new instance of Cloudinary using CLOUDINARY_URL environment variable.
-	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromUrl().
+	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromURL().
 	var cld, err = cloudinary.New()
 	if err != nil {
 		log.Fatalf("Failed to intialize Cloudinary, %v", err)
@@ -44,7 +44,7 @@ func main() {
 	// uploadResult contains useful information about the asset, like Width, Height, Format, etc.
 	// See uploader.UploadResult struct for more details.
 
-	// Now we can use Admin Api to see the details about the asset.
+	// Now we can use Admin API to see the details about the asset.
 	// The request can be customised by providing AssetParams.
 	asset, err := cld.Admin.Asset(ctx, admin.AssetParams{PublicID: "logo"})
 	if err != nil {
@@ -54,7 +54,7 @@ func main() {
 	// Print some basic information about the asset.
 	log.Printf("Public ID: %v, URL: %v\n", asset.PublicID, asset.SecureURL)
 
-	// Cloudinary also provides a very flexible Search Api for filtering and retrieving
+	// Cloudinary also provides a very flexible Search API for filtering and retrieving
 	// information on all the assets in your account with the help of query expressions
 	// in a Lucene-like query language.
 	searchQuery := search.Query{

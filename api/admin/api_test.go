@@ -1,41 +1,26 @@
-package admin
+package admin_test
 
 import (
 	"context"
-	"math/rand"
-	"os"
-	"strconv"
 	"strings"
 	"testing"
-	"time"
+
+	"github.com/cloudinary/cloudinary-go/api/admin"
 )
 
 var ctx = context.Background()
-var adminApi, _ = New()
+var adminAPI, _ = admin.New()
 
-var testSuffix = getTestSuffix()
+func TestAPI_Timeout(t *testing.T) {
+	var originalTimeout = adminAPI.Config.API.Timeout
 
-func getTestSuffix() string {
-	testSuffix := os.Getenv("TRAVIS_JOB_ID")
+	adminAPI.Config.API.Timeout = 0 // should timeout immediately
 
-	if testSuffix == "" {
-		rand.Seed(time.Now().UnixNano())
-		testSuffix = strconv.Itoa(rand.Intn(999999))
-	}
-
-	return testSuffix
-}
-
-func TestApi_Timeout(t *testing.T) {
-	var originalTimeout = adminApi.Config.Api.Timeout
-
-	adminApi.Config.Api.Timeout = 0 // should timeout immediately
-
-	_, err := adminApi.Ping(ctx)
+	_, err := adminAPI.Ping(ctx)
 
 	if err == nil || !strings.HasSuffix(err.Error(), "context deadline exceeded") {
 		t.Error("Expected context timeout did not happen")
 	}
 
-	adminApi.Config.Api.Timeout = originalTimeout
+	adminAPI.Config.API.Timeout = originalTimeout
 }

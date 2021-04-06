@@ -1,7 +1,9 @@
-package admin
+package admin_test
 
 import (
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api/admin"
 )
 
 const TName = "go_transformation"
@@ -9,7 +11,7 @@ const TTransformation = "c_fill,h_500,w_500"
 const TTransformationUpdated = "c_fill,h_501,w_501"
 
 func TestTransformations_Create(t *testing.T) {
-	resp, err := adminApi.CreateTransformation(ctx, CreateTransformationParams{
+	resp, err := adminAPI.CreateTransformation(ctx, admin.CreateTransformationParams{
 		Name:           TName,
 		Transformation: TTransformation,
 	})
@@ -20,7 +22,7 @@ func TestTransformations_Create(t *testing.T) {
 }
 
 func TestTransformations_List(t *testing.T) {
-	resp, err := adminApi.ListTransformations(ctx, ListTransformationsParams{})
+	resp, err := adminAPI.ListTransformations(ctx, admin.ListTransformationsParams{})
 
 	if err != nil || len(resp.Transformations) < 1 {
 		t.Error(resp, err)
@@ -28,13 +30,13 @@ func TestTransformations_List(t *testing.T) {
 }
 
 func TestTransformations_Get(t *testing.T) {
-	lResp, err := adminApi.ListTransformations(ctx, ListTransformationsParams{})
+	lResp, err := adminAPI.ListTransformations(ctx, admin.ListTransformationsParams{})
 
 	if err != nil || lResp.Error.Message != "" {
 		t.Error(lResp, err)
 	}
 
-	resp, err := adminApi.GetTransformation(ctx, GetTransformationParams{Transformation: lResp.Transformations[0].Name})
+	resp, err := adminAPI.GetTransformation(ctx, admin.GetTransformationParams{Transformation: lResp.Transformations[0].Name})
 
 	if err != nil || len(resp.Info) < 1 {
 		t.Error(resp, err)
@@ -42,7 +44,7 @@ func TestTransformations_Get(t *testing.T) {
 }
 
 func TestTransformations_Update(t *testing.T) {
-	resp, err := adminApi.UpdateTransformation(ctx, UpdateTransformationParams{
+	resp, err := adminAPI.UpdateTransformation(ctx, admin.UpdateTransformationParams{
 		Transformation: TName,
 		UnsafeUpdate:   TTransformationUpdated,
 	})
@@ -53,7 +55,7 @@ func TestTransformations_Update(t *testing.T) {
 }
 
 func TestTransformations_Delete(t *testing.T) {
-	resp, err := adminApi.DeleteTransformation(ctx, DeleteTransformationParams{Transformation: TName})
+	resp, err := adminAPI.DeleteTransformation(ctx, admin.DeleteTransformationParams{Transformation: TName})
 
 	if err != nil || resp.Message != "deleted" {
 		t.Error(resp, err)

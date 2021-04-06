@@ -1,40 +1,42 @@
-package uploader
+package uploader_test
 
 import (
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 )
 
 func TestUploader_Context(t *testing.T) {
-	UploadTestAsset(t, publicID)
+	cldtest.UploadTestAsset(t, cldtest.PublicID)
 
-	params := AddContextParams{
-		PublicIDs: api.CldApiArray{publicID},
-		Context:   cContext,
+	params := uploader.AddContextParams{
+		PublicIDs: api.CldAPIArray{cldtest.PublicID},
+		Context:   cldtest.CldContext,
 	}
 
-	resp, err := uploadApi.AddContext(ctx, params)
+	resp, err := uploadAPI.AddContext(ctx, params)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if resp == nil || len(resp.PublicIds) != 1 || resp.PublicIds[0] != publicID {
+	if resp == nil || len(resp.PublicIds) != 1 || resp.PublicIds[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 
-	raParams := RemoveAllContextParams{
-		PublicIDs: api.CldApiArray{publicID},
+	raParams := uploader.RemoveAllContextParams{
+		PublicIDs: api.CldAPIArray{cldtest.PublicID},
 	}
 
-	raResp, err := uploadApi.RemoveAllContext(ctx, raParams)
+	raResp, err := uploadAPI.RemoveAllContext(ctx, raParams)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if raResp == nil || len(raResp.PublicIds) != 1 || raResp.PublicIds[0] != publicID {
+	if raResp == nil || len(raResp.PublicIds) != 1 || raResp.PublicIds[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 }

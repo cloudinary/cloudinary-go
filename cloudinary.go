@@ -9,8 +9,8 @@ import (
 // Cloudinary main struct
 type Cloudinary struct {
 	Config config.Configuration
-	Admin  admin.Api
-	Upload uploader.Api
+	Admin  admin.API
+	Upload uploader.API
 }
 
 // New returns a new Cloudinary instance from environment variable.
@@ -22,9 +22,9 @@ func New() (*Cloudinary, error) {
 	return NewFromConfiguration(*c)
 }
 
-// NewFromUrl returns a new Cloudinary instance from a cloudinary url.
-func NewFromUrl(cloudinaryUrl string) (*Cloudinary, error) {
-	c, err := config.NewFromUrl(cloudinaryUrl)
+// NewFromURL returns a new Cloudinary instance from a cloudinary url.
+func NewFromURL(cloudinaryURL string) (*Cloudinary, error) {
+	c, err := config.NewFromURL(cloudinaryURL)
 	if err != nil {
 		return nil, err
 	}
@@ -44,10 +44,10 @@ func NewFromParams(cloud string, key string, secret string) (*Cloudinary, error)
 func NewFromConfiguration(configuration config.Configuration) (*Cloudinary, error) {
 	return &Cloudinary{
 		Config: configuration,
-		Admin: admin.Api{
+		Admin: admin.API{
 			Config: configuration,
 		},
-		Upload: uploader.Api{
+		Upload: uploader.API{
 			Config: configuration,
 		},
 	}, nil

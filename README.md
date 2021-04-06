@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.com/cloudinary/cloudinary-go.svg)](https://travis-ci.com/cloudinary/cloudinary-go) 
+[![Go Report Card](https://goreportcard.com/badge/github.com/cloudinary/cloudinary-go)](https://goreportcard.com/report/github.com/cloudinary/cloudinary-go) 
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/cloudinary/cloudinary-go)](https://pkg.go.dev/github.com/cloudinary/cloudinary-go)
+
 Cloudinary Go SDK
 ==========
 
@@ -17,10 +21,10 @@ go get github.com/cloudinary/cloudinary-go
 
 ### Configuration
 
-For requests to our secure APIs (e.g., image uploads, asset administration) you must have the `ApiKey` and `ApiSecret` parameters set.
+For requests to our secure APIs (e.g., image uploads, asset administration) you must have the `APIKey` and `APISecret` parameters set.
 You can find your account-specific configuration credentials in the **Dashboard** page of the [account console](https://cloudinary.com/console).
 
-Setting your `CloudName`, `ApiKey` and `ApiSecret` parameters can be done by initializing the Cloudinary object, or by
+Setting your `CloudName`, `APIKey` and `APISecret` parameters can be done by initializing the Cloudinary object, or by
 using the CLOUDINARY_URL environment variable / system property.
 
 The entry point of the library is the Cloudinary struct.
@@ -36,7 +40,7 @@ cld, _ := cloudinary.NewFromParams("n07t21i7", "123456789012345", "abcdeghijklmn
 
 You can also set the configuration parameters by providing the CLOUDINARY_URL value:
 ```go
-cld, _ := cloudinary.NewFromUrl("cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7")
+cld, _ := cloudinary.NewFromURL("cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7")
 ```
 
 **Learn more**: [Go configuration](https://cloudinary.com/documentation/go_integration#configuration)
@@ -56,7 +60,7 @@ go get -u github.com/cloudinary/cloudinary-go
 
 ### Upload 
 
-Assuming you have your Cloudinary configuration parameters defined (`CloudName`, `ApiKey`, `ApiSecret`), uploading to
+Assuming you have your Cloudinary configuration parameters defined (`CloudName`, `APIKey`, `APISecret`), uploading to
 Cloudinary is very simple.
 
 The following example uploads a local JPG to the cloud:
@@ -102,7 +106,7 @@ import (
 
 func main() {
 	// Start by creating a new instance of Cloudinary using CLOUDINARY_URL environment variable.
-	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromUrl().
+	// Alternatively you can use cloudinary.NewFromParams() or cloudinary.NewFromURL().
 	var cld, err = cloudinary.New()
 	if err != nil {
 		log.Fatalf("Failed to intialize Cloudinary, %v", err)
@@ -135,7 +139,7 @@ func main() {
 	// uploadResult contains useful information about the asset, like Width, Height, Format, etc.
 	// See uploader.UploadResult struct for more details.
 
-	// Now we can use Admin Api to see the details about the asset.
+	// Now we can use Admin API to see the details about the asset.
 	// The request can be customised by providing AssetParams.
 	asset, err := cld.Admin.Asset(ctx, admin.AssetParams{PublicID: "logo"})
 	if err != nil {
@@ -145,7 +149,7 @@ func main() {
 	// Print some basic information about the asset.
 	log.Printf("Public ID: %v, URL: %v\n", asset.PublicID, asset.SecureURL)
 
-	// Cloudinary also provides a very flexible Search Api for filtering and retrieving
+	// Cloudinary also provides a very flexible Search API for filtering and retrieving
 	// information on all the assets in your account with the help of query expressions
 	// in a Lucene-like query language.
 	searchQuery := search.Query{

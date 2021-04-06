@@ -1,18 +1,21 @@
-package uploader
+package uploader_test
 
 import (
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 )
 
-func TestUploader_Creative(t *testing.T) {
-	UploadTestAsset(t, publicID)
-	UploadTestAsset(t, publicID2)
+func TestUploader_GenerateSprite(t *testing.T) {
+	cldtest.UploadTestAsset(t, cldtest.PublicID)
+	cldtest.UploadTestAsset(t, cldtest.PublicID2)
 
-	params := GenerateSpriteParams{
-		Tag: tag1,
+	params := uploader.GenerateSpriteParams{
+		Tag: cldtest.Tag1,
 	}
 
-	resp, err := uploadApi.GenerateSprite(ctx, params)
+	resp, err := uploadAPI.GenerateSprite(ctx, params)
 
 	if err != nil {
 		t.Error(err)
@@ -21,27 +24,29 @@ func TestUploader_Creative(t *testing.T) {
 	if resp == nil || len(resp.ImageInfos) < 2 {
 		t.Error(resp)
 	}
-
-	mParams := MultiParams{
-		Tag: tag1,
+}
+func TestUploader_Multi(t *testing.T) {
+	mParams := uploader.MultiParams{
+		Tag: cldtest.Tag1,
 	}
 
-	mResp, err := uploadApi.Multi(ctx, mParams)
+	mResp, err := uploadAPI.Multi(ctx, mParams)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if mResp == nil || mResp.PublicID != tag1 {
+	if mResp == nil || mResp.PublicID != cldtest.Tag1 {
 		t.Error(mResp)
 	}
-
-	eParams := ExplodeParams{
-		PublicID: tag1,
+}
+func TestUploader_Explode(t *testing.T) {
+	eParams := uploader.ExplodeParams{
+		PublicID: cldtest.Tag1,
 		Type:     "multi",
 	}
 
-	eResp, err := uploadApi.Explode(ctx, eParams)
+	eResp, err := uploadAPI.Explode(ctx, eParams)
 
 	if err != nil {
 		t.Error(err)
@@ -49,5 +54,24 @@ func TestUploader_Creative(t *testing.T) {
 
 	if eResp == nil || eResp.BatchID == "" {
 		t.Error(eResp)
+	}
+}
+
+func TestUploader_Text(t *testing.T) {
+	tParams := uploader.TextParams{
+		Text:       "HelloGo",
+		PublicID:   cldtest.PublicID,
+		FontFamily: "Arial",
+		FontSize:   20,
+	}
+
+	tResp, err := uploadAPI.Text(ctx, tParams)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if tResp == nil || tResp.PublicID == "" {
+		t.Error(tResp)
 	}
 }

@@ -9,22 +9,22 @@ import (
 )
 
 const (
-	Tags api.EndPoint = "tags"
+	tags api.EndPoint = "tags"
 )
 
-type TagCommand string
+type tagCommand string
 
 const (
-	AddTag        TagCommand = "add"
-	RemoveTag     TagCommand = "remove"
-	ReplaceTag    TagCommand = "replace"
-	RemoveAllTags TagCommand = "remove_all"
+	addTag        tagCommand = "add"
+	removeTag     tagCommand = "remove"
+	replaceTag    tagCommand = "replace"
+	removeAllTags tagCommand = "remove_all"
 )
 
-// AddTagParams struct
+// AddTagParams are the parameters for
 type AddTagParams struct {
 	Tag          string          `json:"tag,omitempty"` // The name of the tag to add.
-	PublicIDs    api.CldApiArray `json:"public_ids"`    // The public IDs of the assets to add the tag to.
+	PublicIDs    api.CldAPIArray `json:"public_ids"`    // The public IDs of the assets to add the tag to.
 	Type         string          `json:"type,omitempty"`
 	ResourceType string          `json:"-"`
 }
@@ -32,21 +32,22 @@ type AddTagParams struct {
 // AddTag adds a tag to the assets specified.
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#tags_method
-func (u *Api) AddTag(ctx context.Context, params AddTagParams) (*AddTagResult, error) {
+func (u *API) AddTag(ctx context.Context, params AddTagParams) (*AddTagResult, error) {
 	res := &AddTagResult{}
-	err := u.callTagsApi(ctx, AddTag, params, res)
+	err := u.callTagsAPI(ctx, addTag, params, res)
 
 	return res, err
 }
 
+// AddTagResult is the result of AddTag.
 type AddTagResult struct {
 	TagResult
 }
 
-// RemoveTagParams struct
+// RemoveTagParams are the parameters for RemoveTag.
 type RemoveTagParams struct {
 	Tag          string          `json:"tag,omitempty"` // The name of the tag to remove.
-	PublicIDs    api.CldApiArray `json:"public_ids"`    // The public IDs of the assets to remove the tags from.
+	PublicIDs    api.CldAPIArray `json:"public_ids"`    // The public IDs of the assets to remove the tags from.
 	Type         string          `json:"type,omitempty"`
 	ResourceType string          `json:"-"`
 }
@@ -54,20 +55,21 @@ type RemoveTagParams struct {
 // RemoveTag removes a tag from the assets specified.
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#tags_method
-func (u *Api) RemoveTag(ctx context.Context, params RemoveTagParams) (*RemoveTagResult, error) {
+func (u *API) RemoveTag(ctx context.Context, params RemoveTagParams) (*RemoveTagResult, error) {
 	res := &RemoveTagResult{}
-	err := u.callTagsApi(ctx, RemoveTag, params, res)
+	err := u.callTagsAPI(ctx, removeTag, params, res)
 
 	return res, err
 }
 
+// RemoveTagResult is the result of RemoveTag.
 type RemoveTagResult struct {
 	TagResult
 }
 
-// RemoveTagParams struct
+// RemoveAllTagsParams are the parameters for RemoveAllTags.
 type RemoveAllTagsParams struct {
-	PublicIDs    api.CldApiArray `json:"public_ids"` // The public IDs of the assets to remove all tags from.
+	PublicIDs    api.CldAPIArray `json:"public_ids"` // The public IDs of the assets to remove all tags from.
 	Type         string          `json:"type,omitempty"`
 	ResourceType string          `json:"-"`
 }
@@ -75,47 +77,50 @@ type RemoveAllTagsParams struct {
 // RemoveAllTags removes all tags from the assets specified.
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#tags_method
-func (u *Api) RemoveAllTags(ctx context.Context, params RemoveAllTagsParams) (*RemoveAllTagsResult, error) {
+func (u *API) RemoveAllTags(ctx context.Context, params RemoveAllTagsParams) (*RemoveAllTagsResult, error) {
 	res := &RemoveAllTagsResult{}
-	err := u.callTagsApi(ctx, RemoveAllTags, params, res)
+	err := u.callTagsAPI(ctx, removeAllTags, params, res)
 
 	return res, err
 }
 
+// RemoveAllTagsResult is the result of RemoveAllTags.
 type RemoveAllTagsResult struct {
 	TagResult
 }
 
-// ReplaceTagParams struct
+// ReplaceTagParams are the parameters for ReplaceTag.
 type ReplaceTagParams struct {
 	Tag          string          `json:"tag"`        // The new tag with which to replace the existing tags.
-	PublicIDs    api.CldApiArray `json:"public_ids"` // The public IDs of the assets to replace the tags of.
+	PublicIDs    api.CldAPIArray `json:"public_ids"` // The public IDs of the assets to replace the tags of.
 	Type         string          `json:"type,omitempty"`
 	ResourceType string          `json:"-"`
 }
 
-// Replaces all existing tags on the assets specified with the tag specified.
+// ReplaceTag replaces all existing tags on the assets specified with the tag specified.
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#tags_method
-func (u *Api) ReplaceTag(ctx context.Context, params ReplaceTagParams) (*ReplaceTagResult, error) {
+func (u *API) ReplaceTag(ctx context.Context, params ReplaceTagParams) (*ReplaceTagResult, error) {
 	res := &ReplaceTagResult{}
-	err := u.callTagsApi(ctx, ReplaceTag, params, res)
+	err := u.callTagsAPI(ctx, replaceTag, params, res)
 
 	return res, err
 }
 
+// ReplaceTagResult  is the result of ReplaceTag.
 type ReplaceTagResult struct {
 	TagResult
 }
 
+// TagResult represents the tag result.
 type TagResult struct {
 	PublicIds []string      `json:"public_ids"` // The public IDs of the assets that were affected.
 	Error     api.ErrorResp `json:"error,omitempty"`
 	Response  http.Response
 }
 
-// callTagsApi is an internal method that is used to call to the tags API.
-func (u *Api) callTagsApi(ctx context.Context, command TagCommand, requestParams interface{}, result interface{}) error {
+// callTagsAPI is an internal method that is used to call to the tags API.
+func (u *API) callTagsAPI(ctx context.Context, command tagCommand, requestParams interface{}, result interface{}) error {
 	formParams, err := api.StructToParams(requestParams)
 	if err != nil {
 		return err
@@ -123,5 +128,5 @@ func (u *Api) callTagsApi(ctx context.Context, command TagCommand, requestParams
 
 	formParams.Add("command", fmt.Sprintf("%v", command))
 
-	return u.callUploadApiWithParams(ctx, api.BuildPath(getAssetType(requestParams), Tags), formParams, result)
+	return u.callUploadAPIWithParams(ctx, api.BuildPath(getAssetType(requestParams), tags), formParams, result)
 }
