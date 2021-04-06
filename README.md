@@ -177,7 +177,7 @@ func main() {
 
 Please feel free to submit issues, fork the repository and send pull requests!
 
-When submitting an issue, we ask that you please include a complete test function that demonstrates the issue.
+For more information on how to contribute, take a look at the [contributing](CONTRIBUTING.md) page.
 
 ## Additional resources
 
