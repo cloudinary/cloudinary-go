@@ -56,10 +56,7 @@ go get -u github.com/cloudinary/cloudinary-go
 
 ### Logging
 
-The default logger in Cloudinary Go SDK is `go log`. If you want to change the error level to enable debug messages, you can use `cloudinary.Logger.SetLevel`: 
-```go
-cloudinary.Logger.SetLevel(logger.DEBUG)
-```
+The default logger in Cloudinary Go SDK is `go log`. You can use any log library by overwriting standard SDK logging functions.
 
 #### Using logrus with the SDK
 ```go
@@ -114,6 +111,15 @@ func main() {
 	cld.Logger.DebugLogger = zapSugared.With("source", "cloudinary").Debug
 }
 ```
+
+#### Logging level
+
+You can change logging level with `Logger.SetLevel()` function.
+
+Possible options:
+- `logger.NONE`  - disabling logging from the SDK
+- `logger.ERROR` - enable logging only for error messages
+- `logger.DEBUG` - enable debug logs
 
 ## Usage
 

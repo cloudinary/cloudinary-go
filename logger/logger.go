@@ -7,6 +7,7 @@ import (
 
 type Level int8
 
+const NONE Level = 0
 const ERROR Level = 1
 const DEBUG Level = 2
 
@@ -22,7 +23,9 @@ func (l *Logger) SetLevel(level Level) {
 }
 
 func (l *Logger) Error(v ...interface{}) {
-	l.ErrorLogger(v)
+	if l.level >= ERROR {
+		l.ErrorLogger(v)
+	}
 }
 
 func (l *Logger) Debug(v ...interface{}) {
