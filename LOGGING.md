@@ -1,7 +1,7 @@
 ### Logging in Cloudinary SDK
 The default logger in Cloudinary Go SDK is `go log`.
 
-You can use any log library by overwriting standard SDK logging functions.
+You can use any log library by overwriting the standard SDK logging functions.
 
 #### Using logrus with the SDK
 ```go
@@ -59,9 +59,9 @@ func main() {
 
 #### Logging level
 
-You can change logging level with `Logger.SetLevel()` function.
+You can change logging level with the `Logger.SetLevel()` function.
 
-Possible options:
+Possible values:
 - `logger.NONE`  - disabling logging from the SDK
 - `logger.ERROR` - enable logging only for error messages
 - `logger.DEBUG` - enable debug logs
