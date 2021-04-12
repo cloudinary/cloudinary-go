@@ -24,8 +24,7 @@ func main() {
 	// Initialize your logger somewhere in your code.
 	// Set cloudinary.Logger.ErrorLogger and cloudinary.Logger.DebugLogger fields with logrus functions
 	var logger = logrus.New()
-	cld.Logger.ErrorLogger = logger.WithField("source", "cloudinary").Errorln
-	cld.Logger.DebugLogger = logger.WithField("source", "cloudinary").Debugln
+	cld.Logger.Writer = logger.WithField("source", "cloudinary")
 }
 ```
 
@@ -50,10 +49,7 @@ func main() {
 	// Initialize your logger somewhere in your code.
 	// Set cloudinary.Logger.ErrorLogger and cloudinary.Logger.DebugLogger fields with zap sugared logger functions
 	var zapLogger, _ = zap.NewDevelopment()
-	var zapSugared = zapLogger.Sugar()
-
-	cld.Logger.ErrorLogger = zapSugared.With("source", "cloudinary").Error
-	cld.Logger.DebugLogger = zapSugared.With("source", "cloudinary").Debug
+	cld.Logger.Writer = zapLogger.Sugar().With("source", "cloudinary")
 }
 ```
 

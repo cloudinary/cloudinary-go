@@ -58,7 +58,7 @@ go get -u github.com/cloudinary/cloudinary-go
 
 Cloudinary SDK logs errors using standard `go log` functions.
 
-For details on redefining the logger or adjusting the logging level,  see [Logging](LOGGING.md).
+For details on redefining the logger or adjusting the logging level,  see [Logging](logger/README.md).
 
 ## Usage
 
