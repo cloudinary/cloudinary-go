@@ -37,13 +37,13 @@ func (l *Logger) SetLevel(level Level) {
 
 func (l *Logger) Error(v ...interface{}) {
 	if l.level >= ERROR {
-		l.Writer.Error(v)
+		l.Writer.Error(v...)
 	}
 }
 
 func (l *Logger) Debug(v ...interface{}) {
 	if l.level == DEBUG {
-		l.Writer.Debug(v)
+		l.Writer.Debug(v...)
 	}
 }
 
