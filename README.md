@@ -54,6 +54,11 @@ To update the Cloudinary Go SDK to the latest version, use the `go get` command 
 go get -u github.com/cloudinary/cloudinary-go
 ```
 
+### Logging
+
+Cloudinary SDK logs errors using standard `go log` functions.
+
+For details on redefining the logger or adjusting the logging level,  see [Logging](logger/README.md).
 
 ## Usage
 
