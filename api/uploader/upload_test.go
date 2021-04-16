@@ -26,7 +26,7 @@ const largeImageHeight = 1400
 
 func TestUploader_UploadLocalPath(t *testing.T) {
 	params := uploader.UploadParams{
-		PublicID:              cldtest.PublicID,
+		PublicID:              "test/" + cldtest.PublicID,
 		QualityAnalysis:       true,
 		AccessibilityAnalysis: true,
 		CinemagraphAnalysis:   true,
@@ -91,6 +91,24 @@ func TestUploader_UploadBase64Image(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:  cldtest.PublicID,
 		Overwrite: true,
+	}
+
+	resp, err := uploadAPI.Upload(ctx, cldtest.Base64Image, params)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp == nil || resp.PublicID != cldtest.PublicID {
+		t.Error(resp)
+	}
+}
+
+func TestUploader_UploadAuthenticated(t *testing.T) {
+	params := uploader.UploadParams{
+		PublicID:  cldtest.PublicID,
+		Overwrite: true,
+		Type: api.Authenticated,
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.Base64Image, params)

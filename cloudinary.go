@@ -3,6 +3,7 @@ package cloudinary
 import (
 	"github.com/cloudinary/cloudinary-go/api/admin"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"github.com/cloudinary/cloudinary-go/asset"
 	"github.com/cloudinary/cloudinary-go/config"
 	"github.com/cloudinary/cloudinary-go/logger"
 )
@@ -59,4 +60,20 @@ func NewFromConfiguration(configuration config.Configuration) (*Cloudinary, erro
 		},
 		Logger: logger,
 	}, nil
+}
+
+func (c Cloudinary) Image(publicID string) (*asset.Asset, error) {
+	return asset.Image(publicID, &c.Config)
+}
+
+func (c Cloudinary) Video(publicID string) (*asset.Asset, error) {
+	return asset.Video(publicID, &c.Config)
+}
+
+func (c Cloudinary) File(publicID string) (*asset.Asset, error) {
+	return asset.File(publicID, &c.Config)
+}
+
+func (c Cloudinary) Media(publicID string) (*asset.Asset, error) {
+	return asset.Media(publicID, &c.Config)
 }

@@ -11,8 +11,10 @@ import (
 
 // Configuration is the main configuration struct.
 type Configuration struct {
-	Cloud Cloud
-	API   API
+	Cloud     Cloud
+	API       API
+	URL       URL
+	AuthToken AuthToken
 }
 
 // New returns a new Configuration instance from the environment variable
@@ -44,7 +46,9 @@ func NewFromParams(cloud string, key string, secret string) (*Configuration, err
 			APIKey:    key,
 			APISecret: secret,
 		},
-		API: API{},
+		API:       API{},
+		URL:       URL{},
+		AuthToken: AuthToken{},
 	}
 
 	if err := defaults.Set(conf); err != nil {
