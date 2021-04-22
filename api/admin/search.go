@@ -36,6 +36,7 @@ type SearchResult struct {
 	Time       int           `json:"time"`
 	Assets     []SearchAsset `json:"resources"`
 	Error      api.ErrorResp `json:"error,omitempty"`
+	NextCursor string `json:"next_cursor,omitempty"`
 }
 
 // SearchAsset represents the details of a single asset that was found.
