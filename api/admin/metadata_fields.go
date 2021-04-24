@@ -201,9 +201,9 @@ type RestoreDatasourceEntriesResult struct {
 }
 
 type SortMetadataFieldDatasourceParams struct {
-	FieldExternalId string    `json:"-"`
-	FieldSortBy     string    `json:"sort_by"`
-	FieldDirection  Direction `json:"direction,omitempty"`
+	FieldExternalId string      `json:"-"`
+	FieldSortBy     SortByField `json:"sort_by"`
+	FieldDirection  Direction   `json:"direction,omitempty"`
 }
 
 // SortMetadataFieldDatasource sorts metadata fields datasource. Currently supports only value.

@@ -133,7 +133,7 @@ func TestAdmin_RestoreMetadataFieldDataSource(t *testing.T) {
 }
 
 func TestAdmin_SortMetadataFieldsDatasource(t *testing.T) {
-	resp, err := adminAPI.SortMetadataFieldDatasource(ctx, admin.SortMetadataFieldDatasourceParams{FieldExternalId: metadataField.ExternalID, FieldSortBy: "value", FieldDirection: admin.Ascending})
+	resp, err := adminAPI.SortMetadataFieldDatasource(ctx, admin.SortMetadataFieldDatasourceParams{FieldExternalId: metadataField.ExternalID, FieldSortBy: admin.SortFieldValue, FieldDirection: admin.Ascending})
 
 	if err != nil {
 		t.Error(err, resp)
@@ -143,7 +143,7 @@ func TestAdmin_SortMetadataFieldsDatasource(t *testing.T) {
 		t.Error("Wrong response. Metadata fields should be sorted in ascending order")
 	}
 
-	resp, err = adminAPI.SortMetadataFieldDatasource(ctx, admin.SortMetadataFieldDatasourceParams{FieldExternalId: metadataField.ExternalID, FieldSortBy: "value", FieldDirection: admin.Descending})
+	resp, err = adminAPI.SortMetadataFieldDatasource(ctx, admin.SortMetadataFieldDatasourceParams{FieldExternalId: metadataField.ExternalID, FieldSortBy: admin.SortFieldValue, FieldDirection: admin.Descending})
 
 	if err != nil {
 		t.Error(err, resp)
