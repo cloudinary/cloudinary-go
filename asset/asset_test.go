@@ -1,38 +1,85 @@
 package asset_test
 
 import (
+	"fmt"
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/asset"
 	"github.com/cloudinary/cloudinary-go/internal/cldtest"
-	"log"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestAsset_String(t *testing.T) {
-	i, err := asset.Image(cldtest.PublicID, nil)
+func TestAsset_Signature(t *testing.T) {
+	i := getTestImage(t)
+
+	i.DeliveryType = api.Authenticated
+	i.Config.URL.SignURL = true
+
+	assert.Regexp(t, "s--.{8}--", getAssetUrl(t, i))
+}
+
+func TestAsset_LongURLSignature(t *testing.T) {
+	i := getTestImage(t)
+	i.DeliveryType = api.Authenticated
+	i.Config.URL.SignURL = true
+	i.Config.URL.LongURLSignature = true
+
+	assert.Regexp(t, "s--.{32}--", getAssetUrl(t, i))
+}
+
+func TestAsset_ForceVersion(t *testing.T) {
+	i, err := asset.Image(cldtest.ImageInFolder, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	i.DeliveryType = api.Authenticated
-	i.Config.URL.SignURL = true
-	log.Println(i.String())
 
+	assert.Contains(t, getAssetUrl(t, i), "v1")
+
+	i.Config.URL.ForceVersion = false
+
+	assert.NotContains(t, getAssetUrl(t, i), "v1")
+}
+
+func TestAsset_Video(t *testing.T) {
 	v, err := asset.Video(cldtest.VideoPublicID, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	log.Println(v.String())
+	assert.Contains(t, getAssetUrl(t, v), fmt.Sprintf("video/upload/%s", cldtest.VideoPublicID))
+}
 
-	f, err := asset.File("sample_file", nil)
+func TestAsset_VideoSEO(t *testing.T) {
+	f, err := asset.Video(cldtest.VideoPublicID+cldtest.VideoExt, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	log.Println(f.String())
+	f.Suffix = "my_favorite_video"
 
-	m, err := asset.Media("test/" + cldtest.PublicID, nil)
+	assert.Contains(t, getAssetUrl(t, f), fmt.Sprintf("videos/%s/%s%s", cldtest.VideoPublicID, f.Suffix, cldtest.VideoExt))
+}
+
+func TestAsset_File(t *testing.T) {
+	f, err := asset.File(cldtest.PublicID, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	m.Transformation = "c_scale,w_500"
-	log.Println(m.String())
+	assert.Contains(t, getAssetUrl(t, f), fmt.Sprintf("raw/upload/%s", cldtest.PublicID))
+}
+
+func TestAsset_FileSEO(t *testing.T) {
+	f, err := asset.File(cldtest.PublicID+cldtest.FileExt, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	f.Suffix = "my_favorite_sample"
+
+	assert.Contains(t, getAssetUrl(t, f), fmt.Sprintf("files/%s/%s%s", cldtest.PublicID, f.Suffix, cldtest.FileExt))
+}
+
+func TestAsset_Media(t *testing.T) {
+	m, err := asset.Media(cldtest.PublicID, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Contains(t, getAssetUrl(t, m), fmt.Sprintf("image/upload/%s", cldtest.PublicID))
 }

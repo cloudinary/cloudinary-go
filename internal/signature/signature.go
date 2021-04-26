@@ -23,7 +23,6 @@ const (
 )
 
 func Sign(content string, secret string, algo Algo) ([]byte, error) {
-
 	var hashFunc hash.Hash
 	switch algo {
 	case SHA1:
@@ -40,7 +39,7 @@ func Sign(content string, secret string, algo Algo) ([]byte, error) {
 }
 
 func SignURL(content string, secret string, algo Algo, length uint8) string {
-	rawSignature,_  := Sign(content, secret, algo)
+	rawSignature, _ := Sign(content, secret, algo)
 	signature := base64.RawURLEncoding.EncodeToString(rawSignature)
 
 	return fmt.Sprintf("s--%s--", signature[:length])

@@ -1,17 +1,22 @@
 package asset
 
 import (
+	"errors"
 	"fmt"
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/config"
 	"github.com/cloudinary/cloudinary-go/internal/signature"
+	"github.com/cloudinary/cloudinary-go/logger"
 	"github.com/cloudinary/cloudinary-go/transformation"
 	"hash/crc32"
+	"net/url"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
 )
+
+const shortenAssetType = "iu"
 
 // Asset is the Asset struct.
 type Asset struct {
@@ -22,6 +27,12 @@ type Asset struct {
 	PublicID       string
 	Suffix         string
 	Config         config.Configuration
+	logger         logger.Logger
+}
+
+func (a *Asset) setDefaults() {
+	a.AssetType = api.Image
+	a.DeliveryType = api.Upload
 }
 
 func New(publicID string, conf *config.Configuration) (*Asset, error) {
@@ -33,7 +44,10 @@ func New(publicID string, conf *config.Configuration) (*Asset, error) {
 		}
 	}
 
-	return &Asset{PublicID: publicID, Config: *conf}, nil
+	asset := Asset{PublicID: publicID, Config: *conf}
+	asset.setDefaults()
+
+	return &asset, nil
 }
 
 func Image(publicID string, conf *config.Configuration) (*Asset, error) {
@@ -65,29 +79,20 @@ func Media(publicID string, conf *config.Configuration) (*Asset, error) {
 }
 
 // String serializes Asset to string.
-func (a Asset) String() (string, error) {
-	return joinUrl([]interface{}{a.distribution(), a.assetType(), a.signature(), a.Transformation, a.version(), a.PublicID}), nil
-}
+func (a Asset) String() (result string, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			msg := fmt.Sprintf("failed to build URL: %v", r)
+			a.logger.Error(msg)
+			result = ""
+			err = errors.New(msg)
+		}
+	}()
 
-// version finalizes the version part (v123) of the asset URL.
-func (a Asset) version() string {
-	var versionRegexp = regexp.MustCompile(`^v\d+`)
-	var urlRegexp = regexp.MustCompile(`^https?://`)
-	version := a.Version
+	assetURL := joinUrl([]interface{}{a.distribution(), a.assetType(), a.signature(), a.Transformation, a.version(), a.source()})
+	query := a.query()
 
-	if version == 0 &&
-		a.Config.URL.ForceVersion &&
-		filepath.Dir(a.PublicID) != "." &&
-		!urlRegexp.MatchString(a.PublicID) &&
-		!versionRegexp.MatchString(a.PublicID) {
-		version = 1
-	}
-
-	if version != 0 {
-		return fmt.Sprintf("v%d", version)
-	}
-
-	return ""
+	return joinNonEmpty([]interface{}{assetURL, query}, "?"), nil
 }
 
 // distribution builds the hostname for the asset distribution.
@@ -172,8 +177,8 @@ func domainShard(source string) string {
 
 var suffixSupportedDeliveryTypes = map[api.AssetType]map[api.DeliveryType]string{
 	api.Image: {
-		api.Upload: "images",
-		api.Private: "private_images",
+		api.Upload:        "images",
+		api.Private:       "private_images",
 		api.Authenticated: "authenticated_images",
 	},
 	api.Video: {
@@ -184,12 +189,27 @@ var suffixSupportedDeliveryTypes = map[api.AssetType]map[api.DeliveryType]string
 	},
 }
 
-func (a Asset)assetType() string {
+func (a Asset) assetType() string {
+	if a.AssetType == api.Image && a.DeliveryType == api.Upload {
+		if a.Config.URL.UseRootPath {
+			return ""
+		}
+
+		if a.Config.URL.Shorten {
+			return shortenAssetType
+		}
+	}
+
 	if a.Suffix == "" {
 		return joinUrl([]interface{}{a.AssetType, a.DeliveryType})
 	}
 
-	if a.AssetType
+	assetType, found := suffixSupportedDeliveryTypes[a.AssetType][a.DeliveryType]
+	if !found {
+		panic(fmt.Sprintf("URL Suffix is not supported for %v/%v", a.AssetType, a.DeliveryType))
+	}
+
+	return assetType
 }
 
 // signature returns URL signature.
@@ -215,6 +235,58 @@ func (a Asset) getSignatureAlgorithmAndLength() (signature.Algo, signature.Lengt
 	return a.Config.Cloud.GetSignatureAlgorithm(), a.Config.URL.GetSignatureLength()
 }
 
+// version finalizes the version part (v123) of the asset URL.
+func (a Asset) version() string {
+	var versionRegexp = regexp.MustCompile(`^v\d+`)
+	version := a.Version
+	if version == 0 &&
+		a.Config.URL.ForceVersion &&
+		filepath.Dir(a.PublicID) != "." &&
+		!isURL(a.PublicID) &&
+		!versionRegexp.MatchString(a.PublicID) {
+		version = 1
+	}
+
+	if version != 0 {
+		return fmt.Sprintf("v%d", version)
+	}
+
+	return ""
+}
+
+// version finalizes the source part (PublicID + Suffix) of the asset URL.
+func (a Asset) source() string {
+	source := fileNameWithoutExt(a.PublicID)
+
+	if !isURL(source) {
+		var err error
+		source, err = url.QueryUnescape(strings.Replace(source, "%20", "+", -1))
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	source = smartEscape(source)
+
+	if a.Suffix != "" {
+		source += fmt.Sprintf("/%s", a.Suffix)
+	}
+
+	if filepath.Ext(a.PublicID) != "" {
+		source += filepath.Ext(a.PublicID)
+	}
+
+	return source
+}
+
+func (a *Asset) query() string {
+	if !a.Config.URL.Analytics {
+		return ""
+
+	}
+
+	return fmt.Sprintf("%s=%s", queryString, sdkAnalyticsSignature())
+}
 func joinNonEmpty(items []interface{}, sep string) string {
 	var parts []string
 	for _, i := range items {
@@ -229,4 +301,20 @@ func joinNonEmpty(items []interface{}, sep string) string {
 
 func joinUrl(items []interface{}) string {
 	return joinNonEmpty(items, "/")
+}
+
+func fileNameWithoutExt(fileName string) string {
+	return fileName[:len(fileName)-len(filepath.Ext(fileName))]
+}
+
+var urlRegexp = regexp.MustCompile(`^https?://`)
+
+func isURL(candidate string) bool {
+	return urlRegexp.MatchString(candidate)
+}
+
+func smartEscape(str string) string {
+	revert := strings.NewReplacer("%3A", ":", "%2F", "/")
+
+	return revert.Replace(url.QueryEscape(str))
 }

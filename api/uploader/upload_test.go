@@ -26,7 +26,7 @@ const largeImageHeight = 1400
 
 func TestUploader_UploadLocalPath(t *testing.T) {
 	params := uploader.UploadParams{
-		PublicID:              "test/" + cldtest.PublicID,
+		PublicID:              cldtest.PublicID,
 		QualityAnalysis:       true,
 		AccessibilityAnalysis: true,
 		CinemagraphAnalysis:   true,

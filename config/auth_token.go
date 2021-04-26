@@ -7,9 +7,9 @@ type AuthToken struct {
 	Key        string
 	IP         string
 	ACL        string
-	StartTime  uint64
-	Expiration uint64
-	Duration   uint64
+	StartTime  int64
+	Expiration int64
+	Duration   int64
 }
 
 func (a AuthToken) isEnabled() bool {
