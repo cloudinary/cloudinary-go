@@ -11,7 +11,3 @@ type AuthToken struct {
 	Expiration int64
 	Duration   int64
 }
-
-func (a AuthToken) isEnabled() bool {
-	return a.Key != ""
-}
