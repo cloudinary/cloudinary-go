@@ -1,3 +1,15 @@
+1.1.0 / 2021-05-13
+==================
+
+New Functionality And Features
+------------------------------
+  * Add `Logger`
+  * Add `NextCursor` field to search API result
+
+Other Changes
+-------------
+  * Fix Upload with Context
+
 1.0.0 / 2021-04-06
 ==================
 
