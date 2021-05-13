@@ -126,7 +126,7 @@ type UploadResult struct {
 	URL              string          `json:"url"`
 	SecureURL        string          `json:"secure_url"`
 	AccessMode       string          `json:"access_mode"`
-	Context          api.CldAPIMap   `json:"context,omitempty"`
+	Context          api.Metadata    `json:"context,omitempty"`
 	Metadata         api.Metadata    `json:"metadata,omitempty"`
 	Overwritten      bool            `json:"overwritten"`
 	OriginalFilename string          `json:"original_filename"`

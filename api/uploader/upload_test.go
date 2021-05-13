@@ -3,6 +3,7 @@ package uploader_test
 import (
 	"context"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"log"
 	"os"
@@ -150,6 +151,26 @@ func TestUploader_Timeout(t *testing.T) {
 	}
 
 	uploadAPI.Config.API.Timeout = originalTimeout
+}
+
+func TestUploader_UploadWithContext(t *testing.T) {
+	params := uploader.UploadParams{
+		PublicID:  cldtest.PublicID,
+		Overwrite: true,
+		Context:   cldtest.CldContext,
+	}
+
+	resp, err := uploadAPI.Upload(ctx, cldtest.LogoURL, params)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp == nil {
+		t.Error(resp)
+	}
+
+	assert.Equal(t, fmt.Sprintf("%v", cldtest.CldContext), fmt.Sprintf("%v", resp.Context["custom"]))
 }
 
 func populateLargeImage() string {

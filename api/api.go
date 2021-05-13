@@ -157,7 +157,7 @@ type BriefAssetResult struct {
 	URL         string    `json:"url"`
 	SecureURL   string    `json:"secure_url"`
 	Tags        []string  `json:"tags,omitempty"`
-	Context     CldAPIMap `json:"context,omitempty"`
+	Context     Metadata  `json:"context,omitempty"`
 	Metadata    Metadata  `json:"metadata,omitempty"`
 	Placeholder bool      `json:"placeholder,omitempty"`
 	Error       string    `json:"error,omitempty"`
