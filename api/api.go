@@ -4,14 +4,15 @@
 package api
 
 import (
-	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"github.com/cloudinary/cloudinary-go/internal/signature"
 	"io"
 	"log"
 	"net/url"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -24,7 +25,7 @@ type EndPoint = string
 const Version = "1.1.0"
 
 // UserAgent contains information about the SDK user agent. Passed to the Cloudinary servers.
-const UserAgent = "CloudinaryGo/" + Version
+var UserAgent = fmt.Sprintf("CloudinaryGo/%s (Go %s)", Version, strings.TrimPrefix(runtime.Version(), "go"))
 
 // apiVersion is the current Cloudinary API version.
 var apiVersion = "1_1"
@@ -215,10 +216,11 @@ func SignParameters(params url.Values, secret string) (string, error) {
 		return "", err
 	}
 
-	hash := sha1.New()
-	hash.Write([]byte(encodedUnescapedParams + secret))
-
-	return hex.EncodeToString(hash.Sum(nil)), nil
+	rawSignature, err := signature.Sign(encodedUnescapedParams, secret, signature.SHA1)
+	if err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(rawSignature), nil
 }
 
 // StructToParams serializes struct to url.Values, which can be further sent to the http client.

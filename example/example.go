@@ -44,6 +44,26 @@ func main() {
 	// uploadResult contains useful information about the asset, like Width, Height, Format, etc.
 	// See uploader.UploadResult struct for more details.
 
+	// We can also build an image URL using the Public ID.
+	image, err := cld.Image("logo")
+	if err != nil {
+		log.Fatalf("Failed to build image URL, %v\n", err)
+	}
+
+	// Image can be further transformed and optimized as follows:
+	image.Transformation = "c_scale,w_500/f_auto/q_auto"
+	// Here the image is scaled to the width of 500 pixes. Format and quality are set to "auto".
+
+	imageURL, err := image.String()
+	if err != nil {
+		log.Fatalf("Failed to serialize image URL, %v\n", err)
+	}
+
+	log.Printf("Image URL: %s", imageURL)
+	// Prints something like:
+	// https://res.cloudinary.com/<your cloud name>/image/upload/c_scale,w_500/f_auto/q_auto/logo
+
+
 	// Now we can use Admin API to see the details about the asset.
 	// The request can be customised by providing AssetParams.
 	asset, err := cld.Admin.Asset(ctx, admin.AssetParams{PublicID: "logo"})

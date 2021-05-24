@@ -104,6 +104,24 @@ func TestUploader_UploadBase64Image(t *testing.T) {
 	}
 }
 
+func TestUploader_UploadAuthenticated(t *testing.T) {
+	params := uploader.UploadParams{
+		PublicID:  cldtest.PublicID,
+		Overwrite: true,
+		Type:      api.Authenticated,
+	}
+
+	resp, err := uploadAPI.Upload(ctx, cldtest.Base64Image, params)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp == nil || resp.PublicID != cldtest.PublicID {
+		t.Error(resp)
+	}
+}
+
 func TestUploader_UploadLargeFile(t *testing.T) {
 	uploadAPI.Config.API.ChunkSize = largeChunkSize
 

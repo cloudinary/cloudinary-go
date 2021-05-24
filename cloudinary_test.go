@@ -2,6 +2,8 @@ package cloudinary
 
 import (
 	"context"
+	"github.com/cloudinary/cloudinary-go/internal/cldtest"
+	"log"
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/api/uploader"
@@ -65,4 +67,35 @@ func TestCloudinary_Admin(t *testing.T) {
 	if resp == nil || resp.Status != "ok" {
 		t.Error("Admin API failed: ", resp)
 	}
+}
+
+func TestCloudinary_Asset(t *testing.T) {
+	c.Config.URL.Secure = true
+	c.Config.URL.SecureCDNSubDomain = true
+
+	i, err := c.Image(cldtest.PublicID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	i.DeliveryType = "fetch"
+	i.Version = 123
+	log.Println(i.String())
+
+	v, err := c.Video(cldtest.VideoPublicID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	log.Println(v.String())
+
+	f, err := c.File("sample_file")
+	if err != nil {
+		t.Fatal(err)
+	}
+	log.Println(f.String())
+
+	m, err := c.Media(cldtest.PublicID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	log.Println(m.String())
 }

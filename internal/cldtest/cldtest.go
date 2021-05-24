@@ -2,6 +2,7 @@ package cldtest
 
 import (
 	"context"
+	"fmt"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"math/rand"
 	"os"
@@ -25,14 +26,34 @@ const PublicID = "go_test_image"
 // PublicID2 is another test public ID.
 const PublicID2 = "go_test_image_2"
 
+// ImgExt is the extension of the image.
+const ImgExt = ".png"
+
+// VideoExt is the extension of the video.
+const VideoExt = ".mp4"
+
+// FileExt is the extension of the file.
+const FileExt = ".bin"
+
 // VideoPublicID is the public ID of the test video.
 const VideoPublicID = "go_test_video"
+
+// Folder is the test folder path.
+const Folder = "test_folder"
 
 // Tag1 is the test tag.
 const Tag1 = "go_tag1"
 
 // Tag2 is another test tag.
 const Tag2 = "go_tag2"
+
+// SEOName is a SEO friendly name.
+const SEOName = "my_favorite_sample"
+
+const Transformation = "c_scale,w_500"
+
+// ImageInFolder is the test public ID in folder.
+var ImageInFolder = fmt.Sprintf("%s/%s", Folder, PublicID)
 
 // ImageFilePath is a full path to the test image file.
 var ImageFilePath = TestDataDir() + "cloudinary_logo.png"

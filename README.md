@@ -95,6 +95,26 @@ log.Println(resp.SecureURL)
 
 **Learn more**: [Go upload](https://cloudinary.com/documentation/go_image_and_video_upload)
 
+### Embedding and transforming images
+
+Any image uploaded to Cloudinary can be transformed and embedded using powerful view helper methods:
+
+The following example generates the url for accessing an uploaded `sample` image while transforming it to fill a 100x150
+rectangle:
+
+```go
+image, err := cld.Image("sample.jpg")
+if err != nil {...}
+
+image.Transformation = "c_fill,h_150,w_100"
+
+imageURL, err := image.String()
+if err != nil {...}
+
+log.Println(imageURL)
+// https://res.cloudinary.com/demo/image/upload/c_fill,h_150,w_100/sample.jpg
+```
+For many more transformation options, see our [image transformations documentation](http://cloudinary.com/documentation/image_transformations).
 
 ### Complete SDK Example
 ```go
@@ -144,6 +164,26 @@ func main() {
 	// uploadResult contains useful information about the asset, like Width, Height, Format, etc.
 	// See uploader.UploadResult struct for more details.
 
+	// We can also build an image URL using the Public ID.
+	image, err := cld.Image("logo")
+	if err != nil {
+		log.Fatalf("Failed to build image URL, %v\n", err)
+	}
+
+	// Image can be further transformed and optimized as follows:
+	image.Transformation = "c_scale,w_500/f_auto/q_auto"
+	// Here the image is scaled to the width of 500 pixes. Format and quality are set to "auto".
+
+	imageURL, err := image.String()
+	if err != nil {
+		log.Fatalf("Failed to serialize image URL, %v\n", err)
+	}
+
+	log.Printf("Image URL: %s", imageURL)
+	// Prints something like:
+	// https://res.cloudinary.com/<your cloud name>/image/upload/c_scale,w_500/f_auto/q_auto/logo
+	
+	
 	// Now we can use Admin API to see the details about the asset.
 	// The request can be customised by providing AssetParams.
 	asset, err := cld.Admin.Asset(ctx, admin.AssetParams{PublicID: "logo"})
