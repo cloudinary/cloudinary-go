@@ -282,7 +282,6 @@ func (a Asset) source() string {
 func (a *Asset) query() string {
 	if !a.Config.URL.Analytics {
 		return ""
-
 	}
 
 	return fmt.Sprintf("%s=%s", queryString, sdkAnalyticsSignature())

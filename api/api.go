@@ -25,7 +25,7 @@ type EndPoint = string
 const Version = "1.1.0"
 
 // UserAgent contains information about the SDK user agent. Passed to the Cloudinary servers.
-var UserAgent = fmt.Sprintf("CloudinaryGo/%s (Go %s)", Version , strings.TrimPrefix(runtime.Version(), "go"))
+var UserAgent = fmt.Sprintf("CloudinaryGo/%s (Go %s)", Version, strings.TrimPrefix(runtime.Version(), "go"))
 
 // apiVersion is the current Cloudinary API version.
 var apiVersion = "1_1"

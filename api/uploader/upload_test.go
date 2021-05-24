@@ -108,7 +108,7 @@ func TestUploader_UploadAuthenticated(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:  cldtest.PublicID,
 		Overwrite: true,
-		Type: api.Authenticated,
+		Type:      api.Authenticated,
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.Base64Image, params)

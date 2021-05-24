@@ -18,6 +18,7 @@ var techVersion = strings.Join(strings.Split(strings.TrimPrefix(runtime.Version(
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 const binaryPadSize = 6
+
 var charCodes = map[string]string{}
 var analyticsSignature = ""
 
@@ -57,17 +58,17 @@ func encodeVersion(version string) (string, error) {
 	// reverse (in this case swap first and last elements)
 	paddedParts[0], paddedParts[len(paddedParts)-1] = paddedParts[len(paddedParts)-1], paddedParts[0]
 
-	num , _:= strconv.Atoi(strings.Join(paddedParts, ""))
-	paddedBinary := intToPaddedBin(num, len(parts) * binaryPadSize)
+	num, _ := strconv.Atoi(strings.Join(paddedParts, ""))
+	paddedBinary := intToPaddedBin(num, len(parts)*binaryPadSize)
 
-	if len(paddedBinary) % binaryPadSize != 0 {
+	if len(paddedBinary)%binaryPadSize != 0 {
 		return "", errors.New("version must be smaller than 43.21.26")
 	}
 
 	encodedChars := make([]string, len(parts))
 
 	for i := 0; i < len(parts); i++ {
-		encodedChars[i] = getKey(paddedBinary[i*binaryPadSize:(i+1)*binaryPadSize])
+		encodedChars[i] = getKey(paddedBinary[i*binaryPadSize : (i+1)*binaryPadSize])
 	}
 
 	return strings.Join(encodedChars, ""), nil
@@ -83,6 +84,6 @@ func getKey(binaryValue string) string {
 	return charCodes[binaryValue]
 }
 
-func intToPaddedBin(integer int, padNum int) string{
+func intToPaddedBin(integer int, padNum int) string {
 	return fmt.Sprintf("%0*b", padNum, integer)
 }

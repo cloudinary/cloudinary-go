@@ -11,6 +11,7 @@ type Cloud struct {
 	APISecret          string
 	SignatureAlgorithm string
 }
+
 // GetSignatureAlgorithm returns the signature algorithm.
 func (c Cloud) GetSignatureAlgorithm() string {
 	if c.SignatureAlgorithm == "" {
