@@ -2,6 +2,7 @@ package resize
 
 import (
 	"fmt"
+	"github.com/cloudinary/cloudinary-go/logger"
 	"reflect"
 )
 
@@ -24,42 +25,6 @@ func (d Dimensions) String() string {
 	}
 
 	return res
-}
-
-func (d Dimensions) Width(width int) Dimensions {
-	d.width = width
-
-	return d
-}
-
-func (d Dimensions) WidthPercent(width float64) Dimensions {
-	d.width = width
-
-	return d
-}
-
-func (d Dimensions) WidthExpr(width string) Dimensions {
-	d.width = width
-
-	return d
-}
-
-func (d Dimensions) Height(height int) Dimensions {
-	d.height = height
-
-	return d
-}
-
-func (d Dimensions) HeightPercent(height float64) Dimensions {
-	d.height = height
-
-	return d
-}
-
-func (d Dimensions) HeightExpr(height string) Dimensions {
-	d.height = height
-
-	return d
 }
 
 type Position struct {
