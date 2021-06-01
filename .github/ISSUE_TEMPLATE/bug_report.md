@@ -3,7 +3,7 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: ''
-assignees: const-cloudinary
+assignees: ''
 
 ---
 
@@ -28,7 +28,7 @@ Before proceeding, please update to the latest version and test if the issue per
 
 … if applicable
 
-## OS (if issue relates to UI, else ignore)
+## OS
 
 - [ ] Linux
 - [ ] Windows
@@ -40,8 +40,6 @@ Before proceeding, please update to the latest version and test if the issue per
 
 - Cloudinary Go SDK Version - 0.0.0
 - GoLang Version - 0.0.0
-
-## Config Files (Please paste the following files if possible)
 
 ## Repository
 
