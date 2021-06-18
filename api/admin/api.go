@@ -45,6 +45,11 @@ func New() (*API, error) {
 	if err != nil {
 		return nil, err
 	}
+	return NewWithConfiguration(c)
+}
+
+// NewWithConfiguration a new Admin API instance with the given Configuration
+func NewWithConfiguration(c *config.Configuration) (*API, error) {
 	return &API{
 		Config: *c,
 		client: http.Client{},
