@@ -84,11 +84,23 @@ func (u *API) signRequest(requestParams url.Values) (url.Values, error) {
 	if u.Config.Cloud.APISecret == "" {
 		return nil, errors.New("must provide API Secret")
 	}
+	// https://cloudinary.com/documentation/upload_images#generating_authentication_signatures
+	// All parameters added to the method call should be included except: file, cloud_name, resource_type and your api_key.
+	signatureParams := make(url.Values)
+	for k, v := range requestParams {
+		switch k {
+		case "file", "cloud_name", "resource_type", "api_key":
+			// omit
+		default:
+			signatureParams[k] = v
+		}
+	}
 
-	signature, err := api.SignParameters(requestParams, u.Config.Cloud.APISecret)
+	signature, err := api.SignParameters(signatureParams, u.Config.Cloud.APISecret)
 	if err != nil {
 		return nil, err
 	}
+	requestParams.Set("timestamp", signatureParams.Get("timestamp"))
 	requestParams.Add("signature", signature)
 	requestParams.Add("api_key", u.Config.Cloud.APIKey)
 
