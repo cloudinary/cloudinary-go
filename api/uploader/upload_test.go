@@ -3,12 +3,13 @@ package uploader_test
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"log"
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
@@ -83,6 +84,23 @@ func TestUploader_UploadURL(t *testing.T) {
 	}
 
 	if resp == nil || resp.PublicID != cldtest.PublicID {
+		t.Error(resp)
+	}
+}
+
+func TestUploader_UploadVideoURL(t *testing.T) {
+	params := uploader.UploadParams{
+		PublicID:     cldtest.PublicID,
+		ResourceType: "video",
+		Overwrite:    true,
+	}
+
+	resp, err := uploadAPI.Upload(ctx, cldtest.VideoURL, params)
+
+	if err != nil {
+		t.Error(err)
+	}
+	if resp == nil || resp.PublicID != cldtest.PublicID || resp.Error.Message != "" {
 		t.Error(resp)
 	}
 }

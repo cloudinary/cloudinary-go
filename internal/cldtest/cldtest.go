@@ -3,7 +3,6 @@ package cldtest
 import (
 	"context"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"math/rand"
 	"os"
 	"path"
@@ -12,10 +11,15 @@ import (
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/api/uploader"
 )
 
 // LogoURL is the URL of the publicly available logo.
 const LogoURL = "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png"
+
+// VideoURL is the URL of the publicly available video.
+const VideoURL = "https://res.cloudinary.com/demo/video/upload/dog.mp4"
 
 // Base64Image us a base64 encoded test image.
 const Base64Image = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
