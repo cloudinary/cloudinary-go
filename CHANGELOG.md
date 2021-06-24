@@ -1,3 +1,15 @@
+1.2.0 / 2021-06-24
+==================
+
+New Functionality And Features
+------------------------------
+  * Add support for URL generation
+  * Add missing `NextCursor` to `DeleteAssetsResult`
+
+Other Changes
+-------------
+  * Fix request signature of the Upload API
+
 1.1.0 / 2021-05-13
 ==================
 
