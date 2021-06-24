@@ -203,6 +203,7 @@ type DeleteAssetsResult struct {
 	Deleted       map[string]string      `json:"deleted"`
 	DeletedCounts map[string]interface{} `json:"deleted_counts"`
 	Partial       bool                   `json:"partial"`
+	NextCursor    string                 `json:"next_cursor,omitempty"`
 	Error         api.ErrorResp          `json:"error,omitempty"`
 }
 
