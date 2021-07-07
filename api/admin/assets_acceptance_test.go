@@ -42,7 +42,7 @@ func getRestoreAssetsTestCases() []ApiAcceptanceTestCase {
 		}
 	}
 
-	testCases := []ApiAcceptanceTestCase{}
+	var testCases []ApiAcceptanceTestCase
 
 	restoreAssetsTestCases := []restoreAssetsTestCase{
 		{
@@ -157,7 +157,7 @@ func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
 		}
 	}
 
-	testCases := []ApiAcceptanceTestCase{}
+	var testCases []ApiAcceptanceTestCase
 
 	restoreAssetsTestCases := []deleteAssetsTestCase{
 		{
@@ -358,7 +358,7 @@ func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 		}
 	}
 
-	testCases := []ApiAcceptanceTestCase{}
+	var testCases []ApiAcceptanceTestCase
 
 	assetByModerationTestCases := []assetByModerationTestCase{
 		{

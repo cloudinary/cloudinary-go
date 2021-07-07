@@ -1,6 +1,7 @@
 package admin_test
 
 // Acceptance tests for API. See `TEST.md` for additional information.
+
 import (
 	"context"
 	"github.com/cloudinary/cloudinary-go/api/admin"

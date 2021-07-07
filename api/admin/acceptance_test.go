@@ -61,7 +61,7 @@ type expectedRequestParams struct {
 	Headers *map[string]string // Expected HTTP request headers
 }
 
-// Get test handler with basic checks
+// Get test handler for HTTP server. Contains basic checks by expected request params.
 func getTestHandler(response string, t *testing.T, callCounter *int, ep expectedRequestParams) testFunction {
 	return func(w http.ResponseWriter, r *http.Request) {
 
