@@ -37,7 +37,7 @@ These tests are placed in `*_acceptance_test.go` files.
 The main purpose of these tests is to check whether SDK generates proper HTTP requests or not with mocked HTTP-server.
 
 #### Writing an acceptance test
-Check [api/admin/asset_acceptance_test.go](api/admin/asset_acceptance_test.go) for an example of acceptance test.
+Check [api/admin/asset_acceptance_test.go](api/admin/assets_acceptance_test.go) for an example of acceptance test.
 These tests are using a basic Go test approach with [httptest](https://golang.org/pkg/net/http/httptest/) as a mocking HTTP server.
 
 
@@ -81,4 +81,4 @@ type ApiAcceptanceTestCase struct {
 		},
 ```
 
-You can find more examples in [api/admin/asset_acceptance_test.go](api/admin/asset_acceptance_test.go).
+You can find more examples in [api/admin/asset_acceptance_test.go](api/admin/assets_acceptance_test.go).
