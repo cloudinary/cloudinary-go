@@ -12,7 +12,7 @@ const (
 	metadataFields    api.EndPoint = "metadata_fields"
 	dataSource        api.EndPoint = "datasource"
 	dataSourceRestore api.EndPoint = "datasource_restore"
-	sort              api.EndPoint = "sort"
+	order             api.EndPoint = "order"
 )
 
 // ListMetadataFields lists all metadata field definitions.
@@ -200,21 +200,21 @@ type RestoreDatasourceEntriesResult struct {
 	Response interface{}
 }
 
-type SortMetadataFieldDatasourceParams struct {
-	FieldExternalId string      `json:"-"`
-	FieldSortBy     SortByField `json:"sort_by"`
-	FieldDirection  Direction   `json:"direction,omitempty"`
+type ReorderMetadataFieldDatasourceParams struct {
+	FieldExternalId string       `json:"-"`
+	FieldOrderBy    OrderByField `json:"order_by"`
+	FieldDirection  Direction    `json:"direction,omitempty"`
 }
 
-// SortMetadataFieldDatasource sorts metadata fields datasource. Currently supports only value.
-func (a *API) SortMetadataFieldDatasource(ctx context.Context, params SortMetadataFieldDatasourceParams) (*SortMetadataFieldDatasourceResult, error) {
-	res := &SortMetadataFieldDatasourceResult{}
-	_, err := a.post(ctx, api.BuildPath(metadataFields, params.FieldExternalId, dataSource, sort), params, res)
+// ReorderMetadataFieldDatasource reorders metadata fields datasource. Currently, supports only value.
+func (a *API) ReorderMetadataFieldDatasource(ctx context.Context, params ReorderMetadataFieldDatasourceParams) (*ReorderMetadataFieldDatasourceResult, error) {
+	res := &ReorderMetadataFieldDatasourceResult{}
+	_, err := a.post(ctx, api.BuildPath(metadataFields, params.FieldExternalId, dataSource, order), params, res)
 
 	return res, err
 }
 
-type SortMetadataFieldDatasourceResult struct {
+type ReorderMetadataFieldDatasourceResult struct {
 	metadata.DataSource
 	Error    api.ErrorResp `json:"error,omitempty"`
 	Response interface{}

@@ -35,9 +35,9 @@ const (
 	Descending = "desc"
 )
 
-type SortByField string
+type OrderByField string
 
-const SortFieldValue SortByField = "value"
+const OrderFieldValue OrderByField = "value"
 
 // New creates a new Admin API instance from the environment variable (CLOUDINARY_URL).
 func New() (*API, error) {
