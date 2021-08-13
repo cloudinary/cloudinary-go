@@ -21,7 +21,7 @@ Please be aware that the library is used in a wide variety of environments and t
 - Follow the instructions detailed in [Code contribution](#code-contribution)
 - Open a new GitHub pull request
 - Ensure the PR description clearly describes the bug / feature. Include relevant issue number if applicable.
-- Provide test code that covers the new code
+- Provide test code that covers the new code. See [TEST.md](TEST.md) for additional information about tests writing.
 
 ## Code contribution
 
@@ -62,6 +62,8 @@ git push origin feature/my-feature-branch -f
 Try to write a test that reproduces the problem you're trying to fix or describes a feature you would like to build.
 
 We definitely appreciate pull requests that highlight or reproduce a problem, even without a fix.
+
+See [TEST.md](TEST.md) for additional information about tests writing.
 
 #### Write Code
 

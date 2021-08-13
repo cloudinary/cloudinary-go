@@ -48,7 +48,8 @@ func TestAssets_RestoreAssets(t *testing.T) {
 }
 
 func TestAssets_DeleteAssets(t *testing.T) {
-	resp, err := adminAPI.DeleteAssets(ctx, admin.DeleteAssetsParams{PublicIDs: []string{"api_test_restore_20891", "api_test_restore_94060"}})
+	resp, err :=
+		adminAPI.DeleteAssets(ctx, admin.DeleteAssetsParams{PublicIDs: []string{"api_test_restore_20891", "api_test_restore_94060"}})
 	if err != nil {
 		t.Error(err, resp)
 	}
