@@ -41,8 +41,8 @@ func main() {
 		setters := getSettersForType(id, d)
 		if len(setters) > 0 {
 			fmt.Printf("Generating setters file for struct %s with %d setters\n", id, len(setters))
-			template := getSettersTemplate(setters)
-			fileName := generateMixinFile(curDir, template, cldType.(*CldType))
+			tmpl := getSettersTemplate(setters)
+			fileName := generateMixinFile(curDir, tmpl, cldType.(*CldType))
 			fmt.Printf("Done. File: %s\n", fileName)
 		}
 	}
@@ -71,7 +71,7 @@ func getSettersForType(id string, d *dag.DAG) []CldSetter {
 	setters := vertex.(*CldType).setters
 
 	if child, err := d.GetChildren(id); err == nil {
-		for id, _ := range child {
+		for id := range child {
 			setters = append(setters, getSettersForType(id, d)...)
 		}
 	}
@@ -117,7 +117,9 @@ func searchTypesInFile(filename string, d *dag.DAG) {
 				filePath:    filepath.Dir(filename),
 			}
 
-			d.AddVertex(cldType)
+			if _, err := d.AddVertex(cldType); err != nil {
+				panic(err)
+			}
 		} else {
 			t, _ := d.GetVertex(id)
 			cldType = t.(*CldType)
@@ -153,7 +155,9 @@ func searchTypesInFile(filename string, d *dag.DAG) {
 						filePath:    filepath.Dir(filename),
 					}
 
-					d.AddVertex(&t)
+					if _, err := d.AddVertex(&t); err != nil {
+						panic(err)
+					}
 				}
 
 				if err := d.AddEdge(id, embedId); err != nil {
@@ -219,15 +223,20 @@ func ({{ .Receiver}} *{{ .StructName}}) <<index .FuncName %d>>(<<index .ParamNam
 
 	buf := new(bytes.Buffer)
 	w := bufio.NewWriter(buf)
-	templ := template.Must(template.New("test").Delims("<<", ">>").Parse(stringTemplate))
-	templ.Execute(w, templateData)
-	w.Flush()
+	tmpl := template.Must(template.New("test").Delims("<<", ">>").Parse(stringTemplate))
+	if err := tmpl.Execute(w, templateData); err != nil {
+		panic(err)
+	}
+
+	if err := w.Flush(); err != nil {
+		panic(err)
+	}
 
 	return buf.String()
 }
 
 func generateMixinFile(curDir string, templateString string, t *CldType) string {
-	templ := template.Must(template.New("test").Parse(templateString))
+	tmpl := template.Must(template.New("test").Parse(templateString))
 
 	mixinData := struct {
 		PackageName string
@@ -241,10 +250,20 @@ func generateMixinFile(curDir string, templateString string, t *CldType) string 
 
 	fileName := fmt.Sprintf("%s/%s/%s_setters.go", curDir, t.filePath, strings.ToLower(t.structName))
 	f, _ := os.Create(fileName)
+	defer func() {
+		if err := f.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
 	w := bufio.NewWriter(f)
-	templ.Execute(w, mixinData)
-	w.Flush()
-	f.Close()
+	if err := tmpl.Execute(w, mixinData); err != nil {
+		panic(err)
+	}
+
+	if err := w.Flush(); err != nil {
+		panic(err)
+	}
 
 	return fileName
 }
