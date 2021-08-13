@@ -9,8 +9,8 @@ import (
 
 // Crop resize
 type CropGroup struct {
-	cropMode   interface{} `cld:"c"`
-	Dimensions `mixin:"true"`
+	cropMode interface{} `cld:"c"`
+	Dimensions
 }
 
 func Crop() *CropGroup {
@@ -22,19 +22,29 @@ func Scale() *CropGroup {
 }
 
 func (c *CropGroup) String() string {
-	v := reflect.ValueOf(c)
+	v := reflect.ValueOf(*c)
+	result := stringifyReflectedValue(v)
+	sort.Strings(result)
+
+	return strings.Join(result, ",")
+}
+
+func stringifyReflectedValue(v reflect.Value) []string {
+	var res []string
+
 	typeOfS := v.Type()
 
-	var res []string
 	for i := 0; i < v.NumField(); i++ {
 		if isEmptyValue(v.Field(i)) {
 			continue
 		}
 
-		res = append(res, fmt.Sprintf("%s_%v", typeOfS.Field(i).Tag.Get("cld"), v.Field(i).Elem()))
+		if v.Field(i).Kind() == reflect.Struct {
+			res = append(res, stringifyReflectedValue(v.Field(i))...)
+		} else {
+			res = append(res, fmt.Sprintf("%s_%v", typeOfS.Field(i).Tag.Get("cld"), v.Field(i).Elem()))
+		}
 	}
 
-	sort.Strings(res)
-
-	return strings.Join(res, ",")
+	return res
 }
