@@ -15,6 +15,10 @@ import (
 	"text/template"
 )
 
+/**
+Generates typed setters for structs by annotation.
+*/
+
 func main() {
 	curDir, _ := os.Getwd()
 
@@ -178,7 +182,6 @@ func searchTypesInFile(filename string, d *dag.DAG) {
 		return false
 	})
 }
-
 func getSettersFromAnnotation(annotation string, paramName string) []CldSetter {
 	var res []CldSetter
 	types := strings.Split(annotation, ",")
@@ -194,7 +197,6 @@ func getSettersFromAnnotation(annotation string, paramName string) []CldSetter {
 
 	return res
 }
-
 func getSettersTemplate(setters []CldSetter) string {
 	stringTemplate := "package {{ .PackageName}}\n"
 	functionTemplate := `
@@ -234,7 +236,6 @@ func ({{ .Receiver}} *{{ .StructName}}) <<index .FuncName %d>>(<<index .ParamNam
 
 	return buf.String()
 }
-
 func generateMixinFile(curDir string, templateString string, t *CldType) string {
 	tmpl := template.Must(template.New("test").Parse(templateString))
 

@@ -1,2 +1,2 @@
 generate:
-	go run transformation/gen/main.go
+	go run gen/generate_setters.go
