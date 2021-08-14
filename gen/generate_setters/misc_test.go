@@ -290,3 +290,39 @@ func Test_GetSettersFromAnnotation(t *testing.T) {
 		})
 	}
 }
+
+func Test_contains(t *testing.T) {
+	type args struct {
+		s   []string
+		str string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "Returns true on exists",
+			args: args{
+				s:   []string{"string1", "string2"},
+				str: "string1",
+			},
+			want: true,
+		},
+		{
+			name: "Returns false on not exists",
+			args: args{
+				s:   []string{"string1", "string2"},
+				str: "string3",
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := contains(tt.args.s, tt.args.str); got != tt.want {
+				t.Errorf("contains() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

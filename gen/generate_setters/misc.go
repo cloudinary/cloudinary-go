@@ -76,3 +76,13 @@ func getSettersFromAnnotation(annotation string, paramName string) []CldSetter {
 
 	return res
 }
+
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
+}

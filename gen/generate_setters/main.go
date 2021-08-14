@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/heimdalr/dag"
 	"go/parser"
@@ -11,6 +12,11 @@ import (
 )
 
 func main() {
+	excludePathsString := flag.String("e", "", "exclude paths")
+	flag.Parse()
+
+	excludePaths := strings.Split(*excludePathsString, ",")
+
 	curDir, _ := os.Getwd()
 	graph := dag.NewDAG()
 
@@ -20,7 +26,7 @@ func main() {
 				return err
 			}
 
-			if !info.IsDir() && filepath.Ext(path) == ".go" {
+			if !info.IsDir() && filepath.Ext(path) == ".go" && !contains(excludePaths, filepath.Dir(path)) {
 				fset := token.NewFileSet()
 				file, err := parser.ParseFile(fset, path, nil, parser.ParseComments)
 				if err != nil {
