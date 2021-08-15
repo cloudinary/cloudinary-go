@@ -1,5 +1,41 @@
 package resize
 
+func (c *CropGroup) X(x int) *CropGroup {
+	c.x = x
+
+	return c
+}
+
+func (c *CropGroup) XPercent(x float32) *CropGroup {
+	c.x = x
+
+	return c
+}
+
+func (c *CropGroup) XExpr(x string) *CropGroup {
+	c.x = x
+
+	return c
+}
+
+func (c *CropGroup) Y(y int) *CropGroup {
+	c.y = y
+
+	return c
+}
+
+func (c *CropGroup) YPercent(y float32) *CropGroup {
+	c.y = y
+
+	return c
+}
+
+func (c *CropGroup) YExpr(y string) *CropGroup {
+	c.y = y
+
+	return c
+}
+
 func (c *CropGroup) Width(width int) *CropGroup {
 	c.width = width
 

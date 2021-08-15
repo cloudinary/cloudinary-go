@@ -27,8 +27,8 @@ func (d Dimensions) String() string {
 }
 
 type Position struct {
-	X float64 `cld:"x"`
-	Y float64 `cld:"y"`
+	x interface{} `cld:"x" setters:"int,float32:Percent,string:Expr"`
+	y interface{} `cld:"y" setters:"int,float32:Percent,string:Expr"`
 }
 
 type Gravity struct {

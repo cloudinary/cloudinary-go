@@ -7,9 +7,10 @@ import (
 	"strings"
 )
 
-// Crop resize
+// CropGroup resize
 type CropGroup struct {
 	cropMode interface{} `cld:"c"`
+	Position
 	Dimensions
 }
 
@@ -17,12 +18,36 @@ func Crop() *CropGroup {
 	return &CropGroup{cropMode: "crop"}
 }
 
-func Scale() *CropGroup {
-	return &CropGroup{cropMode: "scale"}
+func Thumbnail() *CropGroup {
+	return &CropGroup{cropMode: "thumb"}
 }
+
 
 func (c *CropGroup) String() string {
 	v := reflect.ValueOf(*c)
+	result := stringifyReflectedValue(v)
+	sort.Strings(result)
+
+	return strings.Join(result, ",")
+}
+
+// ScaleGroup resize
+type ScaleGroup struct {
+	cropMode   interface{} `cld:"c"`
+	Dimensions
+}
+
+func Fit() *ScaleGroup {
+	return &ScaleGroup{cropMode: "fit"}
+}
+
+func Scale() *ScaleGroup {
+	return &ScaleGroup{cropMode: "scale"}
+}
+
+
+func (s *ScaleGroup) String() string {
+	v := reflect.ValueOf(*s)
 	result := stringifyReflectedValue(v)
 	sort.Strings(result)
 
