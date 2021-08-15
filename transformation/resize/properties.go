@@ -6,9 +6,9 @@ import (
 )
 
 type Dimensions struct {
-	width       interface{} `cld:"w"`
-	height      interface{} `cld:"h"`
-	aspectRatio interface{} `cld:"ar"`
+	width       interface{} `cld:"w" setters:"int,float32:Percent,string:Expr"`
+	height      interface{} `cld:"h" setters:"int,float32:Percent,string:Expr"`
+	aspectRatio interface{} `cld:"ar" setters:"int,float32:Percent,string:Expr"`
 }
 
 func (d Dimensions) String() string {
@@ -24,42 +24,6 @@ func (d Dimensions) String() string {
 	}
 
 	return res
-}
-
-func (d Dimensions) Width(width int) Dimensions {
-	d.width = width
-
-	return d
-}
-
-func (d Dimensions) WidthPercent(width float64) Dimensions {
-	d.width = width
-
-	return d
-}
-
-func (d Dimensions) WidthExpr(width string) Dimensions {
-	d.width = width
-
-	return d
-}
-
-func (d Dimensions) Height(height int) Dimensions {
-	d.height = height
-
-	return d
-}
-
-func (d Dimensions) HeightPercent(height float64) Dimensions {
-	d.height = height
-
-	return d
-}
-
-func (d Dimensions) HeightExpr(height string) Dimensions {
-	d.height = height
-
-	return d
 }
 
 type Position struct {
