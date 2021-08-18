@@ -36,15 +36,16 @@ type AssetTypesResult struct {
 
 // AssetsParams are the parameters for Assets.
 type AssetsParams struct {
-	AssetType   api.AssetType `json:"-"`
-	Prefix      string        `json:"prefix,omitempty"`
-	StartAt     *time.Time    `json:"start_at,omitempty"`
-	NextCursor  string        `json:"next_cursor,omitempty"`
-	MaxResults  int           `json:"max_results,omitempty"`
-	Tags        bool          `json:"tags,omitempty"`
-	Context     bool          `json:"context,omitempty"`
-	Moderations bool          `json:"moderations,omitempty"`
-	Direction   string        `json:"direction,omitempty"`
+	AssetType    api.AssetType `json:"-"`
+	DeliveryType string        `json:"-"`
+	Prefix       string        `json:"prefix,omitempty"`
+	StartAt      *time.Time    `json:"start_at,omitempty"`
+	NextCursor   string        `json:"next_cursor,omitempty"`
+	MaxResults   int           `json:"max_results,omitempty"`
+	Tags         bool          `json:"tags,omitempty"`
+	Context      bool          `json:"context,omitempty"`
+	Moderations  bool          `json:"moderations,omitempty"`
+	Direction    string        `json:"direction,omitempty"`
 }
 
 // Assets lists all uploaded assets filtered by any specified AssetsParams.
@@ -52,7 +53,7 @@ type AssetsParams struct {
 //https://cloudinary.com/documentation/admin_api#get_resources
 func (a *API) Assets(ctx context.Context, params AssetsParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
-	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType), params, res)
+	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
 
 	return res, err
 }
