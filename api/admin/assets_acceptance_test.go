@@ -328,6 +328,268 @@ func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
 	return testCases
 }
 
+// Acceptance test cases for `Assets` method
+func getAssetsTestCases() []ApiAcceptanceTestCase {
+	type assetsTestCase struct {
+		requestParams  admin.AssetsParams
+		uri            string
+		expectedParams *url.Values
+	}
+
+	getTestCase := func(num int, t assetsTestCase) ApiAcceptanceTestCase {
+		return ApiAcceptanceTestCase{
+			Name: fmt.Sprintf("Assets #%d", num),
+			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+				return api.Assets(ctx, t.requestParams)
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {
+				_, ok := response.(*admin.AssetsResult)
+				if !ok {
+					t.Errorf("Response should be type of AssetsResult, %s given", reflect.TypeOf(response))
+				}
+			},
+			ExpectedRequest: expectedRequestParams{
+				Method: "GET",
+				Uri:    t.uri,
+				Params: t.expectedParams,
+			},
+			JsonResponse:      "{}",
+			ExpectedCallCount: 1,
+		}
+	}
+
+	var testCases []ApiAcceptanceTestCase
+
+	assetsTestCases := []assetsTestCase{
+		{
+			requestParams:  admin.AssetsParams{},
+			uri:            "/resources/image",
+			expectedParams: &url.Values{},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType: "ASSET_TYPE",
+			},
+			uri:            "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:    "ASSET_TYPE",
+				DeliveryType: "DELIVERY_TYPE",
+			},
+			uri:            "/resources/ASSET_TYPE/DELIVERY_TYPE",
+			expectedParams: &url.Values{},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:  "ASSET_TYPE",
+				NextCursor: "NEXT_CURSOR",
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+			},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:  "ASSET_TYPE",
+				NextCursor: "NEXT_CURSOR",
+				MaxResults: 100,
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+			},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:  "ASSET_TYPE",
+				NextCursor: "NEXT_CURSOR",
+				MaxResults: 100,
+				Tags:       true,
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+				"tags":        []string{"true"},
+			},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:  "ASSET_TYPE",
+				NextCursor: "NEXT_CURSOR",
+				MaxResults: 100,
+				Tags:       false,
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+			},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:  "ASSET_TYPE",
+				NextCursor: "NEXT_CURSOR",
+				MaxResults: 100,
+				Tags:       false,
+				Context:    true,
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+				"context":     []string{"true"},
+			},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:  "ASSET_TYPE",
+				NextCursor: "NEXT_CURSOR",
+				MaxResults: 100,
+				Tags:       false,
+				Context:    false,
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+			},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:   "ASSET_TYPE",
+				NextCursor:  "NEXT_CURSOR",
+				MaxResults:  100,
+				Tags:        false,
+				Context:     false,
+				Moderations: true,
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+				"moderations": []string{"true"},
+			},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:   "ASSET_TYPE",
+				NextCursor:  "NEXT_CURSOR",
+				MaxResults:  100,
+				Tags:        false,
+				Context:     false,
+				Moderations: false,
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+			},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:   "ASSET_TYPE",
+				NextCursor:  "NEXT_CURSOR",
+				MaxResults:  100,
+				Tags:        false,
+				Context:     false,
+				Moderations: false,
+				Direction:   "ASC",
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+				"direction":   []string{"ASC"},
+			},
+		},
+		{
+			requestParams: admin.AssetsParams{
+				AssetType:  "ASSET_TYPE",
+				NextCursor: "NEXT_CURSOR",
+				MaxResults: 100,
+				Prefix:     "PREFIX",
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+				"prefix":      []string{"PREFIX"},
+			},
+		},
+	}
+
+	for num, testCase := range assetsTestCases {
+		testCases = append(testCases, getTestCase(num, testCase))
+	}
+
+	testCases = append(testCases, ApiAcceptanceTestCase{
+		Name: "Assets error case",
+		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+			return api.Assets(ctx, admin.AssetsParams{})
+		},
+		ResponseTest: func(response interface{}, t *testing.T) {
+			v, ok := response.(*admin.AssetsResult)
+			if !ok {
+				t.Errorf("Response should be type of AssetsResult, %s given", reflect.TypeOf(response))
+			}
+
+			if v.Error.Message != "TEST ERROR" {
+				t.Errorf("Error message should be %s, %s given", "TEST ERROR", v.Error.Message)
+			}
+		},
+		ExpectedRequest: expectedRequestParams{
+			Method: "GET",
+			Uri:    "/resources/image",
+			Params: &url.Values{},
+		},
+		JsonResponse:      "{\"error\":{\"message\": \"TEST ERROR\"}}",
+		ExpectedCallCount: 1,
+	})
+
+	asset := api.BriefAssetResult{AssetID: "1"}
+	response := map[string]interface{}{
+		"resources":   []api.BriefAssetResult{asset},
+		"next_cursor": "NEXT_CURSOR",
+	}
+	responseJson, _ := json.Marshal(response)
+
+	testCases = append(testCases, ApiAcceptanceTestCase{
+		Name: "Assets response parsing case",
+		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+			return api.Assets(ctx, admin.AssetsParams{})
+		},
+		ResponseTest: func(response interface{}, t *testing.T) {
+			expectedResponse := admin.AssetsResult{
+				Assets:     []api.BriefAssetResult{asset},
+				NextCursor: "NEXT_CURSOR",
+			}
+
+			v, ok := response.(*admin.AssetsResult)
+			if !ok {
+				t.Errorf("Response should be type of %s, %s given", reflect.TypeOf(expectedResponse), reflect.TypeOf(response))
+			}
+
+			if !reflect.DeepEqual(expectedResponse, *v) {
+				t.Errorf("Expected response to be %v, %v given", expectedResponse, v)
+			}
+		},
+		ExpectedRequest: expectedRequestParams{
+			Method: "GET",
+			Uri:    "/resources/image",
+			Params: &url.Values{},
+		},
+		JsonResponse:      string(responseJson),
+		ExpectedCallCount: 1,
+	})
+
+	return testCases
+}
+
 // Acceptance test cases for `assetsByModeration` method
 func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 	type assetByModerationTestCase struct {
@@ -606,6 +868,7 @@ func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 // Run tests
 func TestAssets_Acceptance(t *testing.T) {
 	t.Parallel()
+	testApiByTestCases(getAssetsTestCases(), t)
 	testApiByTestCases(getAssetsByModerationTestCases(), t)
 	testApiByTestCases(getDeleteAssetsTestCases(), t)
 	testApiByTestCases(getRestoreAssetsTestCases(), t)
