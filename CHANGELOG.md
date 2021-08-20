@@ -1,3 +1,18 @@
+1.3.0 / 2021-08-20
+==================
+
+New Functionality And Features
+------------------------------
+  * Add support for query parameters in `CLOUDINARY_URL`
+  * Add support for `DeliveryType` in `Assets` Admin API
+  * Add support for `ReorderMetadataFieldDatasource` Admin API
+  * Add `Info` field to `AssetResult`
+
+Other Changes
+-------------
+* Add code generation for typed setters
+* Add support for acceptance tests
+
 1.2.0 / 2021-06-24
 ==================
 
