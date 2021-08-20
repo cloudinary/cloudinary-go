@@ -67,8 +67,9 @@ type AssetResult struct {
 	Derived               []interface{}               `json:"derived"`
 	Etag                  string                      `json:"etag"`
 	ImageMetadata         ImageMetadataResult         `json:"image_metadata"`
-	Coordinates           struct{}                    `json:"coordinates"`
-	Exif                  struct{}                    `json:"exif"`
+	Coordinates           interface{}                 `json:"coordinates"`
+	Info                  interface{}                 `json:"info"`
+	Exif                  interface{}                 `json:"exif"`
 	Faces                 [][]int                     `json:"faces"`
 	IllustrationScore     float64                     `json:"illustration_score"`
 	SemiTransparent       bool                        `json:"semi_transparent"`
@@ -81,7 +82,7 @@ type AssetResult struct {
 	AccessibilityAnalysis AccessibilityAnalysisResult `json:"accessibility_analysis"`
 	Pages                 int                         `json:"pages"`
 	CinemagraphAnalysis   CinemagraphAnalysisResult   `json:"cinemagraph_analysis"`
-	Usage                 struct{}                    `json:"usage"`
+	Usage                 interface{}                 `json:"usage"`
 	OriginalFilename      string                      `json:"original_filename"`
 	Error                 api.ErrorResp               `json:"error,omitempty"`
 }
