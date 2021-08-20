@@ -62,18 +62,22 @@ func NewFromConfiguration(configuration config.Configuration) (*Cloudinary, erro
 	}, nil
 }
 
+// Image creates a new asset.Image instance.
 func (c Cloudinary) Image(publicID string) (*asset.Asset, error) {
 	return asset.Image(publicID, &c.Config)
 }
 
+// Video creates a new asset.Video instance.
 func (c Cloudinary) Video(publicID string) (*asset.Asset, error) {
 	return asset.Video(publicID, &c.Config)
 }
 
+// File creates a new asset.File instance.
 func (c Cloudinary) File(publicID string) (*asset.Asset, error) {
 	return asset.File(publicID, &c.Config)
 }
 
+// Media creates a new asset.Media instance.
 func (c Cloudinary) Media(publicID string) (*asset.Asset, error) {
 	return asset.Media(publicID, &c.Config)
 }
