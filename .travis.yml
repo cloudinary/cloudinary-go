@@ -12,3 +12,8 @@ before_script: >
 
 script:
   - go test -v ./...
+
+notifications:
+  email:
+    recipients:
+      - sdk_developers@cloudinary.com
