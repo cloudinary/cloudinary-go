@@ -3,6 +3,7 @@ package cldtest
 import (
 	"context"
 	"fmt"
+	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
 	"math/rand"
 	"os"
 	"path"
@@ -12,6 +13,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cloudinary/cloudinary-go/api/admin"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 )
 
@@ -76,6 +78,15 @@ var CldContext = map[string]string{"go-context-key": "go-context-value"}
 
 var ctx = context.Background()
 var uploadAPI, _ = uploader.New()
+var adminAPI, _ = admin.New()
+
+var stringMetadataField = metadata.Field{
+	Type:         metadata.StringFieldType,
+	ExternalID:   UniqueID("string_md_field_id"),
+	Label:        UniqueID("string_md_field_label"),
+	DefaultValue: "Gopher",
+	Validation:   metadata.StringLengthValidation(2, 6),
+}
 
 // UploadTestAsset uploads a test image asset for test purposes.
 func UploadTestAsset(t *testing.T, publicID string) {
@@ -113,6 +124,20 @@ func UploadTestVideoAsset(t *testing.T, publicID string) {
 	if resp == nil || resp.PublicID != publicID {
 		t.Error(resp)
 	}
+}
+
+func CreateStringMetadataField(t *testing.T, prefix string) string {
+	stringMetadataField.ExternalID = UniqueID(prefix + "id")
+	stringMetadataField.Label = UniqueID(prefix + "label")
+	res, err := adminAPI.AddMetadataField(ctx, stringMetadataField)
+	if err != nil {
+		t.Error(err)
+	}
+	if res.Error.Message != "nil" {
+		t.Error(res.Error.Message)
+	}
+
+	return res.ExternalID
 }
 
 // GetTestSuffix returns a unique test suffix.

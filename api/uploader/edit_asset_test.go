@@ -1,6 +1,7 @@
 package uploader_test
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/api"
@@ -60,4 +61,27 @@ func TestUploader_Edit(t *testing.T) {
 	if resp == nil || dResp.Result != "ok" {
 		t.Error(resp)
 	}
+}
+
+
+func TestUploader_UpdateMetadata(t *testing.T) {
+	externalID := cldtest.CreateStringMetadataField(t, "update_metadata_field_")
+	externalID2 := cldtest.CreateStringMetadataField(t, "update_metadata_field2_")
+	pID1 := cldtest.UniqueID(cldtest.PublicID)
+	pID2 := cldtest.UniqueID(cldtest.PublicID2)
+	cldtest.UploadTestAsset(t, pID1)
+	cldtest.UploadTestAsset(t, pID2)
+
+	params := uploader.UpdateMetadataParams{
+		PublicIDs: []string{pID1, pID2},
+		Metadata: api.CldAPIMap{externalID: "upd1", externalID2: "upd2"},
+	}
+
+	resp, err := uploadAPI.UpdateMetadata(ctx, params)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, 2, len(resp.PublicIds))
 }
