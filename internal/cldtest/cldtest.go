@@ -133,7 +133,7 @@ func CreateStringMetadataField(t *testing.T, prefix string) string {
 	if err != nil {
 		t.Error(err)
 	}
-	if res.Error.Message != "nil" {
+	if res.Error.Message != "" {
 		t.Error(res.Error.Message)
 	}
 
