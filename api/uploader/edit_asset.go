@@ -95,9 +95,10 @@ type ExplicitResult struct {
 
 // UpdateMetadataParams are the parameters for UpdateMetadata.
 type UpdateMetadataParams struct {
-	PublicIDs api.CldAPIArray `json:"public_ids"`
-	Metadata  api.Metadata    `json:"metadata"`
-	Type      string          `json:"type,omitempty"`
+	PublicIDs    []string      `json:"public_ids"`
+	Metadata     api.CldAPIMap `json:"metadata"`
+	Type         string        `json:"type,omitempty"`
+	ResourceType string        `json:"-"`
 }
 
 // UpdateMetadata populates metadata fields with the given values. Existing values will be overwritten.
@@ -106,7 +107,7 @@ type UpdateMetadataParams struct {
 // (an empty value for an existing metadata field clears the value).
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#metadata_method
-func (u *API) UpdateMetadata(ctx context.Context, params RenameParams) (*UpdateMetadataResult, error) {
+func (u *API) UpdateMetadata(ctx context.Context, params UpdateMetadataParams) (*UpdateMetadataResult, error) {
 	res := &UpdateMetadataResult{}
 	err := u.callUploadAPI(ctx, metadata, params, res)
 

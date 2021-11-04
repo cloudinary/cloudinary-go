@@ -18,7 +18,9 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/cloudinary/cloudinary-go/api"
@@ -86,14 +88,26 @@ func (u *API) signRequest(requestParams url.Values) (url.Values, error) {
 	}
 	// https://cloudinary.com/documentation/upload_images#generating_authentication_signatures
 	// All parameters added to the method call should be included except: file, cloud_name, resource_type and your api_key.
+
+	var arrayKey = regexp.MustCompile(`(.*)\[\d+]`)
+
 	signatureParams := make(url.Values)
+
 	for k, v := range requestParams {
-		switch k {
-		case "file", "cloud_name", "resource_type", "api_key":
+		switch {
+		case arrayKey.MatchString(k):
+			kName := arrayKey.FindStringSubmatch(k)[1]
+			signatureParams[kName] = append(signatureParams[kName], v[0])
+
+		case ignoredSignatureKey(k):
 			// omit
 		default:
 			signatureParams[k] = v
 		}
+	}
+
+	for k, v := range signatureParams {
+		signatureParams[k] = []string{strings.Join(v, ",")}
 	}
 
 	signature, err := api.SignParameters(signatureParams, u.Config.Cloud.APISecret)
@@ -105,6 +119,14 @@ func (u *API) signRequest(requestParams url.Values) (url.Values, error) {
 	requestParams.Add("api_key", u.Config.Cloud.APIKey)
 
 	return requestParams, nil
+}
+
+func ignoredSignatureKey(key string) bool {
+	switch key {
+	case "file", "cloud_name", "resource_type", "api_key":
+		return true
+	}
+	return false
 }
 
 func (u *API) postForm(ctx context.Context, urlPath interface{}, formParams url.Values) ([]byte, error) {

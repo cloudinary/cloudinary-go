@@ -11,6 +11,7 @@ import (
 	"io"
 	"log"
 	"net/url"
+	"reflect"
 	"regexp"
 	"runtime"
 	"strconv"
@@ -234,20 +235,47 @@ func StructToParams(inputStruct interface{}) (url.Values, error) {
 
 	params := url.Values{}
 	for paramName, value := range paramsMap {
-		resBytes, err := json.Marshal(value)
+		kind := reflect.ValueOf(value).Kind()
+
+		if kind == reflect.Slice || kind == reflect.Array {
+			rVal := reflect.ValueOf(value)
+			for i := 0; i < rVal.Len(); i++ {
+				item := rVal.Index(i)
+				val, err := encodeParamValue(item.Interface())
+				if err != nil {
+					return nil, err
+				}
+
+				arrParamName := fmt.Sprintf("%s[%d]", paramName, i)
+				params.Add(arrParamName, val)
+			}
+
+			continue
+		}
+
+		val, err := encodeParamValue(value)
 		if err != nil {
 			return nil, err
 		}
 
-		res := string(resBytes)
-		if strings.HasPrefix(res, "\"") { // FIXME: Fix this dirty hack that prevents double quoting of strings
-			res, _ = strconv.Unquote(res)
-		}
-
-		params.Add(paramName, res)
+		params.Add(paramName, val)
 	}
 
 	return params, nil
+}
+
+func encodeParamValue(value interface{}) (string, error) {
+	resBytes, err := json.Marshal(value)
+	if err != nil {
+		return "", err
+	}
+
+	res := string(resBytes)
+	if strings.HasPrefix(res, "\"") { // FIXME: Fix this dirty hack that prevents double quoting of strings
+		res, _ = strconv.Unquote(res)
+	}
+
+	return res, nil
 }
 
 // DeferredClose is a wrapper around io.Closer.Close method.
