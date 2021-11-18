@@ -1,3 +1,14 @@
+1.4.0 / 2021-11-18
+==================
+
+New Functionality And Features
+------------------------------
+  * Add support for `Moderation` in `UploadResult`
+
+Other Changes
+-------------
+  * Fix `UpdateMetadata` Upload API parameters
+
 1.3.0 / 2021-08-20
 ==================
 
