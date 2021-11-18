@@ -13,9 +13,10 @@ func TestUploader_Explicit(t *testing.T) {
 	cldtest.UploadTestAsset(t, cldtest.PublicID)
 
 	params := uploader.ExplicitParams{
-		PublicID: cldtest.PublicID,
-		Type:     api.Upload,
-		Tags:     cldtest.Tags,
+		PublicID:   cldtest.PublicID,
+		Type:       api.Upload,
+		Tags:       cldtest.Tags,
+		Moderation: "manual",
 	}
 
 	resp, err := uploadAPI.Explicit(ctx, params)
@@ -25,6 +26,10 @@ func TestUploader_Explicit(t *testing.T) {
 	}
 
 	if resp == nil || len(resp.Tags) != 2 {
+		t.Error(resp)
+	}
+
+	if len(resp.Moderation) < 1 || resp.Moderation[0].Kind != "manual"{
 		t.Error(resp)
 	}
 }
@@ -63,7 +68,6 @@ func TestUploader_Edit(t *testing.T) {
 	}
 }
 
-
 func TestUploader_UpdateMetadata(t *testing.T) {
 	externalID := cldtest.CreateStringMetadataField(t, "update_metadata_field_")
 	externalID2 := cldtest.CreateStringMetadataField(t, "update_metadata_field2_")
@@ -74,7 +78,7 @@ func TestUploader_UpdateMetadata(t *testing.T) {
 
 	params := uploader.UpdateMetadataParams{
 		PublicIDs: []string{pID1, pID2},
-		Metadata: api.CldAPIMap{externalID: "upd1", externalID2: "upd2"},
+		Metadata:  api.CldAPIMap{externalID: "upd1", externalID2: "upd2"},
 	}
 
 	resp, err := uploadAPI.UpdateMetadata(ctx, params)

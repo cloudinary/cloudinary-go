@@ -105,6 +105,23 @@ type Eager struct {
 	SecureURL      string `json:"secure_url"`
 }
 
+type ModerationLabel struct {
+	Confidence float64 `json:"confidence"`
+	Name       string  `json:"name"`
+	ParentName string  `json:"parent_name"`
+}
+
+type ModerationResponse struct {
+	ModerationLabels []ModerationLabel `json:"moderation_labels"`
+}
+
+type Moderation struct {
+	Status    api.ModerationStatus `json:"status"`
+	Kind      string               `json:"kind"`
+	Response  ModerationResponse   `json:"response"`
+	UpdatedAt time.Time            `json:"updated_at"`
+}
+
 // UploadResult image success response struct.
 type UploadResult struct {
 	AssetID          string          `json:"asset_id"`
@@ -128,6 +145,7 @@ type UploadResult struct {
 	AccessMode       string          `json:"access_mode"`
 	Context          api.Metadata    `json:"context,omitempty"`
 	Metadata         api.Metadata    `json:"metadata,omitempty"`
+	Moderation       []Moderation    `json:"moderation,omitempty"`
 	Overwritten      bool            `json:"overwritten"`
 	OriginalFilename string          `json:"original_filename"`
 	Eager            []Eager         `json:"eager"`
