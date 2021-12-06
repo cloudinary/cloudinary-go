@@ -95,7 +95,7 @@ type CreateUploadPresetResult struct {
 
 // UpdateUploadPresetParams are the parameters for UpdateUploadPreset.
 type UpdateUploadPresetParams struct {
-	Name             string `json:"name,omitempty"`
+	Name             string `json:"name"`
 	Unsigned         bool   `json:"unsigned,omitempty"`
 	DisallowPublicID bool   `json:"disallow_public_id,omitempty"`
 	Live             bool   `json:"live,omitempty"`
