@@ -22,7 +22,7 @@ import (
 type API struct {
 	Config config.Configuration
 	Logger *logger.Logger
-	client http.Client
+	Client http.Client
 }
 
 // Direction is the sorting direction.
@@ -52,7 +52,7 @@ func New() (*API, error) {
 func NewWithConfiguration(c *config.Configuration) (*API, error) {
 	return &API{
 		Config: *c,
-		client: http.Client{},
+		Client: http.Client{},
 		Logger: logger.New(),
 	}, nil
 }
@@ -111,7 +111,7 @@ func (a *API) callAPI(ctx context.Context, method string, path interface{}, requ
 
 	req = req.WithContext(ctx)
 
-	resp, err := a.client.Do(req)
+	resp, err := a.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
