@@ -34,7 +34,7 @@ import (
 type API struct {
 	Config config.Configuration
 	Logger *logger.Logger
-	client http.Client
+	Client http.Client
 }
 
 // New creates a new Admin API instance from the environment variable.
@@ -45,7 +45,7 @@ func New() (*API, error) {
 	}
 	return &API{
 		Config: *c,
-		client: http.Client{},
+		Client: http.Client{},
 		Logger: logger.New(),
 	}, nil
 }
@@ -276,7 +276,7 @@ func (u *API) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 
 	req = req.WithContext(ctx)
 
-	resp, err := u.client.Do(req)
+	resp, err := u.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
