@@ -19,6 +19,7 @@ import (
 	"os"
 	"reflect"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -93,16 +94,22 @@ func (u *API) signRequest(requestParams url.Values) (url.Values, error) {
 
 	signatureParams := make(url.Values)
 
-	for k, v := range requestParams {
+	requestKeys := make([]string, 0, len(requestParams))
+	for k := range requestParams {
+		requestKeys = append(requestKeys, k)
+	}
+	sort.Strings(requestKeys)
+
+	for _, k := range requestKeys {
 		switch {
 		case arrayKey.MatchString(k):
 			kName := arrayKey.FindStringSubmatch(k)[1]
-			signatureParams[kName] = append(signatureParams[kName], v[0])
+			signatureParams[kName] = append(signatureParams[kName], requestParams[k][0])
 
 		case ignoredSignatureKey(k):
 			// omit
 		default:
-			signatureParams[k] = v
+			signatureParams[k] = requestParams[k]
 		}
 	}
 

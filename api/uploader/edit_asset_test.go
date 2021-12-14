@@ -76,7 +76,7 @@ func TestUploader_UpdateMetadata(t *testing.T) {
 	cldtest.UploadTestAsset(t, pID2)
 
 	params := uploader.UpdateMetadataParams{
-		PublicIDs: []string{pID2, pID1},
+		PublicIDs: []string{pID1, pID2},
 		Metadata:  api.CldAPIMap{externalID: "upd1", externalID2: "upd2"},
 	}
 
