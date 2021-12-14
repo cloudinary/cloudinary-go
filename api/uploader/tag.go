@@ -23,10 +23,10 @@ const (
 
 // AddTagParams are the parameters for
 type AddTagParams struct {
-	Tag          string          `json:"tag,omitempty"` // The name of the tag to add.
-	PublicIDs    api.CldAPIArray `json:"public_ids"`    // The public IDs of the assets to add the tag to.
-	Type         string          `json:"type,omitempty"`
-	ResourceType string          `json:"-"`
+	Tag          string   `json:"tag,omitempty"` // The name of the tag to add.
+	PublicIDs    []string `json:"public_ids"`    // The public IDs of the assets to add the tag to.
+	Type         string   `json:"type,omitempty"`
+	ResourceType string   `json:"-"`
 }
 
 // AddTag adds a tag to the assets specified.
@@ -46,10 +46,10 @@ type AddTagResult struct {
 
 // RemoveTagParams are the parameters for RemoveTag.
 type RemoveTagParams struct {
-	Tag          string          `json:"tag,omitempty"` // The name of the tag to remove.
-	PublicIDs    api.CldAPIArray `json:"public_ids"`    // The public IDs of the assets to remove the tags from.
-	Type         string          `json:"type,omitempty"`
-	ResourceType string          `json:"-"`
+	Tag          string   `json:"tag,omitempty"` // The name of the tag to remove.
+	PublicIDs    []string `json:"public_ids"`    // The public IDs of the assets to remove the tags from.
+	Type         string   `json:"type,omitempty"`
+	ResourceType string   `json:"-"`
 }
 
 // RemoveTag removes a tag from the assets specified.
@@ -69,9 +69,9 @@ type RemoveTagResult struct {
 
 // RemoveAllTagsParams are the parameters for RemoveAllTags.
 type RemoveAllTagsParams struct {
-	PublicIDs    api.CldAPIArray `json:"public_ids"` // The public IDs of the assets to remove all tags from.
-	Type         string          `json:"type,omitempty"`
-	ResourceType string          `json:"-"`
+	PublicIDs    []string `json:"public_ids"` // The public IDs of the assets to remove all tags from.
+	Type         string   `json:"type,omitempty"`
+	ResourceType string   `json:"-"`
 }
 
 // RemoveAllTags removes all tags from the assets specified.
@@ -91,10 +91,10 @@ type RemoveAllTagsResult struct {
 
 // ReplaceTagParams are the parameters for ReplaceTag.
 type ReplaceTagParams struct {
-	Tag          string          `json:"tag"`        // The new tag with which to replace the existing tags.
-	PublicIDs    api.CldAPIArray `json:"public_ids"` // The public IDs of the assets to replace the tags of.
-	Type         string          `json:"type,omitempty"`
-	ResourceType string          `json:"-"`
+	Tag          string   `json:"tag"`        // The new tag with which to replace the existing tags.
+	PublicIDs    []string `json:"public_ids"` // The public IDs of the assets to replace the tags of.
+	Type         string   `json:"type,omitempty"`
+	ResourceType string   `json:"-"`
 }
 
 // ReplaceTag replaces all existing tags on the assets specified with the tag specified.
