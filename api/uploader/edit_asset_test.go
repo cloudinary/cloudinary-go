@@ -3,6 +3,7 @@ package uploader_test
 import (
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
@@ -80,6 +81,8 @@ func TestUploader_UpdateMetadata(t *testing.T) {
 		PublicIDs: []string{pID1, pID2},
 		Metadata:  api.CldAPIMap{externalID: "upd1", externalID2: "upd2"},
 	}
+	// try to avoid race condition
+	time.Sleep(3 * time.Second)
 
 	resp, err := uploadAPI.UpdateMetadata(ctx, params)
 
