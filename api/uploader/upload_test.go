@@ -209,6 +209,49 @@ func TestUploader_UploadWithContext(t *testing.T) {
 	assert.Equal(t, fmt.Sprintf("%v", cldtest.CldContext), fmt.Sprintf("%v", resp.Context["custom"]))
 }
 
+func TestUploader_UploadWithResponsiveBreakpoints(t *testing.T) {
+	params := uploader.UploadParams{
+		PublicID:              cldtest.PublicID,
+		Overwrite:             true,
+		ResponsiveBreakpoints: uploader.ResponsiveBreakpointsParams{{CreateDerived: false, Transformation: "a_90"}},
+	}
+
+	resp, err := uploadAPI.Upload(ctx, cldtest.LogoURL, params)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp == nil {
+		t.Error(resp)
+	}
+
+	assert.Len(t, resp.ResponsiveBreakpoints, 1)
+	assert.Equal(t, "a_90", resp.ResponsiveBreakpoints[0].Transformation)
+
+	eParams := uploader.ExplicitParams{
+		PublicID: resp.PublicID,
+		Type:     api.Upload,
+		ResponsiveBreakpoints: uploader.ResponsiveBreakpointsParams{
+			{CreateDerived: false, Transformation: "a_90"},
+			{CreateDerived: false, Transformation: "a_45"},
+		}}
+
+	eResp, err := uploadAPI.Explicit(ctx, eParams)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if eResp == nil {
+		t.Error(resp)
+	}
+
+	assert.Len(t, eResp.ResponsiveBreakpoints, 2)
+	assert.Equal(t, "a_90", eResp.ResponsiveBreakpoints[0].Transformation)
+	assert.Equal(t, "a_45", eResp.ResponsiveBreakpoints[1].Transformation)
+}
+
 func populateLargeImage() string {
 	head := "BMJ\xB9Y\x00\x00\x00\x00\x00\x8A\x00\x00\x00|\x00\x00\x00x\x05\x00\x00x\x05\x00\x00\x01\x00\x18\x00" +
 		"\x00\x00\x00\x00\xC0\xB8Y\x00a\x0F\x00\x00a\x0F\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF" +
