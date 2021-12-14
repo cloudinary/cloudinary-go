@@ -5,6 +5,7 @@ go:
   - 1.14.x
   - 1.15.x
   - 1.16.x
+  - 1.17.x
 
 before_script: >
   export CLOUDINARY_URL=$(bash scripts/get_test_cloud.sh);

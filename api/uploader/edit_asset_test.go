@@ -1,12 +1,11 @@
 package uploader_test
 
 import (
-	"github.com/stretchr/testify/assert"
-	"testing"
-
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/cloudinary/cloudinary-go/internal/cldtest"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestUploader_Explicit(t *testing.T) {
@@ -29,7 +28,7 @@ func TestUploader_Explicit(t *testing.T) {
 		t.Error(resp)
 	}
 
-	if len(resp.Moderation) < 1 || resp.Moderation[0].Kind != "manual"{
+	if len(resp.Moderation) < 1 || resp.Moderation[0].Kind != "manual" {
 		t.Error(resp)
 	}
 }
@@ -71,8 +70,8 @@ func TestUploader_Edit(t *testing.T) {
 func TestUploader_UpdateMetadata(t *testing.T) {
 	externalID := cldtest.CreateStringMetadataField(t, "update_metadata_field_")
 	externalID2 := cldtest.CreateStringMetadataField(t, "update_metadata_field2_")
-	pID1 := cldtest.UniqueID(cldtest.PublicID)
-	pID2 := cldtest.UniqueID(cldtest.PublicID2)
+	pID1 := cldtest.UniqueID(cldtest.PublicID + "_metadata")
+	pID2 := cldtest.UniqueID(cldtest.PublicID2 + "_metadata")
 	cldtest.UploadTestAsset(t, pID1)
 	cldtest.UploadTestAsset(t, pID2)
 
