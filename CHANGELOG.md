@@ -1,3 +1,17 @@
+1.5.0 / 2021-12-15
+==================
+
+New Functionality And Features
+------------------------------
+  * Add support for `ResponsiveBreakpoints` upload parameter
+ 
+Other Changes
+-------------
+  * Fix upload parameters signature
+  * Fix multiple `PublicIDs` support in `Tags` Upload API
+  * Fix `UpdateUploadPresetParams`
+  * Make API client public
+
 1.4.0 / 2021-11-18
 ==================
 
