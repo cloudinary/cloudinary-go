@@ -38,6 +38,9 @@ var UserAgent = fmt.Sprintf("CloudinaryGo/%s (Go %s)", Version, strings.TrimPref
 // **Do not set this value in application code!**
 var UserPlatform = ""
 
+// GetUserAgent provides the UserAgent string that is passed to the Cloudinary servers.
+//
+// Prepends UserPlatform if it is defined.
 func GetUserAgent() string {
 	if UserPlatform == "" {
 		return UserAgent
