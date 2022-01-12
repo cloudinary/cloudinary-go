@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strings"
 	"testing"
 )
 
@@ -75,6 +76,20 @@ func getTestHandler(response string, t *testing.T, callCounter *int, ep expected
 				ep.Params.Encode(),
 				r.URL.Query().Encode(),
 			)
+		}
+
+		if ep.Headers != nil {
+			for expectedName, expectedValue := range *ep.Headers {
+				value, present := r.Header[expectedName]
+				if !present {
+					t.Errorf("Expected request header: '%s' not found\n", expectedName)
+				}
+				stringValue := strings.Join(value, ", ")
+				if expectedValue != stringValue {
+					t.Errorf("Expected request header %s value: %s, got: %s\n", expectedName, expectedValue, value)
+				}
+
+			}
 		}
 
 		expectedURI := "/" + apiVersion + "/TEST" + ep.Uri

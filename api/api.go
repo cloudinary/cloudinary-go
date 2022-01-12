@@ -28,6 +28,27 @@ const Version = "1.5.0"
 // UserAgent contains information about the SDK user agent. Passed to the Cloudinary servers.
 var UserAgent = fmt.Sprintf("CloudinaryGo/%s (Go %s)", Version, strings.TrimPrefix(runtime.Version(), "go"))
 
+// UserPlatform provides additional information to be passed with the UserAgent, e.g. "CloudinaryIntegration/1.2.3".
+//
+// This value is set in platform-specific implementations that use cloudinary-go.
+//
+// The format of the value should be <ProductName>/Version[ (comment)].
+// http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43
+//
+// **Do not set this value in application code!**
+var UserPlatform = ""
+
+// GetUserAgent provides the UserAgent string that is passed to the Cloudinary servers.
+//
+// Prepends UserPlatform if it is defined.
+func GetUserAgent() string {
+	if UserPlatform == "" {
+		return UserAgent
+	}
+
+	return fmt.Sprintf("%s %s", UserPlatform, UserAgent)
+}
+
 // apiVersion is the current Cloudinary API version.
 var apiVersion = "1_1"
 

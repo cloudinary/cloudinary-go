@@ -4,6 +4,8 @@ package admin_test
 
 import (
 	"context"
+	"fmt"
+	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/api/admin"
 	"reflect"
 	"testing"
@@ -72,8 +74,54 @@ func getPingTestCases() []ApiAcceptanceTestCase {
 	}
 }
 
+// Acceptance test cases for `ping` method
+func getUserAgentTestCases() []ApiAcceptanceTestCase {
+	return []ApiAcceptanceTestCase{
+		{
+			Name: "Test User Agent",
+			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+				return api.Ping(ctx)
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {
+				_, ok := response.(*admin.PingResult)
+				if !ok {
+					t.Errorf("Response should be type of PingResult, %s given", reflect.TypeOf(response))
+				}
+			},
+			ExpectedRequest: expectedRequestParams{
+				Method:  "GET",
+				Uri:     "/ping",
+				Headers: &map[string]string{"User-Agent": api.UserAgent},
+			},
+			JsonResponse:      "{\"status\": \"OK\"}",
+			ExpectedCallCount: 1,
+		},
+		{
+			Name: "Test User Agent With User Platform",
+			RequestTest: func(adminAPI *admin.API, ctx context.Context) (interface{}, error) {
+				api.UserPlatform = "Test/1.2.3"
+				return adminAPI.Ping(ctx)
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {
+				_, ok := response.(*admin.PingResult)
+				if !ok {
+					t.Errorf("Response should be type of PingResult, %s given", reflect.TypeOf(response))
+				}
+			},
+			ExpectedRequest: expectedRequestParams{
+				Method:  "GET",
+				Uri:     "/ping",
+				Headers: &map[string]string{"User-Agent": fmt.Sprintf("Test/1.2.3 %s", api.UserAgent)},
+			},
+			JsonResponse:      "{\"status\": \"OK\"}",
+			ExpectedCallCount: 1,
+		},
+	}
+}
+
 // Run tests
 func TestAPI_Acceptance(t *testing.T) {
 	t.Parallel()
 	testApiByTestCases(getPingTestCases(), t)
+	testApiByTestCases(getUserAgentTestCases(), t)
 }
