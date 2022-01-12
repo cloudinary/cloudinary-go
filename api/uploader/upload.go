@@ -276,7 +276,7 @@ func (u *API) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 		return nil, err
 	}
 
-	req.Header.Set("User-Agent", api.UserAgent)
+	req.Header.Set("User-Agent", api.GetUserAgent())
 	for key, val := range headers {
 		req.Header.Add(key, val)
 	}

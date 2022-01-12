@@ -102,7 +102,7 @@ func (a *API) callAPI(ctx context.Context, method string, path interface{}, requ
 		req.URL.RawQuery = params.Encode()
 	}
 
-	req.Header.Set("User-Agent", api.UserAgent)
+	req.Header.Set("User-Agent", api.GetUserAgent())
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.SetBasicAuth(a.Config.Cloud.APIKey, a.Config.Cloud.APISecret)
 
