@@ -44,6 +44,12 @@ func New() (*API, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	return NewWithConfiguration(c)
+}
+
+// NewWithConfiguration a new Upload API instance with the given Configuration.
+func NewWithConfiguration(c *config.Configuration) (*API, error) {
 	return &API{
 		Config: *c,
 		Client: http.Client{},
@@ -84,6 +90,11 @@ func (u *API) postAndSignForm(ctx context.Context, urlPath string, formParams ur
 }
 
 func (u *API) signRequest(requestParams url.Values) (url.Values, error) {
+	// No signing for OAuth Token
+	if u.Config.Cloud.OAuthToken != "" {
+		return requestParams, nil
+	}
+
 	if u.Config.Cloud.APISecret == "" {
 		return nil, errors.New("must provide API Secret")
 	}
@@ -277,6 +288,9 @@ func (u *API) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 	}
 
 	req.Header.Set("User-Agent", api.GetUserAgent())
+
+	setAuth(u, req)
+
 	for key, val := range headers {
 		req.Header.Add(key, val)
 	}
@@ -291,6 +305,12 @@ func (u *API) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.
 	defer api.DeferredClose(resp.Body)
 
 	return ioutil.ReadAll(resp.Body)
+}
+
+func setAuth(u *API, req *http.Request) {
+	if u.Config.Cloud.OAuthToken != "" {
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", u.Config.Cloud.OAuthToken))
+	}
 }
 
 func (u *API) getUploadURL(urlPath interface{}) string {

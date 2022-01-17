@@ -4,12 +4,18 @@ import (
 	"context"
 	"fmt"
 	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
+	"io"
+	"io/ioutil"
 	"math/rand"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -57,6 +63,8 @@ const Tag2 = "go_tag2"
 const SEOName = "my_favorite_sample"
 
 const Transformation = "c_scale,w_500"
+
+const ApiVersion = "v1_1"
 
 // ImageInFolder is the test public ID in folder.
 var ImageInFolder = fmt.Sprintf("%s/%s", Folder, PublicID)
@@ -163,4 +171,92 @@ func TestDataDir() string {
 	d := path.Join(path.Dir(b))
 
 	return filepath.Dir(d) + "/cldtest/testdata/"
+}
+
+// GetServerMock Get HTTP server mock
+func GetServerMock(fn TestFunction) *httptest.Server {
+	handler := http.NewServeMux()
+	handler.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fn(w, r)
+	})
+
+	srv := httptest.NewServer(handler)
+
+	return srv
+}
+
+// ApiResponseTest Test function for the response from the API.
+type ApiResponseTest func(response interface{}, t *testing.T)
+
+// TestFunction the test function.
+type TestFunction func(w http.ResponseWriter, r *http.Request)
+
+// ExpectedRequestParams are the expected request parameters
+type ExpectedRequestParams struct {
+	Method  string             // Expected HTTP method of the request
+	Uri     string             // Expected URI
+	Params  *url.Values        // Expected URI params
+	Body    *string            // Expected HTTP body (for POST / PUT requests)
+	Headers *map[string]string // Expected HTTP request headers
+}
+
+// GetTestHandler gets the test handler for HTTP server. Contains basic checks by expected request params.
+func GetTestHandler(response string, t *testing.T, callCounter *int, ep ExpectedRequestParams) TestFunction {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		if r.Method != ep.Method {
+			t.Errorf("HTTP method should be %s", ep.Method)
+		}
+
+		if ep.Params != nil && ep.Params.Encode() != r.URL.Query().Encode() {
+			t.Errorf(
+				"Expected query string: %s, got: %s\n",
+				ep.Params.Encode(),
+				r.URL.Query().Encode(),
+			)
+		}
+
+		if ep.Headers != nil {
+			for expectedName, expectedValue := range *ep.Headers {
+				value, present := r.Header[expectedName]
+				if !present {
+					t.Errorf("Expected request header: '%s' not found\n", expectedName)
+				}
+				stringValue := strings.Join(value, ", ")
+				if expectedValue != stringValue {
+					t.Errorf("Expected request header %s value: %s, got: %s\n", expectedName, expectedValue, value)
+				}
+
+			}
+		}
+
+		expectedURI := "/" + ApiVersion + "/TEST" + ep.Uri
+		if expectedURI != r.URL.Path {
+			t.Errorf(
+				"Expected request URI: %s, got: %s\n",
+				expectedURI,
+				r.URL.Path,
+			)
+		}
+
+		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodDelete {
+			if r.Body != nil && ep.Body != nil {
+				bodyString, err := ioutil.ReadAll(r.Body)
+
+				if err != nil {
+					t.Error(err)
+				}
+
+				if string(bodyString) != *ep.Body {
+					t.Errorf("Wrong request body. Expected: %s, given: %s", *ep.Body, string(bodyString))
+				}
+			}
+		}
+
+		*callCounter++
+		_, err := io.WriteString(w, response)
+		if err != nil {
+			t.Error(err)
+		}
+	}
 }

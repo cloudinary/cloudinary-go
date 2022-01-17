@@ -51,6 +51,11 @@ func NewFromParams(cloud string, key string, secret string) (*Configuration, err
 	return NewFromQueryParams(cloud, key, secret, map[string][]string{})
 }
 
+// NewFromOAuthToken returns a new Configuration instance from the provided cloud name and OAuth token.
+func NewFromOAuthToken(cloud string, oAuthToken string) (*Configuration, error) {
+	return NewFromQueryParams(cloud, "", "", map[string][]string{"oauth_token": {oAuthToken}})
+}
+
 // NewFromQueryParams returns a new Configuration instance from the provided url query parameters.
 func NewFromQueryParams(cloud string, key string, secret string, params map[string][]string) (*Configuration, error) {
 	cloudConf := Cloud{

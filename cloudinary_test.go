@@ -35,6 +35,12 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 	if c.Config.Cloud.CloudName != "test123" {
 		t.Error("Failed creating Cloudinary instance from parameters.")
 	}
+
+	c, _ = NewFromOAuthToken("test123", "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
+
+	if c.Config.Cloud.CloudName != "test123" {
+		t.Error("Failed creating Cloudinary instance from OAuth token.")
+	}
 }
 
 func TestCloudinary_Upload(t *testing.T) {
