@@ -1,3 +1,12 @@
+1.6.0 / 2022-01-17
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `OAuth` authorization
+  * Add support for `UserPlatform`
+
 1.5.0 / 2021-12-15
 ==================
 
