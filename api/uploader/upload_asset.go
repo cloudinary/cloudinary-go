@@ -200,7 +200,7 @@ type UploadResult struct {
 // The upload is not signed so an upload preset is required.
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#unsigned_upload_syntax
-func (u *API) UnsignedUpload(ctx context.Context, file string, uploadPreset string, uploadParams UploadParams) (*UploadResult, error) {
+func (u *API) UnsignedUpload(ctx context.Context, file interface{}, uploadPreset string, uploadParams UploadParams) (*UploadResult, error) {
 	uploadParams.Unsigned = true
 	uploadParams.UploadPreset = uploadPreset
 

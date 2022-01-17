@@ -104,7 +104,8 @@ func (a *API) callAPI(ctx context.Context, method string, path interface{}, requ
 
 	req.Header.Set("User-Agent", api.GetUserAgent())
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	req.SetBasicAuth(a.Config.Cloud.APIKey, a.Config.Cloud.APISecret)
+
+	setAuth(a, req)
 
 	ctx, cancel := context.WithTimeout(ctx, time.Duration(a.Config.API.Timeout)*time.Second)
 	defer cancel()
@@ -128,4 +129,12 @@ func (a *API) callAPI(ctx context.Context, method string, path interface{}, requ
 	err = json.Unmarshal(bodyBytes, result)
 
 	return resp, err
+}
+
+func setAuth(a *API, req *http.Request) {
+	if a.Config.Cloud.OAuthToken != "" {
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", a.Config.Cloud.OAuthToken))
+	} else {
+		req.SetBasicAuth(a.Config.Cloud.APIKey, a.Config.Cloud.APISecret)
+	}
 }

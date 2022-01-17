@@ -11,8 +11,6 @@ import (
 var ctx = context.Background()
 var adminAPI, _ = admin.New()
 
-const apiVersion = "v1_1"
-
 func TestAPI_Timeout(t *testing.T) {
 	var originalTimeout = adminAPI.Config.API.Timeout
 

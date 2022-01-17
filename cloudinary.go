@@ -44,6 +44,15 @@ func NewFromParams(cloud string, key string, secret string) (*Cloudinary, error)
 	return NewFromConfiguration(*c)
 }
 
+// NewFromOAuthToken returns a new Cloudinary instance from the provided cloud name and OAuth token.
+func NewFromOAuthToken(cloud string, oAuthToken string) (*Cloudinary, error) {
+	c, err := config.NewFromOAuthToken(cloud, oAuthToken)
+	if err != nil {
+		return nil, err
+	}
+	return NewFromConfiguration(*c)
+}
+
 // NewFromConfiguration returns a new Cloudinary instance from the provided configuration.
 func NewFromConfiguration(configuration config.Configuration) (*Cloudinary, error) {
 	logger := logger.New()

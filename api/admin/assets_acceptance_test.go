@@ -7,21 +7,22 @@ import (
 	"fmt"
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/api/admin"
+	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 	"net/url"
 	"reflect"
 	"testing"
 )
 
 // Acceptance test cases for `restore` method
-func getRestoreAssetsTestCases() []ApiAcceptanceTestCase {
+func getRestoreAssetsTestCases() []AdminAPIAcceptanceTestCase {
 	type restoreAssetsTestCase struct {
 		requestParams admin.RestoreAssetsParams
 		uri           string
 		expectedBody  string
 	}
 
-	getTestCase := func(num int, t restoreAssetsTestCase) ApiAcceptanceTestCase {
-		return ApiAcceptanceTestCase{
+	getTestCase := func(num int, t restoreAssetsTestCase) AdminAPIAcceptanceTestCase {
+		return AdminAPIAcceptanceTestCase{
 			Name: fmt.Sprintf("RestoreAssets #%d", num),
 			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 				return api.RestoreAssets(ctx, t.requestParams)
@@ -32,7 +33,7 @@ func getRestoreAssetsTestCases() []ApiAcceptanceTestCase {
 					t.Errorf("Response should be type of RestoreAssetsResult, %s given", reflect.TypeOf(response))
 				}
 			},
-			ExpectedRequest: expectedRequestParams{
+			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "POST",
 				Uri:    t.uri,
 				Body:   &t.expectedBody,
@@ -42,7 +43,7 @@ func getRestoreAssetsTestCases() []ApiAcceptanceTestCase {
 		}
 	}
 
-	var testCases []ApiAcceptanceTestCase
+	var testCases []AdminAPIAcceptanceTestCase
 
 	restoreAssetsTestCases := []restoreAssetsTestCase{
 		{
@@ -94,7 +95,7 @@ func getRestoreAssetsTestCases() []ApiAcceptanceTestCase {
 	response := map[string]api.BriefAssetResult{"1": asset}
 	responseJson, _ := json.Marshal(response)
 
-	testCases = append(testCases, ApiAcceptanceTestCase{
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
 		Name: "RestoreAssets response parsing case",
 		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 			return api.RestoreAssets(ctx, admin.RestoreAssetsParams{})
@@ -115,7 +116,7 @@ func getRestoreAssetsTestCases() []ApiAcceptanceTestCase {
 			}
 		},
 
-		ExpectedRequest: expectedRequestParams{
+		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "POST",
 			Uri:    "/resources/image/upload/restore",
 		},
@@ -128,15 +129,15 @@ func getRestoreAssetsTestCases() []ApiAcceptanceTestCase {
 }
 
 // Acceptance test cases for `delete` method
-func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
+func getDeleteAssetsTestCases() []AdminAPIAcceptanceTestCase {
 	type deleteAssetsTestCase struct {
 		requestParams admin.DeleteAssetsParams
 		uri           string
 		expectedBody  string
 	}
 
-	getTestCase := func(num int, t deleteAssetsTestCase) ApiAcceptanceTestCase {
-		return ApiAcceptanceTestCase{
+	getTestCase := func(num int, t deleteAssetsTestCase) AdminAPIAcceptanceTestCase {
+		return AdminAPIAcceptanceTestCase{
 			Name: fmt.Sprintf("DeleteAssets #%d", num),
 			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 				return api.DeleteAssets(ctx, t.requestParams)
@@ -147,7 +148,7 @@ func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
 					t.Errorf("Response should be type of DeleteAssetsResult, %s given", reflect.TypeOf(response))
 				}
 			},
-			ExpectedRequest: expectedRequestParams{
+			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "DELETE",
 				Uri:    t.uri,
 				Body:   &t.expectedBody,
@@ -157,7 +158,7 @@ func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
 		}
 	}
 
-	var testCases []ApiAcceptanceTestCase
+	var testCases []AdminAPIAcceptanceTestCase
 
 	restoreAssetsTestCases := []deleteAssetsTestCase{
 		{
@@ -257,7 +258,7 @@ func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
 		testCases = append(testCases, getTestCase(num, testCase))
 	}
 
-	testCases = append(testCases, ApiAcceptanceTestCase{
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
 		Name: "DeleteAssets error case",
 		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 			return api.DeleteAssets(ctx, admin.DeleteAssetsParams{})
@@ -272,7 +273,7 @@ func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
 				t.Errorf("Error message should be %s, %s given", "TEST ERROR", v.Error.Message)
 			}
 		},
-		ExpectedRequest: expectedRequestParams{
+		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "DELETE",
 			Uri:    "/resources/image/upload",
 		},
@@ -287,7 +288,7 @@ func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
 	}
 	responseJson, _ := json.Marshal(response)
 
-	testCases = append(testCases, ApiAcceptanceTestCase{
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
 		Name: "DeleteAssets response parsing case",
 		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 			return api.DeleteAssets(ctx, admin.DeleteAssetsParams{})
@@ -317,7 +318,7 @@ func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
 				t.Errorf("Response.DeletedCounts expected to be %v, %v given", expectedResponse.DeletedCounts, v.DeletedCounts)
 			}
 		},
-		ExpectedRequest: expectedRequestParams{
+		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "DELETE",
 			Uri:    "/resources/image/upload",
 		},
@@ -329,15 +330,15 @@ func getDeleteAssetsTestCases() []ApiAcceptanceTestCase {
 }
 
 // Acceptance test cases for `Assets` method
-func getAssetsTestCases() []ApiAcceptanceTestCase {
+func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 	type assetsTestCase struct {
 		requestParams  admin.AssetsParams
 		uri            string
 		expectedParams *url.Values
 	}
 
-	getTestCase := func(num int, t assetsTestCase) ApiAcceptanceTestCase {
-		return ApiAcceptanceTestCase{
+	getTestCase := func(num int, t assetsTestCase) AdminAPIAcceptanceTestCase {
+		return AdminAPIAcceptanceTestCase{
 			Name: fmt.Sprintf("Assets #%d", num),
 			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 				return api.Assets(ctx, t.requestParams)
@@ -348,7 +349,7 @@ func getAssetsTestCases() []ApiAcceptanceTestCase {
 					t.Errorf("Response should be type of AssetsResult, %s given", reflect.TypeOf(response))
 				}
 			},
-			ExpectedRequest: expectedRequestParams{
+			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "GET",
 				Uri:    t.uri,
 				Params: t.expectedParams,
@@ -358,7 +359,7 @@ func getAssetsTestCases() []ApiAcceptanceTestCase {
 		}
 	}
 
-	var testCases []ApiAcceptanceTestCase
+	var testCases []AdminAPIAcceptanceTestCase
 
 	assetsTestCases := []assetsTestCase{
 		{
@@ -527,7 +528,7 @@ func getAssetsTestCases() []ApiAcceptanceTestCase {
 		testCases = append(testCases, getTestCase(num, testCase))
 	}
 
-	testCases = append(testCases, ApiAcceptanceTestCase{
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
 		Name: "Assets error case",
 		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 			return api.Assets(ctx, admin.AssetsParams{})
@@ -542,7 +543,7 @@ func getAssetsTestCases() []ApiAcceptanceTestCase {
 				t.Errorf("Error message should be %s, %s given", "TEST ERROR", v.Error.Message)
 			}
 		},
-		ExpectedRequest: expectedRequestParams{
+		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "GET",
 			Uri:    "/resources/image",
 			Params: &url.Values{},
@@ -558,7 +559,7 @@ func getAssetsTestCases() []ApiAcceptanceTestCase {
 	}
 	responseJson, _ := json.Marshal(response)
 
-	testCases = append(testCases, ApiAcceptanceTestCase{
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
 		Name: "Assets response parsing case",
 		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 			return api.Assets(ctx, admin.AssetsParams{})
@@ -578,7 +579,7 @@ func getAssetsTestCases() []ApiAcceptanceTestCase {
 				t.Errorf("Expected response to be %v, %v given", expectedResponse, v)
 			}
 		},
-		ExpectedRequest: expectedRequestParams{
+		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "GET",
 			Uri:    "/resources/image",
 			Params: &url.Values{},
@@ -591,15 +592,15 @@ func getAssetsTestCases() []ApiAcceptanceTestCase {
 }
 
 // Acceptance test cases for `assetsByModeration` method
-func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
+func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 	type assetByModerationTestCase struct {
 		requestParams  admin.AssetsByModerationParams
 		uri            string
 		expectedParams *url.Values
 	}
 
-	getTestCase := func(num int, t assetByModerationTestCase) ApiAcceptanceTestCase {
-		return ApiAcceptanceTestCase{
+	getTestCase := func(num int, t assetByModerationTestCase) AdminAPIAcceptanceTestCase {
+		return AdminAPIAcceptanceTestCase{
 			Name: fmt.Sprintf("AssetsByModeration #%d", num),
 			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 				return api.AssetsByModeration(ctx, t.requestParams)
@@ -610,7 +611,7 @@ func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 					t.Errorf("Response should be type of AssetsResult, %s given", reflect.TypeOf(response))
 				}
 			},
-			ExpectedRequest: expectedRequestParams{
+			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "GET",
 				Uri:    t.uri,
 				Params: t.expectedParams,
@@ -620,7 +621,7 @@ func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 		}
 	}
 
-	var testCases []ApiAcceptanceTestCase
+	var testCases []AdminAPIAcceptanceTestCase
 
 	assetByModerationTestCases := []assetByModerationTestCase{
 		{
@@ -802,7 +803,7 @@ func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 		testCases = append(testCases, getTestCase(num, testCase))
 	}
 
-	testCases = append(testCases, ApiAcceptanceTestCase{
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
 		Name: "AssetsByModeration error case",
 		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 			return api.AssetsByModeration(ctx, admin.AssetsByModerationParams{})
@@ -817,7 +818,7 @@ func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 				t.Errorf("Error message should be %s, %s given", "TEST ERROR", v.Error.Message)
 			}
 		},
-		ExpectedRequest: expectedRequestParams{
+		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "GET",
 			Uri:    "/resources/image/moderations",
 			Params: &url.Values{},
@@ -833,7 +834,7 @@ func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 	}
 	responseJson, _ := json.Marshal(response)
 
-	testCases = append(testCases, ApiAcceptanceTestCase{
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
 		Name: "AssetsByModeration response parsing case",
 		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
 			return api.AssetsByModeration(ctx, admin.AssetsByModerationParams{})
@@ -853,7 +854,7 @@ func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 				t.Errorf("Expected response to be %v, %v given", expectedResponse, v)
 			}
 		},
-		ExpectedRequest: expectedRequestParams{
+		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "GET",
 			Uri:    "/resources/image/moderations",
 			Params: &url.Values{},
@@ -868,8 +869,8 @@ func getAssetsByModerationTestCases() []ApiAcceptanceTestCase {
 // Run tests
 func TestAssets_Acceptance(t *testing.T) {
 	t.Parallel()
-	testApiByTestCases(getAssetsTestCases(), t)
-	testApiByTestCases(getAssetsByModerationTestCases(), t)
-	testApiByTestCases(getDeleteAssetsTestCases(), t)
-	testApiByTestCases(getRestoreAssetsTestCases(), t)
+	testAdminAPIByTestCases(getAssetsTestCases(), t)
+	testAdminAPIByTestCases(getAssetsByModerationTestCases(), t)
+	testAdminAPIByTestCases(getDeleteAssetsTestCases(), t)
+	testAdminAPIByTestCases(getRestoreAssetsTestCases(), t)
 }

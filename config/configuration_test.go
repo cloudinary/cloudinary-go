@@ -9,6 +9,7 @@ import (
 )
 
 var cldURL = "cloudinary://key:secret@test123"
+var fakeOAuthToken = "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4"
 
 func TestConfiguration_CreateInstance(t *testing.T) {
 	c, _ := config.New()
@@ -35,6 +36,14 @@ func TestConfiguration_CreateInstance(t *testing.T) {
 	assert.Equal(t, "test123", c.Cloud.CloudName)
 	assert.Equal(t, "key", c.Cloud.APIKey)
 	assert.Equal(t, "secret", c.Cloud.APISecret)
+
+	c, _ = config.NewFromOAuthToken("test123", fakeOAuthToken)
+
+	assert.Equal(t, "test123", c.Cloud.CloudName)
+	assert.Equal(t, fakeOAuthToken, c.Cloud.OAuthToken)
+	assert.Equal(t, "", c.Cloud.APIKey)
+	assert.Equal(t, "", c.Cloud.APISecret)
+
 	// check a few default values
 	assert.EqualValues(t, signature.SHA1, c.Cloud.GetSignatureAlgorithm())
 	assert.EqualValues(t, 60, c.API.Timeout)
