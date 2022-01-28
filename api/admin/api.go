@@ -38,6 +38,9 @@ const (
 type OrderByField string
 
 const OrderFieldValue OrderByField = "value"
+const OrderFieldLabel OrderByField = "label"
+const OrderFieldExternalID OrderByField = "external_id"
+const OrderFieldCreatedAt OrderByField = "created_at"
 
 // New creates a new Admin API instance from the environment variable (CLOUDINARY_URL).
 func New() (*API, error) {
