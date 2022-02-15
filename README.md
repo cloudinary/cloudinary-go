@@ -54,7 +54,7 @@ cld, _ := cloudinary.New()
 - [See full documentation](https://cloudinary.com/documentation/go_integration#configuration).
 
 ### Transform and Optimize Assets
-- [See full documentation](https://cloudinary.com/documentation/go_image_manipulation).
+- [See full documentation](https://cloudinary.com/documentation/go_media_transformations).
 
 ```go
 image, err := cld.Image("sample.jpg")
