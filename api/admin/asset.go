@@ -163,3 +163,35 @@ func (a *API) UpdateAsset(ctx context.Context, params UpdateAssetParams) (*Asset
 
 	return res, err
 }
+
+// AssetByAssetIDParams are the parameters for AssetByAssetID.
+type AssetByAssetIDParams struct {
+	AssetID               string `json:"-"`
+	Colors                bool   `json:"colors,omitempty"`
+	Exif                  bool   `json:"exif,omitempty"`
+	Faces                 bool   `json:"faces,omitempty"`
+	QualityAnalysis       bool   `json:"quality_analysis,omitempty"`
+	ImageMetadata         bool   `json:"image_metadata,omitempty"`
+	Phash                 bool   `json:"phash,omitempty"`
+	Pages                 bool   `json:"pages,omitempty"`
+	CinemagraphAnalysis   bool   `json:"cinemagraph_analysis,omitempty"`
+	Coordinates           bool   `json:"coordinates,omitempty"`
+	MaxResults            int    `json:"max_results,omitempty"`
+	DerivedNextCursor     string `json:"derived_next_cursor,omitempty"`
+	AccessibilityAnalysis bool   `json:"accessibility_analysis,omitempty"`
+	Versions              bool   `json:"versions,omitempty"`
+}
+
+// AssetByAssetID returns the details of the specified asset and all its derived assets by asset id.
+//
+// Note that if you only need details about the original asset,
+// you can also use the uploader.Upload or uploader.Explicit methods, which return the same information and
+// are not rate limited.
+//
+// https://cloudinary.com/documentation/admin_api#get_the_details_of_a_single_resource
+func (a *API) AssetByAssetIDs(ctx context.Context, params AssetByAssetIDParams) (*AssetResult, error) {
+	res := &AssetResult{}
+	_, err := a.get(ctx, api.BuildPath(assets, params.AssetID), params, res)
+
+	return res, err
+}

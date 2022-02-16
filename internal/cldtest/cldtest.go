@@ -3,7 +3,6 @@ package cldtest
 import (
 	"context"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -20,6 +19,7 @@ import (
 	"time"
 
 	"github.com/cloudinary/cloudinary-go/api/admin"
+	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 )
 
@@ -97,7 +97,7 @@ var stringMetadataField = metadata.Field{
 }
 
 // UploadTestAsset uploads a test image asset for test purposes.
-func UploadTestAsset(t *testing.T, publicID string) {
+func UploadTestAsset(t *testing.T, publicID string) *uploader.UploadResult {
 	params := uploader.UploadParams{
 		PublicID:  publicID,
 		Overwrite: true,
@@ -113,6 +113,8 @@ func UploadTestAsset(t *testing.T, publicID string) {
 	if resp == nil || resp.PublicID != publicID {
 		t.Error(resp)
 	}
+
+	return resp
 }
 
 // UploadTestVideoAsset uploads a test video asset for test purposes.
