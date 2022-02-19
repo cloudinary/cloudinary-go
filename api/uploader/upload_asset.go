@@ -3,6 +3,7 @@ package uploader
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -110,11 +111,11 @@ func (u *API) Upload(ctx context.Context, file interface{}, uploadParams UploadP
 	}
 	upload := &UploadResult{}
 	err = json.Unmarshal(body, upload)
-
 	if err != nil {
 		return nil, err
 	}
 
+	upload.RawHTTPBody = body
 	return upload, nil
 }
 
@@ -189,10 +190,14 @@ type UploadResult struct {
 	Metadata              api.Metadata                  `json:"metadata,omitempty"`
 	Moderation            []Moderation                  `json:"moderation,omitempty"`
 	Overwritten           bool                          `json:"overwritten"`
+	Colors                []ColorWeight                 `json:"colors,omitempty"`
+	Predominant           map[string]ColorWeight        `json:"predominant,omitempty"`
+	Phash                 string                        `json:"phash,omitempty"`
 	OriginalFilename      string                        `json:"original_filename"`
 	Eager                 []Eager                       `json:"eager"`
 	ResponsiveBreakpoints []ResponsiveBreakpointsResult `json:"responsive_breakpoints"`
 	Error                 api.ErrorResp                 `json:"error,omitempty"`
+	RawHTTPBody           []byte                        `json:"-"` // raw bytes from http response
 }
 
 // UnsignedUpload uploads an asset to a Cloudinary account.
@@ -205,4 +210,46 @@ func (u *API) UnsignedUpload(ctx context.Context, file interface{}, uploadPreset
 	uploadParams.UploadPreset = uploadPreset
 
 	return u.Upload(ctx, file, uploadParams)
+}
+
+// ColorWeight represents a color with a corresponding weight value.
+// This converts from the JSON array format returned by API calls, e.g.
+//   ["#E4E4A8",71.0] <-> ColorWeight{Color:"#E4E4A8",Weight:71.0}
+type ColorWeight struct {
+	Color  string
+	Weight float32
+}
+
+// UnmarshalJSON implements json.Unmarshaler
+func (c *ColorWeight) UnmarshalJSON(data []byte) error {
+	var raw []json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	len := len(raw)
+	if len == 0 || len > 2 {
+		return fmt.Errorf("ColorWeight got %d fields, want 1 or 2", len)
+	}
+	if err := json.Unmarshal(raw[0], &c.Color); err != nil {
+		return fmt.Errorf("failed to unmarshal %.50s as color: %w", raw[0], err)
+	}
+	if len > 1 {
+		if err := json.Unmarshal(raw[1], &c.Weight); err != nil {
+			return fmt.Errorf("failed to unmarshal %.50s as weight: %w", raw[0], err)
+		}
+	}
+	return nil
+}
+
+// MarshalJSON implements json.Marshaler
+func (c ColorWeight) MarshalJSON() ([]byte, error) {
+	color, err := json.Marshal(c.Color)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal %.50s as color: %w", c.Color, err)
+	}
+	weight, err := json.Marshal(c.Weight)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal %v as weight: %w", c.Weight, err)
+	}
+	return json.Marshal([]json.RawMessage{color, weight})
 }

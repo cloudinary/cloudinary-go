@@ -2,6 +2,7 @@ package uploader_test
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -275,4 +276,42 @@ func populateLargeImage() string {
 	}
 
 	return tmpFile.Name()
+}
+
+func TestColorWeightJSON(t *testing.T) {
+	tests := []struct {
+		JSON string
+		CW   uploader.ColorWeight
+	}{
+		{
+			JSON: `["#E4E4A8",71]`,
+			CW:   uploader.ColorWeight{Color: "#E4E4A8", Weight: 71.0},
+		},
+		{
+			JSON: `["#2F2F2F",8.7]`,
+			CW:   uploader.ColorWeight{Color: "#2F2F2F", Weight: 8.7},
+		},
+		{
+			JSON: `["brown",7.4]`,
+			CW:   uploader.ColorWeight{Color: "brown", Weight: 7.4},
+		},
+	}
+	for _, test := range tests {
+		// Test json.Unmarshal
+		var cw uploader.ColorWeight
+		if err := json.Unmarshal([]byte(test.JSON), &cw); err != nil {
+			t.Error(err)
+		}
+		if got, want := cw, test.CW; got != want {
+			t.Errorf("got %v, want %v", got, want)
+		}
+		// Test json.Marshal
+		b, err := json.Marshal(test.CW)
+		if err != nil {
+			t.Error(err)
+		}
+		if got, want := string(b), test.JSON; got != want {
+			t.Errorf("got %v, want %v", got, want)
+		}
+	}
 }
