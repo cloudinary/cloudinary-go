@@ -28,9 +28,10 @@ func TestAsset_LongURLSignature(t *testing.T) {
 }
 
 func TestAsset_WithAuthToken(t *testing.T) {
+	localTokenConfig := authTokenConfig
 	i := getTestImage(t)
 	i.Config.URL.SignURL = true
-	i.AuthToken.Config = &authTokenConfig
+	i.AuthToken.Config = &localTokenConfig
 
 	assert.Contains(t, getAssetUrl(t, i), "1751370bcc6cfe9e03f30dd1a9722ba0f2cdca283fa3e6df3342a00a7528cc51")
 	assert.NotContains(t, getAssetUrl(t, i), "s--") // no simple signature
