@@ -33,7 +33,8 @@ func TestAsset_WithAuthToken(t *testing.T) {
 	i.AuthToken.Config = &authTokenConfig
 
 	assert.Contains(t, getAssetUrl(t, i), "1751370bcc6cfe9e03f30dd1a9722ba0f2cdca283fa3e6df3342a00a7528cc51")
-	assert.NotContains(t, getAssetUrl(t, i), "s--")
+	assert.NotContains(t, getAssetUrl(t, i), "s--") // no simple signature
+	assert.NotContains(t, getAssetUrl(t, i), "_a=") // no analytics
 
 	i.AuthToken.Config.ACL = ""
 
