@@ -27,6 +27,19 @@ func TestAsset_LongURLSignature(t *testing.T) {
 	assert.Regexp(t, "s--.{32}--", getAssetUrl(t, i))
 }
 
+func TestAsset_WithAuthToken(t *testing.T) {
+	i := getTestImage(t)
+	i.Config.URL.SignURL = true
+	i.AuthToken.Config = &authTokenConfig
+
+	assert.Contains(t, getAssetUrl(t, i), "1751370bcc6cfe9e03f30dd1a9722ba0f2cdca283fa3e6df3342a00a7528cc51")
+	assert.NotContains(t, getAssetUrl(t, i), "s--")
+
+	i.AuthToken.Config.ACL = ""
+
+	assert.Contains(t, getAssetUrl(t, i), "bdef2f6869faa4cde0f5d943440df9a592301a6e695a0e82687eb5bbaccd12f4")
+}
+
 func TestAsset_ForceVersion(t *testing.T) {
 	i, err := asset.Image(cldtest.ImageInFolder, nil)
 	if err != nil {

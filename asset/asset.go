@@ -27,6 +27,7 @@ type Asset struct {
 	PublicID       string
 	Suffix         string
 	Config         config.Configuration
+	AuthToken      AuthToken
 	logger         logger.Logger
 }
 
@@ -46,6 +47,7 @@ func New(publicID string, conf *config.Configuration) (*Asset, error) {
 
 	asset := Asset{PublicID: publicID, Config: *conf}
 	asset.setDefaults()
+	asset.AuthToken.Config = &conf.AuthToken
 
 	return &asset, nil
 }
@@ -89,7 +91,7 @@ func (a Asset) String() (result string, err error) {
 		}
 	}()
 
-	assetURL := joinUrl([]interface{}{a.distribution(), a.assetType(), a.signature(), a.Transformation, a.version(), a.source()})
+	assetURL := joinUrl([]interface{}{a.distribution(), a.path()})
 	query := a.query()
 
 	return joinNonEmpty([]interface{}{assetURL, query}, "?"), nil
@@ -216,7 +218,7 @@ func (a Asset) assetType() string {
 //
 // https://cloudinary.com/documentation/advanced_url_delivery_options#generating_delivery_url_signatures
 func (a Asset) signature() string {
-	if !a.Config.URL.SignURL {
+	if !a.Config.URL.SignURL || a.AuthToken.isEnabled() {
 		return ""
 	}
 
@@ -279,7 +281,16 @@ func (a Asset) source() string {
 	return source
 }
 
+func (a *Asset) path() string {
+	return joinUrl([]interface{}{a.assetType(), a.signature(), a.Transformation, a.version(), a.source()})
+}
+
 func (a *Asset) query() string {
+	// Currently, analytics is not supported with AuthToken. Just return AuthToken if it is configured.
+	if a.Config.URL.SignURL && a.AuthToken.isEnabled() {
+		return a.AuthToken.Generate(a.path())
+	}
+
 	if !a.Config.URL.Analytics {
 		return ""
 	}
