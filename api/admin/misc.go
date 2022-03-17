@@ -58,9 +58,10 @@ type UsageResult struct {
 	Plan            string `json:"plan"`
 	LastUpdated     string `json:"last_updated"`
 	Transformations struct {
-		Usage       int     `json:"usage"`
-		Limit       int     `json:"limit"`
-		UsedPercent float64 `json:"used_percent"`
+		Usage        int     `json:"usage"`
+		CreditsUsage float64 `json:"credits_usage"`
+		Limit        int     `json:"limit"`
+		UsedPercent  float64 `json:"used_percent"`
 	} `json:"transformations"`
 	Objects struct {
 		Usage       int     `json:"usage"`
@@ -68,15 +69,20 @@ type UsageResult struct {
 		UsedPercent float64 `json:"used_percent"`
 	} `json:"objects"`
 	Bandwidth struct {
-		Usage       int64   `json:"usage"`
-		Limit       int64   `json:"limit"`
-		UsedPercent float64 `json:"used_percent"`
+		Usage        int64   `json:"usage"`
+		CreditsUsage float64 `json:"credits_usage"`
+		Limit        int64   `json:"limit"`
+		UsedPercent  float64 `json:"used_percent"`
 	} `json:"bandwidth"`
 	Storage struct {
-		Usage       int64   `json:"usage"`
-		Limit       int64   `json:"limit"`
-		UsedPercent float64 `json:"used_percent"`
+		Usage        int64   `json:"usage"`
+		CreditsUsage float64 `json:"credits_usage"`
+		Limit        int64   `json:"limit"`
+		UsedPercent  float64 `json:"used_percent"`
 	} `json:"storage"`
+	Credits struct {
+		Usage float64 `json:"usage"`
+	} `json:"credits"`
 	Requests         int64 `json:"requests"`
 	Resources        int   `json:"resources"`
 	DerivedResources int   `json:"derived_resources"`
