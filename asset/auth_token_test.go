@@ -1,6 +1,7 @@
-package asset
+package asset_test
 
 import (
+	"github.com/cloudinary/cloudinary-go/asset"
 	"github.com/cloudinary/cloudinary-go/config"
 	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 	"github.com/stretchr/testify/assert"
@@ -25,7 +26,7 @@ var authTokenConfig = config.AuthToken{
 }
 
 func TestAsset_AuthToken_GenerateWithStartTimeAndDuration(t *testing.T) {
-	a := AuthToken{Config: authTokenConfig}
+	a := asset.AuthToken{Config: &authTokenConfig}
 
 	expectedToken := "__cld_token__=st=1111111111~exp=1111111411~acl=%2fimage%2f*" +
 		"~hmac=1751370bcc6cfe9e03f30dd1a9722ba0f2cdca283fa3e6df3342a00a7528cc51"
@@ -34,13 +35,13 @@ func TestAsset_AuthToken_GenerateWithStartTimeAndDuration(t *testing.T) {
 }
 
 func TestAsset_AuthToken_MustProvideExpirationOrDuration(t *testing.T) {
-	a := AuthToken{Config: config.AuthToken{Key: authTokenKey}}
+	a := asset.AuthToken{Config: &config.AuthToken{Key: authTokenKey}}
 
 	assert.Panics(t, func() { a.Generate("") })
 }
 
 func TestAsset_AuthToken_ShouldIgnoreUrlIfAclIsProvided(t *testing.T) {
-	a := AuthToken{Config: authTokenConfig}
+	a := asset.AuthToken{Config: &authTokenConfig}
 	aclToken := a.Generate("")
 	aclTokenUrlIgnored := a.Generate(cldtest.PublicID)
 
@@ -53,8 +54,10 @@ func TestAsset_AuthToken_ShouldIgnoreUrlIfAclIsProvided(t *testing.T) {
 }
 
 func TestAsset_AuthToken_EscapeToLower(t *testing.T) {
+	a := asset.AuthToken{Config: &authTokenConfig}
+	a.Config.ACL = ""
 
-	expected := "Encode%20these%20%3a%7e%40%23%25%5e%26%7b%7d%5b%5d%5c%22%27%3b%2f%22,%20but%20not%20those%20$!()_.*"
+	expected := "__cld_token__=st=1111111111~exp=1111111411~hmac=9ee78e220dd8099445b0640986d4255ff2ff4d04609c55c8812d2d2490a0d509"
 
-	assert.Equal(t, escapeToLower("Encode these :~@#%^&{}[]\\\"';/\", but not those $!()_.*"), expected)
+	assert.Equal(t, expected, a.Generate("Encode these :~@#%^&{}[]\\\"';/\", but not those $!()_.*"))
 }

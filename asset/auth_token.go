@@ -17,7 +17,7 @@ const authTokenSeparator = "~"
 const authTokenInnerSeparator = "="
 
 type AuthToken struct {
-	Config config.AuthToken
+	Config *config.AuthToken
 }
 
 func (a AuthToken) isEnabled() bool {
