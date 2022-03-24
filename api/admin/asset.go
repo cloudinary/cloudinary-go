@@ -189,7 +189,7 @@ type AssetByAssetIDParams struct {
 // are not rate limited.
 //
 // https://cloudinary.com/documentation/admin_api#get_the_details_of_a_single_resource
-func (a *API) AssetByAssetIDs(ctx context.Context, params AssetByAssetIDParams) (*AssetResult, error) {
+func (a *API) AssetByAssetID(ctx context.Context, params AssetByAssetIDParams) (*AssetResult, error) {
 	res := &AssetResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetID), params, res)
 
