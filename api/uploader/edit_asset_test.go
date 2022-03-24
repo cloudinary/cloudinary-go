@@ -82,6 +82,10 @@ func TestUploader_UpdateMetadata(t *testing.T) {
 
 	resp, err := uploadAPI.UpdateMetadata(ctx, params)
 
+	// FIXME: use setUp/tearDown
+	cldtest.DeleteTestMetadataField(t, externalID)
+	cldtest.DeleteTestMetadataField(t, externalID2)
+
 	if err != nil {
 		t.Error(err)
 	}

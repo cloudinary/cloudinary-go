@@ -148,6 +148,18 @@ func CreateStringMetadataField(t *testing.T, prefix string) string {
 	return res.ExternalID
 }
 
+func DeleteTestMetadataField(t *testing.T, mdFieldExternalID string) string {
+	res, err := adminAPI.DeleteMetadataField(ctx, admin.DeleteMetadataFieldParams{FieldExternalID: mdFieldExternalID})
+	if err != nil {
+		t.Error(err)
+	}
+	if res.Error.Message != "" {
+		t.Error(res.Error.Message)
+	}
+
+	return res.Message
+}
+
 // GetTestSuffix returns a unique test suffix.
 func GetTestSuffix() string {
 	testSuffix := os.Getenv("TRAVIS_JOB_ID")
