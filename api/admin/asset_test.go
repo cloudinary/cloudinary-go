@@ -39,3 +39,51 @@ func TestAsset_UpdateAsset(t *testing.T) {
 		t.Error(resp, err)
 	}
 }
+
+func TestAsset_AssetByAssetID(t *testing.T) {
+	asset := cldtest.UploadTestAsset(t, cldtest.PublicID)
+
+	t.Run("", func(t *testing.T) {
+		resp, err := adminAPI.AssetByAssetID(ctx, admin.AssetByAssetIDParams{AssetID: asset.AssetID})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if resp.Colors != nil {
+			t.Error()
+		}
+
+		if resp.Exif != nil {
+			t.Error()
+		}
+
+		if resp.Faces != nil {
+			t.Error()
+		}
+	})
+
+	t.Run("With Extra Info", func(t *testing.T) {
+		resp, err := adminAPI.AssetByAssetID(ctx, admin.AssetByAssetIDParams{
+			AssetID: asset.AssetID,
+			Colors:  true,
+			Exif:    true,
+			Faces:   true,
+		})
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if resp.Colors == nil {
+			t.Error()
+		}
+
+		if resp.Exif == nil {
+			t.Error()
+		}
+
+		if resp.Faces == nil {
+			t.Error()
+		}
+	})
+}
