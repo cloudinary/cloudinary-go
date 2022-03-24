@@ -2,8 +2,6 @@ package admin
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
 )
@@ -29,7 +27,7 @@ func (a *API) ListMetadataFields(ctx context.Context) (*ListMetadataFieldsResult
 type ListMetadataFieldsResult struct {
 	MetadataFields []metadata.Field `json:"metadata_fields"`
 	Error          api.ErrorResp    `json:"error,omitempty"`
-	Response       http.Response
+	Response       interface{}
 }
 
 // MetadataFieldByFieldIDParams are the parameters for MetadataFieldByFieldID.
@@ -68,7 +66,7 @@ func (a *API) AddMetadataField(ctx context.Context, params metadata.Field) (*Add
 type AddMetadataFieldResult struct {
 	metadata.Field
 	Error    api.ErrorResp `json:"error,omitempty"`
-	Response http.Response
+	Response interface{}
 }
 
 // UpdateMetadataFieldParams are the parameters for UpdateMetadataField.
@@ -93,7 +91,7 @@ func (a *API) UpdateMetadataField(ctx context.Context, params UpdateMetadataFiel
 type UpdateMetadataFieldResult struct {
 	metadata.Field
 	Error    api.ErrorResp `json:"error,omitempty"`
-	Response http.Response
+	Response interface{}
 }
 
 // DeleteMetadataFieldParams are the parameters for DeleteMetadataField.
