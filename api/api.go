@@ -187,6 +187,21 @@ type BriefAssetResult struct {
 }
 
 // MarshalJSON writes a quoted string in the custom format.
+func (cldAPIMap Metadata) MarshalJSON() ([]byte, error) {
+	// FIXME: handle escaping
+	var params []string
+	for name, value := range cldAPIMap {
+		val, err := encodeParamValue(value)
+		if err != nil {
+			return nil, err
+		}
+		params = append(params, strings.Join([]string{name, val}, "="))
+	}
+
+	return []byte(strconv.Quote(strings.Join(params, "|"))), nil
+}
+
+// MarshalJSON writes a quoted string in the custom format.
 func (cldAPIMap CldAPIMap) MarshalJSON() ([]byte, error) {
 	// FIXME: handle escaping
 	var params []string
