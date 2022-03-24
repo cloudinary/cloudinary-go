@@ -230,7 +230,7 @@ func TestUploader_UploadWithMetadata(t *testing.T) {
 		t.Error(resp)
 	}
 
-	assert.Equal(t, fmt.Sprintf(params.Metadata[externalID]), fmt.Sprintf("%v", resp.Metadata[externalID]))
+	assert.Equal(t, params.Metadata[externalID], resp.Metadata[externalID])
 }
 
 func TestUploader_UploadWithResponsiveBreakpoints(t *testing.T) {
