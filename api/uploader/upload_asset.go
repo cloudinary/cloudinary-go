@@ -25,7 +25,7 @@ type UploadParams struct {
 	Type                    api.DeliveryType            `json:"type,omitempty"`
 	Tags                    api.CldAPIArray             `json:"tags,omitempty"`
 	Context                 api.CldAPIMap               `json:"context,omitempty"`
-	Metadata                api.Metadata                `json:"metadata,omitempty"`
+	Metadata                api.CldAPIMap               `json:"metadata,omitempty"`
 	Transformation          string                      `json:"transformation,omitempty"`
 	Format                  string                      `json:"format,omitempty"`
 	AllowedFormats          api.CldAPIArray             `json:"allowed_formats,omitempty"`

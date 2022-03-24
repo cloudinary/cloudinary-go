@@ -209,6 +209,30 @@ func TestUploader_UploadWithContext(t *testing.T) {
 	assert.Equal(t, fmt.Sprintf("%v", cldtest.CldContext), fmt.Sprintf("%v", resp.Context["custom"]))
 }
 
+func TestUploader_UploadWithMetadata(t *testing.T) {
+	externalID := cldtest.CreateStringMetadataField(t, "upload_metadata_field_")
+	params := uploader.UploadParams{
+		PublicID:  cldtest.PublicID,
+		Overwrite: true,
+		Metadata:  api.CldAPIMap{externalID: cldtest.UniqueID("")[:5]},
+	}
+
+	resp, err := uploadAPI.Upload(ctx, cldtest.LogoURL, params)
+
+	// FIXME: use setUp/tearDown
+	cldtest.DeleteTestMetadataField(t, externalID)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp == nil {
+		t.Error(resp)
+	}
+
+	assert.Equal(t, fmt.Sprintf(params.Metadata[externalID]), fmt.Sprintf("%v", resp.Metadata[externalID]))
+}
+
 func TestUploader_UploadWithResponsiveBreakpoints(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:              cldtest.PublicID,
