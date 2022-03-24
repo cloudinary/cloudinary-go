@@ -154,6 +154,28 @@ func TestAdmin_ReorderMetadataFieldsDatasource(t *testing.T) {
 	}
 }
 
+func TestAdmin_ReorderMetadataFields(t *testing.T) {
+	// FIXME: do not use resp if err is not nil
+
+	resp, err := adminAPI.ReorderMetadataFields(ctx, admin.ReorderMetadataFieldsParams{FieldOrderBy: admin.OrderFieldLabel, FieldDirection: admin.Ascending})
+
+	if err != nil {
+		t.Error(err, resp)
+	}
+
+	resp, err = adminAPI.ReorderMetadataFields(ctx, admin.ReorderMetadataFieldsParams{FieldOrderBy: admin.OrderFieldExternalID, FieldDirection: admin.Descending})
+
+	if err != nil {
+		t.Error(err, resp)
+	}
+
+	resp, err = adminAPI.ReorderMetadataFields(ctx, admin.ReorderMetadataFieldsParams{FieldOrderBy: admin.OrderFieldCreatedAt, FieldDirection: admin.Ascending})
+
+	if err != nil {
+		t.Error(err, resp)
+	}
+}
+
 func TestAdmin_DeleteMetadataField(t *testing.T) {
 	resp, err := adminAPI.DeleteMetadataField(ctx, admin.DeleteMetadataFieldParams{FieldExternalID: metadataField.ExternalID})
 

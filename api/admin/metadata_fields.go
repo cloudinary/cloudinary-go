@@ -219,3 +219,24 @@ type ReorderMetadataFieldDatasourceResult struct {
 	Error    api.ErrorResp `json:"error,omitempty"`
 	Response interface{}
 }
+
+// ReorderMetadataFieldsParams are the parameters for ReorderMetadataFields.
+type ReorderMetadataFieldsParams struct {
+	FieldOrderBy   OrderByField `json:"order_by"`
+	FieldDirection Direction    `json:"direction,omitempty"`
+}
+
+// ReorderMetadataFields reorders metadata fields.
+func (a *API) ReorderMetadataFields(ctx context.Context, params ReorderMetadataFieldsParams) (*ReorderMetadataFieldsResult, error) {
+	res := &ReorderMetadataFieldsResult{}
+	_, err := a.put(ctx, api.BuildPath(metadataFields, order), params, res)
+
+	return res, err
+}
+
+// ReorderMetadataFieldsResult is the result of ReorderMetadataFields.
+type ReorderMetadataFieldsResult struct {
+	MetadataFields []metadata.Field `json:"metadata_fields"`
+	Error          api.ErrorResp    `json:"error,omitempty"`
+	Response       interface{}
+}
