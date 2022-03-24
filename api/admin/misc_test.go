@@ -13,6 +13,12 @@ func TestAdmin_Ping(t *testing.T) {
 	if err != nil || resp.Status != "ok" {
 		t.Error(resp)
 	}
+
+	rawResponse := resp.Response.(*map[string]interface{})
+
+	if (*rawResponse)["status"] != "ok" {
+		t.Error(resp)
+	}
 }
 
 func TestAdmin_Usage(t *testing.T) {

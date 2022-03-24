@@ -85,6 +85,7 @@ type AssetResult struct {
 	Usage                 interface{}                 `json:"usage"`
 	OriginalFilename      string                      `json:"original_filename"`
 	Error                 api.ErrorResp               `json:"error,omitempty"`
+	Response              interface{}
 }
 
 // QualityAnalysisResult contains the details about quality analysis.

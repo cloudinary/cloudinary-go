@@ -2,7 +2,6 @@ package admin
 
 import (
 	"context"
-	"net/http"
 	"time"
 
 	"github.com/cloudinary/cloudinary-go/api"
@@ -27,7 +26,7 @@ func (a *API) Ping(ctx context.Context) (*PingResult, error) {
 type PingResult struct {
 	Status   string        `json:"status"`
 	Error    api.ErrorResp `json:"error,omitempty"`
-	Response http.Response
+	Response interface{}
 }
 
 // UsageParams are the parameters for Usage.
@@ -120,4 +119,5 @@ type TagsResult struct {
 	Tags       []string      `json:"tags"`
 	NextCursor string        `json:"next_cursor"`
 	Error      api.ErrorResp `json:"error,omitempty"`
+	Response   interface{}
 }
