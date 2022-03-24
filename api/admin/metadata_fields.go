@@ -234,7 +234,7 @@ func (a *API) ReorderMetadataFields(ctx context.Context, params ReorderMetadataF
 	return res, err
 }
 
-// RestoreDatasourceEntriesResult is the result of ReorderMetadataFields.
+// ReorderMetadataFieldsResult is the result of ReorderMetadataFields.
 type ReorderMetadataFieldsResult struct {
 	MetadataFields []metadata.Field `json:"metadata_fields"`
 	Error          api.ErrorResp    `json:"error,omitempty"`
