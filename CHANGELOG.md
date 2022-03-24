@@ -1,3 +1,21 @@
+1.7.0 / 2022-03-24
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `Response` field for future proofing
+  * Add support for `ReorderMetadataFields` Admin API
+  * Add support for `AssetByAssetID` Admin API
+  * Add support for `Credits` field in `UsageResult`
+  * Add support for `AuthToken`
+
+Other Changes
+-------------
+
+  * Fix `Metadata` field  in `UploadParams` serialization
+  * Update `README`
+
 1.6.0 / 2022-01-17
 ==================
 
