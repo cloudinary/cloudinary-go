@@ -53,7 +53,7 @@ func getUserAgentTestCases() []UploadAPIAcceptanceTestCase {
 func getAuthorizationTestCases() []UploadAPIAcceptanceTestCase {
 	return []UploadAPIAcceptanceTestCase{
 		{
-			Name: "Upload Test OAuth Authorization",
+			Name:   "Upload Test OAuth Authorization",
 			Config: oAuthTokenConfig,
 			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
 				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{})
@@ -70,9 +70,38 @@ func getAuthorizationTestCases() []UploadAPIAcceptanceTestCase {
 	}
 }
 
+// Acceptance test cases for folder decoupling
+func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
+	body := "asset_folder=asset_folder&display_name=test&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7&folder=folder%2Ftest&public_id_prefix=fd_public_id_prefix&timestamp=0001-01-01T00%3A00%3A00Z&unsigned=true&use_filename_as_display_name=true"
+
+	return []UploadAPIAcceptanceTestCase{
+		{
+			Name: "Upload Test Folder Decoupling",
+			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
+				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
+					PublicIDPrefix:           "fd_public_id_prefix",
+					DisplayName:              "test",
+					Folder:                   "folder/test",
+					AssetFolder:              "asset_folder",
+					UseFilenameAsDisplayName: true,
+					Unsigned:                 true,
+				})
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "POST",
+				Uri:    "/auto/upload",
+				Body:   &body,
+			},
+			ExpectedCallCount: 1,
+		},
+	}
+}
+
 // Run tests
 func TestUploadAPI_Acceptance(t *testing.T) {
 	t.Parallel()
 	testUploadAPIByTestCases(getUserAgentTestCases(), t)
 	testUploadAPIByTestCases(getAuthorizationTestCases(), t)
+	testUploadAPIByTestCases(getFolderDecouplingTestCases(), t)
 }
