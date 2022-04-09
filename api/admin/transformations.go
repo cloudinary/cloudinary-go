@@ -17,7 +17,7 @@ const (
 
 // ListTransformationsParams are the parameters for ListTransformations.
 type ListTransformationsParams struct {
-	Named      bool   `json:"named,omitempty"`
+	Named      *bool  `json:"named,omitempty"`
 	MaxResults int    `json:"max_results,omitempty"`
 	NextCursor string `json:"next_cursor,omitempty"`
 }

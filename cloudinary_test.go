@@ -2,6 +2,7 @@ package cloudinary
 
 import (
 	"context"
+	"github.com/cloudinary/cloudinary-go/api"
 	"github.com/cloudinary/cloudinary-go/internal/cldtest"
 	"log"
 	"testing"
@@ -47,9 +48,9 @@ func TestCloudinary_Upload(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:       "test_image",
 		Eager:          "w_500,h_500",
-		UniqueFilename: false,
-		UseFilename:    true,
-		Overwrite:      true,
+		UniqueFilename: api.Bool(false),
+		UseFilename:    api.Bool(true),
+		Overwrite:      api.Bool(true),
 	}
 
 	resp, err := c.Upload.Upload(ctx, "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png", params)

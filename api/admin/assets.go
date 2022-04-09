@@ -42,9 +42,9 @@ type AssetsParams struct {
 	StartAt      *time.Time    `json:"start_at,omitempty"`
 	NextCursor   string        `json:"next_cursor,omitempty"`
 	MaxResults   int           `json:"max_results,omitempty"`
-	Tags         bool          `json:"tags,omitempty"`
-	Context      bool          `json:"context,omitempty"`
-	Moderations  bool          `json:"moderations,omitempty"`
+	Tags         *bool         `json:"tags,omitempty"`
+	Context      *bool         `json:"context,omitempty"`
+	Moderations  *bool         `json:"moderations,omitempty"`
 	Direction    string        `json:"direction,omitempty"`
 }
 
@@ -71,9 +71,9 @@ type AssetsByTagParams struct {
 	Tag         string        `json:"-"`
 	NextCursor  string        `json:"next_cursor,omitempty"`
 	MaxResults  int           `json:"max_results,omitempty"`
-	Tags        bool          `json:"tags,omitempty"`
-	Context     bool          `json:"context,omitempty"`
-	Moderations bool          `json:"moderations,omitempty"`
+	Tags        *bool         `json:"tags,omitempty"`
+	Context     *bool         `json:"context,omitempty"`
+	Moderations *bool         `json:"moderations,omitempty"`
 	Direction   string        `json:"direction,omitempty"`
 }
 
@@ -96,9 +96,9 @@ type AssetsByContextParams struct {
 	Value       string        `json:"value,omitempty"`
 	NextCursor  string        `json:"next_cursor,omitempty"`
 	MaxResults  int           `json:"max_results,omitempty"`
-	Tags        bool          `json:"tags,omitempty"`
-	Context     bool          `json:"context,omitempty"`
-	Moderations bool          `json:"moderations,omitempty"`
+	Tags        *bool         `json:"tags,omitempty"`
+	Context     *bool         `json:"context,omitempty"`
+	Moderations *bool         `json:"moderations,omitempty"`
 	Direction   string        `json:"direction,omitempty"`
 }
 
@@ -121,9 +121,9 @@ type AssetsByModerationParams struct {
 	Status      string        `json:"-"`
 	NextCursor  string        `json:"next_cursor,omitempty"`
 	MaxResults  int           `json:"max_results,omitempty"`
-	Tags        bool          `json:"tags,omitempty"`
-	Context     bool          `json:"context,omitempty"`
-	Moderations bool          `json:"moderations,omitempty"`
+	Tags        *bool         `json:"tags,omitempty"`
+	Context     *bool         `json:"context,omitempty"`
+	Moderations *bool         `json:"moderations,omitempty"`
 	Direction   string        `json:"direction,omitempty"`
 }
 
@@ -142,9 +142,9 @@ type AssetsByIDsParams struct {
 	AssetType    api.AssetType    `json:"-"`
 	DeliveryType api.DeliveryType `json:"-"`
 	PublicIDs    api.CldAPIArray  `json:"public_ids"`
-	Tags         bool             `json:"tags,omitempty"`
-	Context      bool             `json:"context,omitempty"`
-	Moderations  bool             `json:"moderations,omitempty"`
+	Tags         *bool            `json:"tags,omitempty"`
+	Context      *bool            `json:"context,omitempty"`
+	Moderations  *bool            `json:"moderations,omitempty"`
 }
 
 // AssetsByIDs lists assets with the specified public IDs.
@@ -183,8 +183,8 @@ type DeleteAssetsParams struct {
 	AssetType       api.AssetType    `json:"-"`
 	DeliveryType    api.DeliveryType `json:"-"`
 	PublicIDs       api.CldAPIArray  `json:"public_ids"` // The public IDs of the assets to delete (up to 100).
-	KeepOriginal    bool             `json:"keep_original,omitempty"`
-	Invalidate      bool             `json:"invalidate,omitempty"`
+	KeepOriginal    *bool            `json:"keep_original,omitempty"`
+	Invalidate      *bool            `json:"invalidate,omitempty"`
 	Transformations string           `json:"transformations,omitempty"`
 	NextCursor      string           `json:"next_cursor,omitempty"`
 }
@@ -213,8 +213,8 @@ type DeleteAssetsByPrefixParams struct {
 	AssetType       api.AssetType    `json:"-"`
 	DeliveryType    api.DeliveryType `json:"-"`
 	Prefix          api.CldAPIArray  `json:"prefix"`
-	KeepOriginal    bool             `json:"keep_original,omitempty"`
-	Invalidate      bool             `json:"invalidate,omitempty"`
+	KeepOriginal    *bool            `json:"keep_original,omitempty"`
+	Invalidate      *bool            `json:"invalidate,omitempty"`
 	Transformations string           `json:"transformations,omitempty"`
 	NextCursor      string           `json:"next_cursor,omitempty"`
 }
@@ -233,8 +233,8 @@ func (a *API) DeleteAssetsByPrefix(ctx context.Context, params DeleteAssetsByPre
 type DeleteAssetsByTagParams struct {
 	AssetType       api.AssetType `json:"-"`
 	Tag             string        `json:"-"`
-	KeepOriginal    bool          `json:"keep_original,omitempty"`
-	Invalidate      bool          `json:"invalidate,omitempty"`
+	KeepOriginal    *bool         `json:"keep_original,omitempty"`
+	Invalidate      *bool         `json:"invalidate,omitempty"`
 	Transformations string        `json:"transformations,omitempty"`
 	NextCursor      string        `json:"next_cursor,omitempty"`
 }
@@ -255,9 +255,9 @@ func (a *API) DeleteAssetsByTag(ctx context.Context, params DeleteAssetsByTagPar
 type DeleteAllAssetsParams struct {
 	AssetType       api.AssetType    `json:"-"`
 	DeliveryType    api.DeliveryType `json:"-"`
-	All             bool             `json:"all"`
-	KeepOriginal    bool             `json:"keep_original,omitempty"`
-	Invalidate      bool             `json:"invalidate,omitempty"`
+	All             *bool            `json:"all"`
+	KeepOriginal    *bool            `json:"keep_original,omitempty"`
+	Invalidate      *bool            `json:"invalidate,omitempty"`
 	Transformations string           `json:"transformations,omitempty"`
 	NextCursor      string           `json:"next_cursor,omitempty"`
 }
@@ -268,7 +268,7 @@ type DeleteAllAssetsParams struct {
 //
 // https://cloudinary.com/documentation/admin_api#delete_resources
 func (a *API) DeleteAllAssets(ctx context.Context, params DeleteAllAssetsParams) (*DeleteAssetsResult, error) {
-	params.All = true
+	params.All = api.Bool(true)
 
 	res := &DeleteAssetsResult{}
 	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
@@ -300,13 +300,13 @@ type DeleteDerivedAssetsByTransformationParams struct {
 	DeliveryType    api.DeliveryType `json:"-"`
 	PublicIDs       api.CldAPIArray  `json:"public_ids"`      // The public IDs for which you want to delete derived resources.
 	Transformations string           `json:"transformations"` // The transformation(s) associated with the derived resources to delete.
-	KeepOriginal    bool             `json:"keep_original"`
-	Invalidate      bool             `json:"invalidate,omitempty"`
+	KeepOriginal    *bool            `json:"keep_original"`
+	Invalidate      *bool            `json:"invalidate,omitempty"`
 }
 
 // DeleteDerivedAssetsByTransformation deletes derived resources identified by transformation and public_ids.
 func (a *API) DeleteDerivedAssetsByTransformation(ctx context.Context, params DeleteDerivedAssetsByTransformationParams) (*DeleteAssetsResult, error) {
-	params.KeepOriginal = true
+	params.KeepOriginal = api.Bool(true)
 
 	res := &DeleteAssetsResult{}
 	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)

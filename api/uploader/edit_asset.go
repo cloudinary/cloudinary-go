@@ -20,7 +20,7 @@ type DestroyParams struct {
 	PublicID     string `json:"public_id,omitempty"`
 	Type         string `json:"type,omitempty"`
 	ResourceType string `json:"-"`
-	Invalidate   bool   `json:"invalidate,omitempty"`
+	Invalidate   *bool  `json:"invalidate,omitempty"`
 }
 
 // Destroy immediately and permanently deletes a single asset from your Cloudinary account.
@@ -51,8 +51,8 @@ type RenameParams struct {
 	Type         string `json:"type,omitempty"`
 	ToType       string `json:"to_type,omitempty"`
 	ResourceType string `json:"-"`
-	Overwrite    bool   `json:"overwrite,omitempty"`
-	Invalidate   bool   `json:"invalidate,omitempty"`
+	Overwrite    *bool  `json:"overwrite,omitempty"`
+	Invalidate   *bool  `json:"invalidate,omitempty"`
 }
 
 // Rename renames the specified asset in your Cloudinary account.

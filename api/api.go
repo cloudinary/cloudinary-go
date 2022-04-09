@@ -349,3 +349,8 @@ func IsLocalFilePath(path interface{}) bool {
 		return false
 	}
 }
+
+// Bool returns a pointer for the provided boolean.
+func Bool(b bool) *bool {
+	return &b
+}

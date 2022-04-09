@@ -14,8 +14,8 @@ func TestUploadPresets_Create(t *testing.T) {
 
 	params := admin.CreateUploadPresetParams{
 		Name:         UPName,
-		Unsigned:     true,
-		Live:         true,
+		Unsigned:     api.Bool(true),
+		Live:         api.Bool(true),
 		UploadParams: uploader.UploadParams{Tags: api.CldAPIArray{"go-tag1", "go-tag2"}},
 	}
 
@@ -45,8 +45,8 @@ func TestUploadPresets_Get(t *testing.T) {
 func TestUploadPresets_Update(t *testing.T) {
 	updateUPParams := admin.UpdateUploadPresetParams{
 		Name:         UPName,
-		Unsigned:     false,
-		Live:         false,
+		Unsigned:     api.Bool(false),
+		Live:         api.Bool(false),
 		UploadParams: uploader.UploadParams{Tags: api.CldAPIArray{"go-tag3", "go-tag4"}},
 	}
 

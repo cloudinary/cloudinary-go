@@ -18,7 +18,7 @@ const (
 type GenerateSpriteParams struct {
 	Tag             string `json:"tag,omitempty"`
 	NotificationURL string `json:"notification_url,omitempty"`
-	Async           bool   `json:"async,omitempty"`
+	Async           *bool  `json:"async,omitempty"`
 	Transformation  string `json:"transformation,omitempty"`
 	ResourceType    string `json:"-"`
 }
@@ -65,7 +65,7 @@ type MultiParams struct {
 	Tag             string `json:"tag,omitempty"`
 	Format          string `json:"format,omitempty"`
 	NotificationURL string `json:"notification_url,omitempty"`
-	Async           bool   `json:"async,omitempty"`
+	Async           *bool  `json:"async,omitempty"`
 	Transformation  string `json:"transformation,omitempty"`
 	ResourceType    string `json:"-"`
 }

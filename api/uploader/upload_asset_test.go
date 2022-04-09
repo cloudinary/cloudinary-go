@@ -28,10 +28,10 @@ const largeImageHeight = 1400
 func TestUploader_UploadLocalPath(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:              cldtest.PublicID,
-		QualityAnalysis:       true,
-		AccessibilityAnalysis: true,
-		CinemagraphAnalysis:   true,
-		Overwrite:             true,
+		QualityAnalysis:       api.Bool(true),
+		AccessibilityAnalysis: api.Bool(true),
+		CinemagraphAnalysis:   api.Bool(true),
+		Overwrite:             api.Bool(true),
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.ImageFilePath, params)
@@ -55,9 +55,9 @@ func TestUploader_UploadIOReader(t *testing.T) {
 
 	params := uploader.UploadParams{
 		PublicID:              cldtest.PublicID,
-		QualityAnalysis:       true,
-		AccessibilityAnalysis: true,
-		CinemagraphAnalysis:   true,
+		QualityAnalysis:       api.Bool(true),
+		AccessibilityAnalysis: api.Bool(true),
+		CinemagraphAnalysis:   api.Bool(true),
 	}
 
 	resp, err := uploadAPI.Upload(ctx, file, params)
@@ -74,7 +74,7 @@ func TestUploader_UploadIOReader(t *testing.T) {
 func TestUploader_UploadURL(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:  cldtest.PublicID,
-		Overwrite: true,
+		Overwrite: api.Bool(true),
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.LogoURL, params)
@@ -92,7 +92,7 @@ func TestUploader_UploadVideoURL(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:     cldtest.PublicID,
 		ResourceType: "video",
-		Overwrite:    true,
+		Overwrite:    api.Bool(true),
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.VideoURL, params)
@@ -108,7 +108,7 @@ func TestUploader_UploadVideoURL(t *testing.T) {
 func TestUploader_UploadBase64Image(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:  cldtest.PublicID,
-		Overwrite: true,
+		Overwrite: api.Bool(true),
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.Base64Image, params)
@@ -125,7 +125,7 @@ func TestUploader_UploadBase64Image(t *testing.T) {
 func TestUploader_UploadAuthenticated(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:  cldtest.PublicID,
-		Overwrite: true,
+		Overwrite: api.Bool(true),
 		Type:      api.Authenticated,
 	}
 
@@ -154,7 +154,7 @@ func TestUploader_UploadLargeFile(t *testing.T) {
 
 	params := uploader.UploadParams{
 		PublicID:  largeImagePublicID,
-		Overwrite: true,
+		Overwrite: api.Bool(true),
 	}
 
 	resp, err := uploadAPI.Upload(ctx, largeImage, params)
@@ -192,7 +192,7 @@ func TestUploader_Timeout(t *testing.T) {
 func TestUploader_UploadWithContext(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:  cldtest.PublicID,
-		Overwrite: true,
+		Overwrite: api.Bool(true),
 		Context:   cldtest.CldContext,
 	}
 
@@ -214,7 +214,7 @@ func TestUploader_UploadWithMetadata(t *testing.T) {
 	externalID2 := cldtest.CreateStringMetadataField(t, "upload_metadata_field_2_")
 	params := uploader.UploadParams{
 		PublicID:  cldtest.PublicID,
-		Overwrite: true,
+		Overwrite: api.Bool(true),
 		Metadata: api.Metadata{
 			externalID:  cldtest.UniqueID("1")[:6],
 			externalID2: cldtest.UniqueID("2")[:6],
@@ -242,8 +242,8 @@ func TestUploader_UploadWithMetadata(t *testing.T) {
 func TestUploader_UploadWithResponsiveBreakpoints(t *testing.T) {
 	params := uploader.UploadParams{
 		PublicID:              cldtest.PublicID,
-		Overwrite:             true,
-		ResponsiveBreakpoints: uploader.ResponsiveBreakpointsParams{{CreateDerived: false, Transformation: "a_90"}},
+		Overwrite:             api.Bool(true),
+		ResponsiveBreakpoints: uploader.ResponsiveBreakpointsParams{{CreateDerived: api.Bool(false), Transformation: "a_90"}},
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.LogoURL, params)
@@ -263,8 +263,8 @@ func TestUploader_UploadWithResponsiveBreakpoints(t *testing.T) {
 		PublicID: resp.PublicID,
 		Type:     api.Upload,
 		ResponsiveBreakpoints: uploader.ResponsiveBreakpointsParams{
-			{CreateDerived: false, Transformation: "a_90"},
-			{CreateDerived: false, Transformation: "a_45"},
+			{CreateDerived: api.Bool(false), Transformation: "a_90"},
+			{CreateDerived: api.Bool(false), Transformation: "a_45"},
 		}}
 
 	eResp, err := uploadAPI.Explicit(ctx, eParams)

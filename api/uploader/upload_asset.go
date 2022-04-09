@@ -17,14 +17,14 @@ type UploadParams struct {
 	PublicID                 string                      `json:"public_id,omitempty"`
 	PublicIDPrefix           string                      `json:"public_id_prefix,omitempty"`
 	PublicIds                api.CldAPIArray             `json:"public_ids,omitempty"`
-	UseFilename              bool                        `json:"use_filename,omitempty"`
-	UniqueFilename           bool                        `json:"unique_filename,omitempty"`
+	UseFilename              *bool                       `json:"use_filename,omitempty"`
+	UniqueFilename           *bool                       `json:"unique_filename,omitempty"`
 	DisplayName              string                      `json:"display_name,omitempty"`
-	UseFilenameAsDisplayName bool                        `json:"use_filename_as_display_name,omitempty"`
+	UseFilenameAsDisplayName *bool                       `json:"use_filename_as_display_name,omitempty"`
 	FilenameOverride         string                      `json:"filename_override,omitempty"`
 	Folder                   string                      `json:"folder,omitempty"`
 	AssetFolder              string                      `json:"asset_folder,omitempty"`
-	Overwrite                bool                        `json:"overwrite,omitempty"`
+	Overwrite                *bool                       `json:"overwrite,omitempty"`
 	ResourceType             string                      `json:"resource_type,omitempty"`
 	Type                     api.DeliveryType            `json:"type,omitempty"`
 	Tags                     api.CldAPIArray             `json:"tags,omitempty"`
@@ -36,25 +36,25 @@ type UploadParams struct {
 	Eager                    string                      `json:"eager,omitempty"`
 	ResponsiveBreakpoints    ResponsiveBreakpointsParams `json:"responsive_breakpoints,omitempty"`
 	Eval                     string                      `json:"eval,omitempty"`
-	Async                    bool                        `json:"async,omitempty"`
-	EagerAsync               bool                        `json:"eager_async,omitempty"`
-	Unsigned                 bool                        `json:"unsigned,omitempty"`
+	Async                    *bool                       `json:"async,omitempty"`
+	EagerAsync               *bool                       `json:"eager_async,omitempty"`
+	Unsigned                 *bool                       `json:"unsigned,omitempty"`
 	Proxy                    string                      `json:"proxy,omitempty"`
 	Headers                  string                      `json:"headers,omitempty"`
 	Callback                 string                      `json:"callback,omitempty"`
 	NotificationURL          string                      `json:"notification_url,omitempty"`
 	EagerNotificationURL     string                      `json:"eager_notification_url,omitempty"`
-	Faces                    bool                        `json:"faces,omitempty"`
-	ImageMetadata            bool                        `json:"image_metadata,omitempty"`
-	Exif                     bool                        `json:"exif,omitempty"`
-	Colors                   bool                        `json:"colors,omitempty"`
-	Phash                    bool                        `json:"phash,omitempty"`
+	Faces                    *bool                       `json:"faces,omitempty"`
+	ImageMetadata            *bool                       `json:"image_metadata,omitempty"`
+	Exif                     *bool                       `json:"exif,omitempty"`
+	Colors                   *bool                       `json:"colors,omitempty"`
+	Phash                    *bool                       `json:"phash,omitempty"`
 	FaceCoordinates          api.Coordinates             `json:"face_coordinates,omitempty"`
 	CustomCoordinates        api.Coordinates             `json:"custom_coordinates,omitempty"`
-	Backup                   bool                        `json:"backup,omitempty"`
-	ReturnDeleteToken        bool                        `json:"return_delete_token,omitempty"`
-	Invalidate               bool                        `json:"invalidate,omitempty"`
-	DiscardOriginalFilename  bool                        `json:"discard_original_filename,omitempty"`
+	Backup                   *bool                       `json:"backup,omitempty"`
+	ReturnDeleteToken        *bool                       `json:"return_delete_token,omitempty"`
+	Invalidate               *bool                       `json:"invalidate,omitempty"`
+	DiscardOriginalFilename  *bool                       `json:"discard_original_filename,omitempty"`
 	Moderation               string                      `json:"moderation,omitempty"`
 	UploadPreset             string                      `json:"upload_preset,omitempty"`
 	RawConvert               string                      `json:"raw_convert,omitempty"`
@@ -64,14 +64,14 @@ type UploadParams struct {
 	Detection                string                      `json:"detection,omitempty"`
 	OCR                      string                      `json:"ocr,omitempty"`
 	Timestamp                time.Time                   `json:"timestamp,omitempty"`
-	QualityAnalysis          bool                        `json:"quality_analysis,omitempty"`
-	AccessibilityAnalysis    bool                        `json:"accessibility_analysis,omitempty"`
-	CinemagraphAnalysis      bool                        `json:"cinemagraph_analysis,omitempty"`
+	QualityAnalysis          *bool                       `json:"quality_analysis,omitempty"`
+	AccessibilityAnalysis    *bool                       `json:"accessibility_analysis,omitempty"`
+	CinemagraphAnalysis      *bool                       `json:"cinemagraph_analysis,omitempty"`
 }
 
 // SingleResponsiveBreakpointsParams represents params for a single responsive breakpoints generation request.
 type SingleResponsiveBreakpointsParams struct {
-	CreateDerived  bool   `json:"create_derived"`
+	CreateDerived  *bool  `json:"create_derived"`
 	Transformation string `json:"transformation,omitempty"`
 	MinWidth       int    `json:"min_width,omitempty"`
 	MaxWidth       int    `json:"max_width,omitempty"`
@@ -205,7 +205,7 @@ type UploadResult struct {
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#unsigned_upload_syntax
 func (u *API) UnsignedUpload(ctx context.Context, file interface{}, uploadPreset string, uploadParams UploadParams) (*UploadResult, error) {
-	uploadParams.Unsigned = true
+	uploadParams.Unsigned = api.Bool(true)
 	uploadParams.UploadPreset = uploadPreset
 
 	return u.Upload(ctx, file, uploadParams)

@@ -1,6 +1,7 @@
 package admin_test
 
 import (
+	"github.com/cloudinary/cloudinary-go/api"
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/api/admin"
@@ -12,16 +13,16 @@ func TestAsset_Asset(t *testing.T) {
 
 	resp, err := adminAPI.Asset(ctx, admin.AssetParams{
 		PublicID:              cldtest.PublicID,
-		Exif:                  true,
-		Colors:                true,
-		Faces:                 true,
-		QualityAnalysis:       true,
-		ImageMetadata:         true,
-		Phash:                 true,
-		Pages:                 true,
-		AccessibilityAnalysis: true,
-		CinemagraphAnalysis:   true,
-		Coordinates:           true,
+		Exif:                  api.Bool(true),
+		Colors:                api.Bool(true),
+		Faces:                 api.Bool(true),
+		QualityAnalysis:       api.Bool(true),
+		ImageMetadata:         api.Bool(true),
+		Phash:                 api.Bool(true),
+		Pages:                 api.Bool(true),
+		AccessibilityAnalysis: api.Bool(true),
+		CinemagraphAnalysis:   api.Bool(true),
+		Coordinates:           api.Bool(true),
 	})
 
 	if err != nil || resp.PublicID == "" {
@@ -65,9 +66,9 @@ func TestAsset_AssetByAssetID(t *testing.T) {
 	t.Run("With Extra Info", func(t *testing.T) {
 		resp, err := adminAPI.AssetByAssetID(ctx, admin.AssetByAssetIDParams{
 			AssetID: asset.AssetID,
-			Colors:  true,
-			Exif:    true,
-			Faces:   true,
+			Colors:  api.Bool(true),
+			Exif:    api.Bool(true),
+			Faces:   api.Bool(true),
 		})
 
 		if err != nil {
