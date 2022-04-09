@@ -39,7 +39,7 @@ func TestUploader_Edit(t *testing.T) {
 	params := uploader.RenameParams{
 		FromPublicID: cldtest.PublicID,
 		ToPublicID:   cldtest.PublicID2,
-		Overwrite:    true,
+		Overwrite:    api.Bool(true),
 	}
 
 	resp, err := uploadAPI.Rename(ctx, params)

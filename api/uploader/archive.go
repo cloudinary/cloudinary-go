@@ -37,27 +37,27 @@ const (
 
 // CreateArchiveParams are the parameters for CreateArchive.
 type CreateArchiveParams struct {
-	AllowMissing            bool             `json:"allow_missing,omitempty"`
-	Async                   bool             `json:"async,omitempty"`
+	AllowMissing            *bool            `json:"allow_missing,omitempty"`
+	Async                   *bool            `json:"async,omitempty"`
 	ExpiresAt               *time.Time       `json:"expires_at,omitempty"`
-	FlattenFolders          bool             `json:"flatten_folders,omitempty"`
-	FlattenTransformations  bool             `json:"flatten_transformations,omitempty"`
+	FlattenFolders          *bool            `json:"flatten_folders,omitempty"`
+	FlattenTransformations  *bool            `json:"flatten_transformations,omitempty"`
 	FullyQualifiedPublicIds api.CldAPIArray  `json:"fully_qualified_public_ids,omitempty"`
-	KeepDerived             bool             `json:"keep_derived,omitempty"`
+	KeepDerived             *bool            `json:"keep_derived,omitempty"`
 	Mode                    ArchiveMode      `json:"mode,omitempty"`
 	NotificationURL         string           `json:"notification_url,omitempty"`
 	Phash                   string           `json:"phash,omitempty"`
 	Prefixes                api.CldAPIArray  `json:"prefixes,omitempty"`
 	PublicIds               api.CldAPIArray  `json:"public_ids,omitempty"`
 	ResourceType            api.AssetType    `json:"-"`
-	SkipTransformationName  bool             `json:"skip_transformation_name,omitempty"`
+	SkipTransformationName  *bool            `json:"skip_transformation_name,omitempty"`
 	TargetFormat            ArchiveFormat    `json:"target_format,omitempty"`
 	TargetPublicID          string           `json:"target_public_id,omitempty"`
 	TargetTags              api.CldAPIArray  `json:"target_tags,omitempty"`
 	Tags                    api.CldAPIArray  `json:"tags,omitempty"`
 	Transformations         string           `json:"transformations,omitempty"`
 	Type                    api.DeliveryType `json:"type,omitempty"`
-	UseOriginalFilename     bool             `json:"use_original_filename,omitempty"`
+	UseOriginalFilename     *bool            `json:"use_original_filename,omitempty"`
 }
 
 // CreateArchive creates a new archive in the server and returns information in JSON format.

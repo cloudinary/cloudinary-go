@@ -83,8 +83,33 @@ func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
 					DisplayName:              "test",
 					Folder:                   "folder/test",
 					AssetFolder:              "asset_folder",
-					UseFilenameAsDisplayName: true,
-					Unsigned:                 true,
+					UseFilenameAsDisplayName: api.Bool(true),
+					Unsigned:                 api.Bool(true),
+				})
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "POST",
+				Uri:    "/auto/upload",
+				Body:   &body,
+			},
+			ExpectedCallCount: 1,
+		},
+	}
+}
+
+// Acceptance test cases for handling of boolean values
+func getBooleanValuesTestCases() []UploadAPIAcceptanceTestCase {
+	body := "file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7&timestamp=0001-01-01T00%3A00%3A00Z&unique_filename=false&unsigned=true&use_filename=true"
+
+	return []UploadAPIAcceptanceTestCase{
+		{
+			Name: "Upload Test Boolean Values",
+			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
+				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
+					UniqueFilename: api.Bool(false),
+					UseFilename:    api.Bool(true),
+					Unsigned:       api.Bool(true),
 				})
 			},
 			ResponseTest: func(response interface{}, t *testing.T) {},
@@ -104,4 +129,5 @@ func TestUploadAPI_Acceptance(t *testing.T) {
 	testUploadAPIByTestCases(getUserAgentTestCases(), t)
 	testUploadAPIByTestCases(getAuthorizationTestCases(), t)
 	testUploadAPIByTestCases(getFolderDecouplingTestCases(), t)
+	testUploadAPIByTestCases(getBooleanValuesTestCases(), t)
 }

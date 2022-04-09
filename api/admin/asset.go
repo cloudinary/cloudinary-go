@@ -16,16 +16,16 @@ type AssetParams struct {
 	AssetType             api.AssetType    `json:"-"`
 	DeliveryType          api.DeliveryType `json:"-"`
 	PublicID              string           `json:"-"`
-	Exif                  bool             `json:"exif,omitempty"`
-	Colors                bool             `json:"colors,omitempty"`
-	Faces                 bool             `json:"faces,omitempty"`
-	QualityAnalysis       bool             `json:"quality_analysis,omitempty"`
-	ImageMetadata         bool             `json:"image_metadata,omitempty"`
-	Phash                 bool             `json:"phash,omitempty"`
-	Pages                 bool             `json:"pages,omitempty"`
-	AccessibilityAnalysis bool             `json:"accessibility_analysis,omitempty"`
-	CinemagraphAnalysis   bool             `json:"cinemagraph_analysis,omitempty"`
-	Coordinates           bool             `json:"coordinates,omitempty"`
+	Exif                  *bool            `json:"exif,omitempty"`
+	Colors                *bool            `json:"colors,omitempty"`
+	Faces                 *bool            `json:"faces,omitempty"`
+	QualityAnalysis       *bool            `json:"quality_analysis,omitempty"`
+	ImageMetadata         *bool            `json:"image_metadata,omitempty"`
+	Phash                 *bool            `json:"phash,omitempty"`
+	Pages                 *bool            `json:"pages,omitempty"`
+	AccessibilityAnalysis *bool            `json:"accessibility_analysis,omitempty"`
+	CinemagraphAnalysis   *bool            `json:"cinemagraph_analysis,omitempty"`
+	Coordinates           *bool            `json:"coordinates,omitempty"`
 	MaxResults            int              `json:"max_results,omitempty"`
 	DerivedNextCursor     string           `json:"derived_next_cursor,omitempty"`
 }
@@ -168,19 +168,19 @@ func (a *API) UpdateAsset(ctx context.Context, params UpdateAssetParams) (*Asset
 // AssetByAssetIDParams are the parameters for AssetByAssetID.
 type AssetByAssetIDParams struct {
 	AssetID               string `json:"-"`
-	Colors                bool   `json:"colors,omitempty"`
-	Exif                  bool   `json:"exif,omitempty"`
-	Faces                 bool   `json:"faces,omitempty"`
-	QualityAnalysis       bool   `json:"quality_analysis,omitempty"`
-	ImageMetadata         bool   `json:"image_metadata,omitempty"`
-	Phash                 bool   `json:"phash,omitempty"`
-	Pages                 bool   `json:"pages,omitempty"`
-	CinemagraphAnalysis   bool   `json:"cinemagraph_analysis,omitempty"`
-	Coordinates           bool   `json:"coordinates,omitempty"`
+	Colors                *bool  `json:"colors,omitempty"`
+	Exif                  *bool  `json:"exif,omitempty"`
+	Faces                 *bool  `json:"faces,omitempty"`
+	QualityAnalysis       *bool  `json:"quality_analysis,omitempty"`
+	ImageMetadata         *bool  `json:"image_metadata,omitempty"`
+	Phash                 *bool  `json:"phash,omitempty"`
+	Pages                 *bool  `json:"pages,omitempty"`
+	CinemagraphAnalysis   *bool  `json:"cinemagraph_analysis,omitempty"`
+	Coordinates           *bool  `json:"coordinates,omitempty"`
 	MaxResults            int    `json:"max_results,omitempty"`
 	DerivedNextCursor     string `json:"derived_next_cursor,omitempty"`
-	AccessibilityAnalysis bool   `json:"accessibility_analysis,omitempty"`
-	Versions              bool   `json:"versions,omitempty"`
+	AccessibilityAnalysis *bool  `json:"accessibility_analysis,omitempty"`
+	Versions              *bool  `json:"versions,omitempty"`
 }
 
 // AssetByAssetID returns the details of the specified asset and all its derived assets by asset id.

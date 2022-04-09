@@ -70,9 +70,9 @@ type GetUploadPresetResult struct {
 // CreateUploadPresetParams are the parameters for CreateUploadPreset.
 type CreateUploadPresetParams struct {
 	Name             string `json:"name,omitempty"`
-	Unsigned         bool   `json:"unsigned,omitempty"`
-	DisallowPublicID bool   `json:"disallow_public_id,omitempty"`
-	Live             bool   `json:"live,omitempty"`
+	Unsigned         *bool  `json:"unsigned,omitempty"`
+	DisallowPublicID *bool  `json:"disallow_public_id,omitempty"`
+	Live             *bool  `json:"live,omitempty"`
 	uploader.UploadParams
 }
 
@@ -96,9 +96,9 @@ type CreateUploadPresetResult struct {
 // UpdateUploadPresetParams are the parameters for UpdateUploadPreset.
 type UpdateUploadPresetParams struct {
 	Name             string `json:"name"`
-	Unsigned         bool   `json:"unsigned,omitempty"`
-	DisallowPublicID bool   `json:"disallow_public_id,omitempty"`
-	Live             bool   `json:"live,omitempty"`
+	Unsigned         *bool  `json:"unsigned,omitempty"`
+	DisallowPublicID *bool  `json:"disallow_public_id,omitempty"`
+	Live             *bool  `json:"live,omitempty"`
 	uploader.UploadParams
 }
 

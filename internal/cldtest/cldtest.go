@@ -3,6 +3,7 @@ package cldtest
 import (
 	"context"
 	"fmt"
+	"github.com/cloudinary/cloudinary-go/api"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -100,7 +101,7 @@ var stringMetadataField = metadata.Field{
 func UploadTestAsset(t *testing.T, publicID string) *uploader.UploadResult {
 	params := uploader.UploadParams{
 		PublicID:  publicID,
-		Overwrite: true,
+		Overwrite: api.Bool(true),
 		Tags:      Tags,
 	}
 
@@ -121,7 +122,7 @@ func UploadTestAsset(t *testing.T, publicID string) *uploader.UploadResult {
 func UploadTestVideoAsset(t *testing.T, publicID string) {
 	params := uploader.UploadParams{
 		PublicID:  publicID,
-		Overwrite: true,
+		Overwrite: api.Bool(true),
 		Tags:      Tags,
 	}
 
