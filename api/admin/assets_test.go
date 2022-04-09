@@ -18,7 +18,11 @@ func TestAssets_AssetTypes(t *testing.T) {
 
 func TestAssets_Assets(t *testing.T) {
 	cldtest.UploadTestAsset(t, cldtest.PublicID)
-	resp, err := adminAPI.Assets(ctx, admin.AssetsParams{Tags: true, Context: true, Moderations: true, MaxResults: 1})
+	resp, err := adminAPI.Assets(ctx, admin.AssetsParams{
+		Tags:        api.Bool(true),
+		Context:     api.Bool(true),
+		Moderations: api.Bool(true),
+		MaxResults:  1})
 
 	if err != nil || len(resp.Assets) != 1 {
 		t.Error(err, resp)
@@ -27,7 +31,9 @@ func TestAssets_Assets(t *testing.T) {
 
 func TestAssets_AssetsByIDs(t *testing.T) {
 	cldtest.UploadTestVideoAsset(t, cldtest.VideoPublicID)
-	resp, err := adminAPI.AssetsByIDs(ctx, admin.AssetsByIDsParams{PublicIDs: []string{cldtest.PublicID}, Tags: true})
+	resp, err := adminAPI.AssetsByIDs(ctx, admin.AssetsByIDsParams{
+		PublicIDs: []string{cldtest.PublicID},
+		Tags:      api.Bool(true)})
 
 	if err != nil || len(resp.Assets) != 1 {
 		t.Error(err, resp)

@@ -198,7 +198,7 @@ func getDeleteAssetsTestCases() []AdminAPIAcceptanceTestCase {
 				KeepOriginal: api.Bool(false),
 			},
 			uri:          "/resources/ASSET_TYPE/DELIVERY_TYPE",
-			expectedBody: "{\"public_ids\":\"1,2\"}",
+			expectedBody: "{\"public_ids\":\"1,2\",\"keep_original\":false}",
 		},
 		{
 			requestParams: admin.DeleteAssetsParams{
@@ -219,7 +219,7 @@ func getDeleteAssetsTestCases() []AdminAPIAcceptanceTestCase {
 				Invalidate:   api.Bool(false),
 			},
 			uri:          "/resources/ASSET_TYPE/DELIVERY_TYPE",
-			expectedBody: "{\"public_ids\":\"1,2\",\"keep_original\":true}",
+			expectedBody: "{\"public_ids\":\"1,2\",\"keep_original\":true,\"invalidate\":false}",
 		},
 		{
 			requestParams: admin.DeleteAssetsParams{
@@ -429,6 +429,7 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
 			},
 		},
 		{
@@ -443,6 +444,7 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
 				"context":     []string{"true"},
 			},
 		},
@@ -458,6 +460,8 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
+				"context":     []string{"false"},
 			},
 		},
 		{
@@ -473,6 +477,8 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
+				"context":     []string{"false"},
 				"moderations": []string{"true"},
 			},
 		},
@@ -489,6 +495,9 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
+				"context":     []string{"false"},
+				"moderations": []string{"false"},
 			},
 		},
 		{
@@ -505,6 +514,9 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
+				"context":     []string{"false"},
+				"moderations": []string{"false"},
 				"direction":   []string{"ASC"},
 			},
 		},
@@ -708,6 +720,7 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
 			},
 		},
 		{
@@ -724,6 +737,7 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
 				"context":     []string{"true"},
 			},
 		},
@@ -741,6 +755,8 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
+				"context":     []string{"false"},
 			},
 		},
 		{
@@ -758,6 +774,8 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
+				"context":     []string{"false"},
 				"moderations": []string{"true"},
 			},
 		},
@@ -776,6 +794,9 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 			expectedParams: &url.Values{
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
+				"tags":        []string{"false"},
+				"context":     []string{"false"},
+				"moderations": []string{"false"},
 			},
 		},
 		{
@@ -795,6 +816,9 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 				"next_cursor": []string{"NEXT_CURSOR"},
 				"max_results": []string{"100"},
 				"direction":   []string{"ASC"},
+				"tags":        []string{"false"},
+				"context":     []string{"false"},
+				"moderations": []string{"false"},
 			},
 		},
 	}
