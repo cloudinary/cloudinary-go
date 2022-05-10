@@ -42,13 +42,13 @@ type CreateArchiveParams struct {
 	ExpiresAt               *time.Time       `json:"expires_at,omitempty"`
 	FlattenFolders          *bool            `json:"flatten_folders,omitempty"`
 	FlattenTransformations  *bool            `json:"flatten_transformations,omitempty"`
-	FullyQualifiedPublicIds api.CldAPIArray  `json:"fully_qualified_public_ids,omitempty"`
+	FullyQualifiedPublicIDs api.CldAPIArray  `json:"fully_qualified_public_ids,omitempty"`
 	KeepDerived             *bool            `json:"keep_derived,omitempty"`
 	Mode                    ArchiveMode      `json:"mode,omitempty"`
 	NotificationURL         string           `json:"notification_url,omitempty"`
 	Phash                   string           `json:"phash,omitempty"`
 	Prefixes                api.CldAPIArray  `json:"prefixes,omitempty"`
-	PublicIds               api.CldAPIArray  `json:"public_ids,omitempty"`
+	PublicIDs               api.CldAPIArray  `json:"public_ids,omitempty"`
 	ResourceType            api.AssetType    `json:"-"`
 	SkipTransformationName  *bool            `json:"skip_transformation_name,omitempty"`
 	TargetFormat            ArchiveFormat    `json:"target_format,omitempty"`

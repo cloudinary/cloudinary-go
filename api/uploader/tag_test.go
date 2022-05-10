@@ -23,7 +23,7 @@ func TestUploader_Tag(t *testing.T) {
 		t.Error(err)
 	}
 
-	if resp == nil || len(resp.PublicIds) != 2 || resp.PublicIds[0] != cldtest.PublicID {
+	if resp == nil || len(resp.PublicIDs) != 2 || resp.PublicIDs[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 
@@ -38,7 +38,7 @@ func TestUploader_Tag(t *testing.T) {
 		t.Error(err)
 	}
 
-	if rResp == nil || len(rResp.PublicIds) != 2 || rResp.PublicIds[0] != cldtest.PublicID {
+	if rResp == nil || len(rResp.PublicIDs) != 2 || rResp.PublicIDs[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 	// FIXME: add some tags :) before removing
@@ -52,7 +52,7 @@ func TestUploader_Tag(t *testing.T) {
 		t.Error(err)
 	}
 
-	if raResp == nil || len(raResp.PublicIds) != 2 || raResp.PublicIds[0] != cldtest.PublicID {
+	if raResp == nil || len(raResp.PublicIDs) != 2 || raResp.PublicIDs[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 
@@ -67,7 +67,7 @@ func TestUploader_Tag(t *testing.T) {
 		t.Error(err)
 	}
 
-	if reResp == nil || len(reResp.PublicIds) != 2 || reResp.PublicIds[0] != cldtest.PublicID {
+	if reResp == nil || len(reResp.PublicIDs) != 2 || reResp.PublicIDs[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 }

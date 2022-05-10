@@ -90,5 +90,5 @@ func TestUploader_UpdateMetadata(t *testing.T) {
 		t.Error(err)
 	}
 
-	assert.Equal(t, 2, len(resp.PublicIds))
+	assert.Equal(t, 2, len(resp.PublicIDs))
 }

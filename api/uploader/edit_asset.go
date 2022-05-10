@@ -116,6 +116,6 @@ func (u *API) UpdateMetadata(ctx context.Context, params UpdateMetadataParams) (
 
 // UpdateMetadataResult is the result of UpdateMetadata.
 type UpdateMetadataResult struct {
-	PublicIds []string    `json:"public_ids"`
+	PublicIDs []string    `json:"public_ids"`
 	Error     interface{} `json:"error,omitempty"`
 }
