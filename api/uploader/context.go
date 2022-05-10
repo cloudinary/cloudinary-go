@@ -42,7 +42,7 @@ type AddContextResult = ContextResult
 
 // ContextResult is the result of Context APIs.
 type ContextResult struct {
-	PublicIds []string      `json:"public_ids"`
+	PublicIDs []string      `json:"public_ids"`
 	Error     api.ErrorResp `json:"error,omitempty"`
 	Response  http.Response
 }

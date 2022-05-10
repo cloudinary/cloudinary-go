@@ -199,7 +199,7 @@ type RestoreDatasourceEntriesResult struct {
 }
 
 type ReorderMetadataFieldDatasourceParams struct {
-	FieldExternalId string       `json:"-"`
+	FieldExternalID string       `json:"-"`
 	FieldOrderBy    OrderByField `json:"order_by"`
 	FieldDirection  Direction    `json:"direction,omitempty"`
 }
@@ -207,7 +207,7 @@ type ReorderMetadataFieldDatasourceParams struct {
 // ReorderMetadataFieldDatasource reorders metadata fields datasource. Currently, supports only value.
 func (a *API) ReorderMetadataFieldDatasource(ctx context.Context, params ReorderMetadataFieldDatasourceParams) (*ReorderMetadataFieldDatasourceResult, error) {
 	res := &ReorderMetadataFieldDatasourceResult{}
-	_, err := a.post(ctx, api.BuildPath(metadataFields, params.FieldExternalId, dataSource, order), params, res)
+	_, err := a.post(ctx, api.BuildPath(metadataFields, params.FieldExternalID, dataSource, order), params, res)
 
 	return res, err
 }

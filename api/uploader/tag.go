@@ -114,7 +114,7 @@ type ReplaceTagResult struct {
 
 // TagResult represents the tag result.
 type TagResult struct {
-	PublicIds []string      `json:"public_ids"` // The public IDs of the assets that were affected.
+	PublicIDs []string      `json:"public_ids"` // The public IDs of the assets that were affected.
 	Error     api.ErrorResp `json:"error,omitempty"`
 	Response  http.Response
 }

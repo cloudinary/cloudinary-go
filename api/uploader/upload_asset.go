@@ -16,7 +16,7 @@ import (
 type UploadParams struct {
 	PublicID                 string                      `json:"public_id,omitempty"`
 	PublicIDPrefix           string                      `json:"public_id_prefix,omitempty"`
-	PublicIds                api.CldAPIArray             `json:"public_ids,omitempty"`
+	PublicIDs                api.CldAPIArray             `json:"public_ids,omitempty"`
 	UseFilename              *bool                       `json:"use_filename,omitempty"`
 	UniqueFilename           *bool                       `json:"unique_filename,omitempty"`
 	DisplayName              string                      `json:"display_name,omitempty"`

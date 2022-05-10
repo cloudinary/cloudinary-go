@@ -22,7 +22,7 @@ func TestUploader_Context(t *testing.T) {
 		t.Error(err)
 	}
 
-	if resp == nil || len(resp.PublicIds) != 1 || resp.PublicIds[0] != cldtest.PublicID {
+	if resp == nil || len(resp.PublicIDs) != 1 || resp.PublicIDs[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 
@@ -36,7 +36,7 @@ func TestUploader_Context(t *testing.T) {
 		t.Error(err)
 	}
 
-	if raResp == nil || len(raResp.PublicIds) != 1 || raResp.PublicIds[0] != cldtest.PublicID {
+	if raResp == nil || len(raResp.PublicIDs) != 1 || raResp.PublicIDs[0] != cldtest.PublicID {
 		t.Error(resp)
 	}
 }
