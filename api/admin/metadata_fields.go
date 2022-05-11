@@ -198,6 +198,7 @@ type RestoreDatasourceEntriesResult struct {
 	Response interface{}
 }
 
+// ReorderMetadataFieldDatasourceParams are the parameters for ReorderMetadataFieldDatasource.
 type ReorderMetadataFieldDatasourceParams struct {
 	FieldExternalID string       `json:"-"`
 	FieldOrderBy    OrderByField `json:"order_by"`
@@ -212,6 +213,7 @@ func (a *API) ReorderMetadataFieldDatasource(ctx context.Context, params Reorder
 	return res, err
 }
 
+// ReorderMetadataFieldDatasourceResult is the result of ReorderMetadataFieldDatasource.
 type ReorderMetadataFieldDatasourceResult struct {
 	metadata.DataSource
 	Error    api.ErrorResp `json:"error,omitempty"`

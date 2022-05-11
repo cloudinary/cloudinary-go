@@ -36,11 +36,19 @@ const (
 	Descending = "desc"
 )
 
+// OrderByField is the field to order by.
 type OrderByField string
 
+// OrderFieldValue defines to order by value.
 const OrderFieldValue OrderByField = "value"
+
+// OrderFieldLabel defines to order by label.
 const OrderFieldLabel OrderByField = "label"
+
+// OrderFieldExternalID defines to order by external_id.
 const OrderFieldExternalID OrderByField = "external_id"
+
+// OrderFieldCreatedAt defines to order by created_at.
 const OrderFieldCreatedAt OrderByField = "created_at"
 
 // New creates a new Admin API instance from the environment variable (CLOUDINARY_URL).

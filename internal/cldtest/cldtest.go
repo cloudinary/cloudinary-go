@@ -63,9 +63,11 @@ const Tag2 = "go_tag2"
 // SEOName is a SEO friendly name.
 const SEOName = "my_favorite_sample"
 
+// Transformation is the test transfomration.
 const Transformation = "c_scale,w_500"
 
-const ApiVersion = "v1_1"
+// APIVersion is the version of the API.
+const APIVersion = "v1_1"
 
 // ImageInFolder is the test public ID in folder.
 var ImageInFolder = fmt.Sprintf("%s/%s", Folder, PublicID)
@@ -137,6 +139,7 @@ func UploadTestVideoAsset(t *testing.T, publicID string) {
 	}
 }
 
+// CreateStringMetadataField creates a test string metadata field.
 func CreateStringMetadataField(t *testing.T, prefix string) string {
 	stringMetadataField.ExternalID = UniqueID(prefix + "id")
 	stringMetadataField.Label = UniqueID(prefix + "label")
@@ -151,6 +154,7 @@ func CreateStringMetadataField(t *testing.T, prefix string) string {
 	return res.ExternalID
 }
 
+// DeleteTestMetadataField used to delete test metadata field.
 func DeleteTestMetadataField(t *testing.T, mdFieldExternalID string) string {
 	res, err := adminAPI.DeleteMetadataField(ctx, admin.DeleteMetadataFieldParams{FieldExternalID: mdFieldExternalID})
 	if err != nil {
@@ -200,8 +204,8 @@ func GetServerMock(fn TestFunction) *httptest.Server {
 	return srv
 }
 
-// ApiResponseTest Test function for the response from the API.
-type ApiResponseTest func(response interface{}, t *testing.T)
+// APIResponseTest Test function for the response from the API.
+type APIResponseTest func(response interface{}, t *testing.T)
 
 // TestFunction the test function.
 type TestFunction func(w http.ResponseWriter, r *http.Request)
@@ -209,7 +213,7 @@ type TestFunction func(w http.ResponseWriter, r *http.Request)
 // ExpectedRequestParams are the expected request parameters
 type ExpectedRequestParams struct {
 	Method  string             // Expected HTTP method of the request
-	Uri     string             // Expected URI
+	URI     string             // Expected URI
 	Params  *url.Values        // Expected URI params
 	Body    *string            // Expected HTTP body (for POST / PUT requests)
 	Headers *map[string]string // Expected HTTP request headers
@@ -245,7 +249,7 @@ func GetTestHandler(response string, t *testing.T, callCounter *int, ep Expected
 			}
 		}
 
-		expectedURI := "/" + ApiVersion + "/TEST" + ep.Uri
+		expectedURI := "/" + APIVersion + "/TEST" + ep.URI
 		if expectedURI != r.URL.Path {
 			t.Errorf(
 				"Expected request URI: %s, got: %s\n",

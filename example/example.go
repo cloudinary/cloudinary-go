@@ -63,7 +63,6 @@ func main() {
 	// Prints something like:
 	// https://res.cloudinary.com/<your cloud name>/image/upload/c_scale,w_500/f_auto/q_auto/logo
 
-
 	// Now we can use Admin API to see the details about the asset.
 	// The request can be customised by providing AssetParams.
 	asset, err := cld.Admin.Asset(ctx, admin.AssetParams{PublicID: "logo"})

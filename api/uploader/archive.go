@@ -170,8 +170,8 @@ func (u *API) DownloadBackedUpAsset(params DownloadBackedUpAssetParams) (string,
 	return urlStruct.String(), nil
 }
 
-// PrivateDownloadUrlParams are the parameters for PrivateDownloadUrl.
-type PrivateDownloadUrlParams struct {
+// PrivateDownloadURLParams are the parameters for PrivateDownloadURL.
+type PrivateDownloadURLParams struct {
 	PublicID     string        `json:"public_id"`
 	Format       string        `json:"format"`
 	DeliveryType string        `json:"type,omitempty"`
@@ -180,8 +180,8 @@ type PrivateDownloadUrlParams struct {
 	ResourceType api.AssetType `json:"-"`
 }
 
-// PrivateDownloadUrl returns a URL that when invoked downloads the asset.
-func (u *API) PrivateDownloadUrl(params PrivateDownloadUrlParams) (string, error) {
+// PrivateDownloadURL returns a URL that when invoked downloads the asset.
+func (u *API) PrivateDownloadURL(params PrivateDownloadURLParams) (string, error) {
 	queryParams, err := api.StructToParams(params)
 	if err != nil {
 		return "", err

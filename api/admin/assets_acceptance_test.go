@@ -35,7 +35,7 @@ func getRestoreAssetsTestCases() []AdminAPIAcceptanceTestCase {
 			},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "POST",
-				Uri:    t.uri,
+				URI:    t.uri,
 				Body:   &t.expectedBody,
 			},
 			JsonResponse:      "{}",
@@ -118,7 +118,7 @@ func getRestoreAssetsTestCases() []AdminAPIAcceptanceTestCase {
 
 		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "POST",
-			Uri:    "/resources/image/upload/restore",
+			URI:    "/resources/image/upload/restore",
 		},
 		JsonResponse:      string(responseJson),
 		ExpectedCallCount: 1,
@@ -150,7 +150,7 @@ func getDeleteAssetsTestCases() []AdminAPIAcceptanceTestCase {
 			},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "DELETE",
-				Uri:    t.uri,
+				URI:    t.uri,
 				Body:   &t.expectedBody,
 			},
 			JsonResponse:      "{}",
@@ -275,7 +275,7 @@ func getDeleteAssetsTestCases() []AdminAPIAcceptanceTestCase {
 		},
 		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "DELETE",
-			Uri:    "/resources/image/upload",
+			URI:    "/resources/image/upload",
 		},
 		JsonResponse:      "{\"error\":{\"message\":\"TEST ERROR\"}}",
 		ExpectedCallCount: 1,
@@ -320,7 +320,7 @@ func getDeleteAssetsTestCases() []AdminAPIAcceptanceTestCase {
 		},
 		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "DELETE",
-			Uri:    "/resources/image/upload",
+			URI:    "/resources/image/upload",
 		},
 		JsonResponse:      string(responseJson),
 		ExpectedCallCount: 1,
@@ -351,7 +351,7 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 			},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "GET",
-				Uri:    t.uri,
+				URI:    t.uri,
 				Params: t.expectedParams,
 			},
 			JsonResponse:      "{}",
@@ -557,7 +557,7 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 		},
 		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "GET",
-			Uri:    "/resources/image",
+			URI:    "/resources/image",
 			Params: &url.Values{},
 		},
 		JsonResponse:      "{\"error\":{\"message\": \"TEST ERROR\"}}",
@@ -593,7 +593,7 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 		},
 		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "GET",
-			Uri:    "/resources/image",
+			URI:    "/resources/image",
 			Params: &url.Values{},
 		},
 		JsonResponse:      string(responseJson),
@@ -625,7 +625,7 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 			},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "GET",
-				Uri:    t.uri,
+				URI:    t.uri,
 				Params: t.expectedParams,
 			},
 			JsonResponse:      "{}",
@@ -844,7 +844,7 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 		},
 		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "GET",
-			Uri:    "/resources/image/moderations",
+			URI:    "/resources/image/moderations",
 			Params: &url.Values{},
 		},
 		JsonResponse:      "{\"error\":{\"message\": \"TEST ERROR\"}}",
@@ -880,7 +880,7 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 		},
 		ExpectedRequest: cldtest.ExpectedRequestParams{
 			Method: "GET",
-			Uri:    "/resources/image/moderations",
+			URI:    "/resources/image/moderations",
 			Params: &url.Values{},
 		},
 		JsonResponse:      string(responseJson),

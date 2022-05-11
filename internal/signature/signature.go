@@ -9,19 +9,27 @@ import (
 	"hash"
 )
 
+// Length represents the length of the signature.
 type Length = uint8
+
+// Algo represent the algorithm of the  signature.
 type Algo = string
 
 const (
+	// Short signature length
 	Short Length = 8
-	Long  Length = 32
+	// Long signature length
+	Long Length = 32
 )
 
 const (
-	SHA1   Algo = "sha1"
+	// SHA1 algorithm.
+	SHA1 Algo = "sha1"
+	// SHA256 algorithm.
 	SHA256 Algo = "sha256"
 )
 
+// Sign signs the content with the provided signature.
 func Sign(content string, secret string, algo Algo) ([]byte, error) {
 	var hashFunc hash.Hash
 	switch algo {
@@ -38,6 +46,7 @@ func Sign(content string, secret string, algo Algo) ([]byte, error) {
 	return hashFunc.Sum(nil), nil
 }
 
+// SignURL returns the URL signature.
 func SignURL(content string, secret string, algo Algo, length uint8) string {
 	rawSignature, _ := Sign(content, secret, algo)
 	signature := base64.RawURLEncoding.EncodeToString(rawSignature)
