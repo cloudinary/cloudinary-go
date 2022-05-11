@@ -1,3 +1,19 @@
+2.0.0 / 2022-05-11
+==================
+
+Breaking Changes
+----------------
+  * Fix boolean values handling in API functions 
+  * Align parameter names
+
+New Functionality And Features
+------------------------------
+  * Add support for folder decoupling
+
+Other Changes
+-------------
+  * Fix `golint` issues
+
 1.7.0 / 2022-03-24
 ==================
 
