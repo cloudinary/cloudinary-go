@@ -16,6 +16,7 @@ const authTokenName = "__cld_token__"
 const authTokenSeparator = "~"
 const authTokenInnerSeparator = "="
 
+// AuthToken is the Authentication Token struct.
 type AuthToken struct {
 	Config *config.AuthToken
 }
@@ -24,6 +25,7 @@ func (a AuthToken) isEnabled() bool {
 	return a.Config.Key != ""
 }
 
+// Generate generates the authentication token.
 func (a AuthToken) Generate(path string) string {
 	if !a.isEnabled() {
 		return ""

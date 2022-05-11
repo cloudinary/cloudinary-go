@@ -29,7 +29,7 @@ func getPingTestCases() []AdminAPIAcceptanceTestCase {
 					t.Errorf("Response should be type of PingResult, %s given", reflect.TypeOf(response))
 				}
 			},
-			ExpectedRequest:   cldtest.ExpectedRequestParams{Method: "GET", Uri: "/ping"},
+			ExpectedRequest:   cldtest.ExpectedRequestParams{Method: "GET", URI: "/ping"},
 			JsonResponse:      "{\"status\": \"OK\"}",
 			ExpectedCallCount: 1,
 		},
@@ -52,7 +52,7 @@ func getPingTestCases() []AdminAPIAcceptanceTestCase {
 					}
 				}
 			},
-			ExpectedRequest:   cldtest.ExpectedRequestParams{Method: "GET", Uri: "/ping"},
+			ExpectedRequest:   cldtest.ExpectedRequestParams{Method: "GET", URI: "/ping"},
 			JsonResponse:      "{\"error\":{\"message\": \"ERROR MESSAGE\"}}",
 			ExpectedCallCount: 1,
 		},
@@ -71,7 +71,7 @@ func getPingTestCases() []AdminAPIAcceptanceTestCase {
 					t.Errorf("Response should be type %s, %s given", reflect.TypeOf(admin.PingResult{}), reflect.TypeOf(response))
 				}
 			},
-			ExpectedRequest:   cldtest.ExpectedRequestParams{Method: "GET", Uri: "/ping"},
+			ExpectedRequest:   cldtest.ExpectedRequestParams{Method: "GET", URI: "/ping"},
 			JsonResponse:      "{\"status\":\"OK\"}",
 			ExpectedCallCount: 1,
 		},
@@ -89,7 +89,7 @@ func getUserAgentTestCases() []AdminAPIAcceptanceTestCase {
 			ResponseTest: func(response interface{}, t *testing.T) {},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method:  "GET",
-				Uri:     "/ping",
+				URI:     "/ping",
 				Headers: &map[string]string{"User-Agent": api.UserAgent},
 			},
 			JsonResponse:      "{\"status\": \"OK\"}",
@@ -104,7 +104,7 @@ func getUserAgentTestCases() []AdminAPIAcceptanceTestCase {
 			ResponseTest: func(response interface{}, t *testing.T) {},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method:  "GET",
-				Uri:     "/ping",
+				URI:     "/ping",
 				Headers: &map[string]string{"User-Agent": fmt.Sprintf("Test/1.2.3 %s", api.UserAgent)},
 			},
 			JsonResponse:      "{\"status\": \"OK\"}",
@@ -124,14 +124,14 @@ func getAuthorizationTestCases() []AdminAPIAcceptanceTestCase {
 			ResponseTest: func(response interface{}, t *testing.T) {},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method:  "GET",
-				Uri:     "/ping",
+				URI:     "/ping",
 				Headers: &map[string]string{"Authorization": "Basic a2V5OnNlY3JldA=="},
 			},
 			JsonResponse:      "{\"status\": \"OK\"}",
 			ExpectedCallCount: 1,
 		},
 		{
-			Name: "Test OAuth Authorization",
+			Name:   "Test OAuth Authorization",
 			Config: oAuthTokenConfig,
 			RequestTest: func(adminAPI *admin.API, ctx context.Context) (interface{}, error) {
 				return adminAPI.Ping(ctx)
@@ -139,7 +139,7 @@ func getAuthorizationTestCases() []AdminAPIAcceptanceTestCase {
 			ResponseTest: func(response interface{}, t *testing.T) {},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method:  "GET",
-				Uri:     "/ping",
+				URI:     "/ping",
 				Headers: &map[string]string{"Authorization": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4"},
 			},
 			JsonResponse:      "{\"status\": \"OK\"}",

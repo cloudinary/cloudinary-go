@@ -116,12 +116,12 @@ func Test_searchTypesInAstFile(t *testing.T) {
 			files: []file{},
 		},
 		expected: expected{
-			vertices: []string{"test_data.struct1"},
+			vertices: []string{"testdata.struct1"},
 			edges:    nil,
 		},
 	}
 
-	for _, filename := range []string{"./test_data/struct1.go"} {
+	for _, filename := range []string{"./testdata/struct1.go"} {
 		fset := token.NewFileSet()
 		parsedFile, err := parser.ParseFile(fset, filename, nil, parser.ParseComments)
 		if err != nil {
@@ -138,12 +138,12 @@ func Test_searchTypesInAstFile(t *testing.T) {
 			files: []file{},
 		},
 		expected: expected{
-			vertices: []string{"test_data.struct1", "test_data.struct2"},
+			vertices: []string{"testdata.struct1", "testdata.struct2"},
 			edges:    nil,
 		},
 	}
 
-	for _, filename := range []string{"./test_data/struct1.go", "./test_data/struct2.go"} {
+	for _, filename := range []string{"./testdata/struct1.go", "./testdata/struct2.go"} {
 		fset := token.NewFileSet()
 		parsedFile, err := parser.ParseFile(fset, filename, nil, parser.ParseComments)
 		if err != nil {
@@ -160,12 +160,12 @@ func Test_searchTypesInAstFile(t *testing.T) {
 			files: []file{},
 		},
 		expected: expected{
-			vertices: []string{"test_data.struct1", "another_package.Struct3"},
+			vertices: []string{"testdata.struct1", "anotherpackage.Struct3"},
 			edges:    nil,
 		},
 	}
 
-	for _, filename := range []string{"./test_data/struct1.go", "./test_data/another_package/struct3.go"} {
+	for _, filename := range []string{"./testdata/struct1.go", "./testdata/anotherpackage/struct3.go"} {
 		fset := token.NewFileSet()
 		parsedFile, err := parser.ParseFile(fset, filename, nil, parser.ParseComments)
 		if err != nil {
@@ -182,16 +182,16 @@ func Test_searchTypesInAstFile(t *testing.T) {
 			files: []file{},
 		},
 		expected: expected{
-			vertices: []string{"test_data.struct1", "test_data.struct2", "another_package.Struct3", "test_data.case1", "test_data.case2", "test_data.case3"},
+			vertices: []string{"testdata.struct1", "testdata.struct2", "anotherpackage.Struct3", "testdata.case1", "testdata.case2", "testdata.case3"},
 			edges: map[string][]string{
-				"test_data.case1": {"test_data.struct1"},
-				"test_data.case2": {"test_data.struct1", "test_data.struct2"},
-				"test_data.case3": {"test_data.struct1", "another_package.Struct3"},
+				"testdata.case1": {"testdata.struct1"},
+				"testdata.case2": {"testdata.struct1", "testdata.struct2"},
+				"testdata.case3": {"testdata.struct1", "anotherpackage.Struct3"},
 			},
 		},
 	}
 
-	for _, filename := range []string{"./test_data/cases.go", "./test_data/struct1.go", "./test_data/another_package/struct3.go", "./test_data/struct2.go"} {
+	for _, filename := range []string{"./testdata/cases.go", "./testdata/struct1.go", "./testdata/anotherpackage/struct3.go", "./testdata/struct2.go"} {
 		fset := token.NewFileSet()
 		parsedFile, err := parser.ParseFile(fset, filename, nil, parser.ParseComments)
 		if err != nil {

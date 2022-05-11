@@ -6,12 +6,14 @@ import (
 	"strings"
 )
 
+// CldSetter is the setter.
 type CldSetter struct {
 	Type   string
 	Suffix string
 	Param  string
 }
 
+// CldType is the Cloudinary node type.
 type CldType struct {
 	packageName string
 	structName  string
@@ -20,6 +22,7 @@ type CldType struct {
 	filePath    string
 }
 
+//ID returns the ID of the node.
 func (t *CldType) ID() string {
 	return t.id
 }

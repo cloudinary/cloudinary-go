@@ -36,6 +36,7 @@ func (a *Asset) setDefaults() {
 	a.DeliveryType = api.Upload
 }
 
+// New returns a new Asset instance from the provided configuration.
 func New(publicID string, conf *config.Configuration) (*Asset, error) {
 	if conf == nil {
 		var err error
@@ -52,10 +53,12 @@ func New(publicID string, conf *config.Configuration) (*Asset, error) {
 	return &asset, nil
 }
 
+// Image returns a new image Asset instance from the provided configuration.
 func Image(publicID string, conf *config.Configuration) (*Asset, error) {
 	return New(publicID, conf)
 }
 
+// Video returns a new video Asset instance from the provided configuration.
 func Video(publicID string, conf *config.Configuration) (*Asset, error) {
 	v, err := New(publicID, conf)
 	if err != nil {
@@ -66,6 +69,7 @@ func Video(publicID string, conf *config.Configuration) (*Asset, error) {
 	return v, nil
 }
 
+// File returns a new file Asset instance from the provided configuration.
 func File(publicID string, conf *config.Configuration) (*Asset, error) {
 	f, err := New(publicID, conf)
 	if err != nil {
@@ -76,6 +80,7 @@ func File(publicID string, conf *config.Configuration) (*Asset, error) {
 	return f, nil
 }
 
+// Media returns a new media Asset instance from the provided configuration.
 func Media(publicID string, conf *config.Configuration) (*Asset, error) {
 	return New(publicID, conf)
 }
@@ -91,7 +96,7 @@ func (a Asset) String() (result string, err error) {
 		}
 	}()
 
-	assetURL := joinUrl([]interface{}{a.distribution(), a.path()})
+	assetURL := joinURL([]interface{}{a.distribution(), a.path()})
 	query := a.query()
 
 	return joinNonEmpty([]interface{}{assetURL, query}, "?"), nil
@@ -203,7 +208,7 @@ func (a Asset) assetType() string {
 	}
 
 	if a.Suffix == "" {
-		return joinUrl([]interface{}{a.AssetType, a.DeliveryType})
+		return joinURL([]interface{}{a.AssetType, a.DeliveryType})
 	}
 
 	assetType, found := suffixSupportedDeliveryTypes[a.AssetType][a.DeliveryType]
@@ -224,7 +229,7 @@ func (a Asset) signature() string {
 
 	algo, length := a.getSignatureAlgorithmAndLength()
 
-	toSign := joinUrl([]interface{}{a.Transformation, a.PublicID})
+	toSign := joinURL([]interface{}{a.Transformation, a.PublicID})
 
 	return signature.SignURL(toSign, a.Config.Cloud.APISecret, algo, length)
 }
@@ -282,7 +287,7 @@ func (a Asset) source() string {
 }
 
 func (a *Asset) path() string {
-	return joinUrl([]interface{}{a.assetType(), a.signature(), a.Transformation, a.version(), a.source()})
+	return joinURL([]interface{}{a.assetType(), a.signature(), a.Transformation, a.version(), a.source()})
 }
 
 func (a *Asset) query() string {
@@ -309,7 +314,7 @@ func joinNonEmpty(items []interface{}, sep string) string {
 	return strings.Join(parts, sep)
 }
 
-func joinUrl(items []interface{}) string {
+func joinURL(items []interface{}) string {
 	return joinNonEmpty(items, "/")
 }
 

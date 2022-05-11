@@ -11,11 +11,11 @@ import (
 // UploadAPIRequestTest is a function that will be executed during the test.
 type UploadAPIRequestTest func(api *uploader.API, ctx context.Context) (interface{}, error)
 
-// UploadAPIAcceptanceTestCase is the acceptance test case definition. See `TEST.md` for an additional information.
+// UploadAPIAcceptanceTestCase is the acceptance test case definition. See `TEST.md` for additional information.
 type UploadAPIAcceptanceTestCase struct {
 	Name              string                        // Name of the test case
-	RequestTest       UploadAPIRequestTest          // Function which will be called as a API request. Put SDK calls here.
-	ResponseTest      cldtest.ApiResponseTest       // Function which will be called to test an API response.
+	RequestTest       UploadAPIRequestTest          // Function which will be called as an API request. Put SDK calls here.
+	ResponseTest      cldtest.APIResponseTest       // Function which will be called to test an API response.
 	ExpectedRequest   cldtest.ExpectedRequestParams // Expected HTTP request to be sent to the server
 	JsonResponse      string                        // Mock of the JSON response from server. This is used to check JSON parsing.
 	ExpectedStatus    string                        // Expected HTTP status of the request. This status will be returned from the HTTP mock.
@@ -23,7 +23,7 @@ type UploadAPIAcceptanceTestCase struct {
 	Config            *config.Configuration         // Configuration
 }
 
-// testUploadAPIByTestCases run acceptance tests by the given test cases. See `TEST.md` for an additional information.
+// testUploadAPIByTestCases run acceptance tests by the given test cases. See `TEST.md` for additional information.
 func testUploadAPIByTestCases(cases []UploadAPIAcceptanceTestCase, t *testing.T) {
 	for num, test := range cases {
 		if test.Name == "" {

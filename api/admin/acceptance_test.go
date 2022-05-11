@@ -11,11 +11,11 @@ import (
 // Function that will be executed during the test
 type AdminAPIRequestTest func(api *admin.API, ctx context.Context) (interface{}, error)
 
-// Acceptance test case definition. See `TEST.md` for an additional information.
+// Acceptance test case definition. See `TEST.md` for additional information.
 type AdminAPIAcceptanceTestCase struct {
 	Name              string                        // Name of the test case
-	RequestTest       AdminAPIRequestTest           // Function which will be called as a API request. Put SDK calls here.
-	ResponseTest      cldtest.ApiResponseTest       // Function which will be called to test an API response.
+	RequestTest       AdminAPIRequestTest           // Function which will be called as an API request. Put SDK calls here.
+	ResponseTest      cldtest.APIResponseTest       // Function which will be called to test an API response.
 	ExpectedRequest   cldtest.ExpectedRequestParams // Expected HTTP request to be sent to the server
 	JsonResponse      string                        // Mock of the JSON response from server. This is used to check JSON parsing.
 	ExpectedStatus    string                        // Expected HTTP status of the request. This status will be returned from the HTTP mock.
@@ -23,7 +23,7 @@ type AdminAPIAcceptanceTestCase struct {
 	Config            *config.Configuration         // Configuration
 }
 
-// Run acceptance tests by given test cases. See `TEST.md` for an additional information.
+// Run acceptance tests by given test cases. See `TEST.md` for additional information.
 func testAdminAPIByTestCases(cases []AdminAPIAcceptanceTestCase, t *testing.T) {
 	for num, test := range cases {
 		if test.Name == "" {

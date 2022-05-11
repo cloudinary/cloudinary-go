@@ -25,7 +25,7 @@ func getUserAgentTestCases() []UploadAPIAcceptanceTestCase {
 			ResponseTest: func(response interface{}, t *testing.T) {},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method:  "POST",
-				Uri:     "/auto/upload",
+				URI:     "/auto/upload",
 				Headers: &map[string]string{"User-Agent": api.UserAgent},
 			},
 			JsonResponse:      "{\"status\": \"OK\"}",
@@ -40,7 +40,7 @@ func getUserAgentTestCases() []UploadAPIAcceptanceTestCase {
 			ResponseTest: func(response interface{}, t *testing.T) {},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method:  "POST",
-				Uri:     "/auto/upload",
+				URI:     "/auto/upload",
 				Headers: &map[string]string{"User-Agent": fmt.Sprintf("Test/1.2.3 %s", api.UserAgent)},
 			},
 			JsonResponse:      "{\"status\": \"OK\"}",
@@ -61,7 +61,7 @@ func getAuthorizationTestCases() []UploadAPIAcceptanceTestCase {
 			ResponseTest: func(response interface{}, t *testing.T) {},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method:  "POST",
-				Uri:     "/auto/upload",
+				URI:     "/auto/upload",
 				Headers: &map[string]string{"Authorization": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4"},
 			},
 			JsonResponse:      "{\"status\": \"OK\"}",
@@ -90,7 +90,7 @@ func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
 			ResponseTest: func(response interface{}, t *testing.T) {},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "POST",
-				Uri:    "/auto/upload",
+				URI:    "/auto/upload",
 				Body:   &body,
 			},
 			ExpectedCallCount: 1,
@@ -115,7 +115,7 @@ func getBooleanValuesTestCases() []UploadAPIAcceptanceTestCase {
 			ResponseTest: func(response interface{}, t *testing.T) {},
 			ExpectedRequest: cldtest.ExpectedRequestParams{
 				Method: "POST",
-				Uri:    "/auto/upload",
+				URI:    "/auto/upload",
 				Body:   &body,
 			},
 			ExpectedCallCount: 1,

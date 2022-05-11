@@ -47,16 +47,16 @@ func searchTypesInAstFile(file *ast.File, filename string, graph *dag.DAG) {
 			return true
 		}
 
-		structVertexId := fmt.Sprintf("%s.%s", currentPackage, currentTypeName)
-		cldType := findOrCreateGraphNode(structVertexId, currentPackage, currentTypeName, filename, graph)
+		structVertexID := fmt.Sprintf("%s.%s", currentPackage, currentTypeName)
+		cldType := findOrCreateGraphNode(structVertexID, currentPackage, currentTypeName, filename, graph)
 
 		for _, field := range s.Fields.List {
 			if field.Names == nil {
 				// Embed struct
 				embedPackageName, embedStructName := getPackageAndStructNamesByAstField(currentPackage, field)
-				embedVertexId := fmt.Sprintf("%s.%s", embedPackageName, embedStructName)
-				findOrCreateGraphNode(embedVertexId, embedPackageName, embedStructName, filename, graph)
-				if err := graph.AddEdge(structVertexId, embedVertexId); err != nil {
+				embedVertexID := fmt.Sprintf("%s.%s", embedPackageName, embedStructName)
+				findOrCreateGraphNode(embedVertexID, embedPackageName, embedStructName, filename, graph)
+				if err := graph.AddEdge(structVertexID, embedVertexID); err != nil {
 					panic(err)
 				}
 			} else if field.Names != nil && field.Tag != nil {

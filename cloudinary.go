@@ -55,19 +55,19 @@ func NewFromOAuthToken(cloud string, oAuthToken string) (*Cloudinary, error) {
 
 // NewFromConfiguration returns a new Cloudinary instance from the provided configuration.
 func NewFromConfiguration(configuration config.Configuration) (*Cloudinary, error) {
-	logger := logger.New()
+	log := logger.New()
 
 	return &Cloudinary{
 		Config: configuration,
 		Admin: admin.API{
 			Config: configuration,
-			Logger: logger,
+			Logger: log,
 		},
 		Upload: uploader.API{
 			Config: configuration,
-			Logger: logger,
+			Logger: log,
 		},
-		Logger: logger,
+		Logger: log,
 	}, nil
 }
 
