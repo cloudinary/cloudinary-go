@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/api/uploader"
-	"github.com/cloudinary/cloudinary-go/internal/cldtest"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"github.com/stretchr/testify/assert"
 )
 

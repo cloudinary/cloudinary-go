@@ -16,8 +16,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/api/admin/search"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin/search"
 )
 
 const searchEndPoint api.EndPoint = "resources/search"

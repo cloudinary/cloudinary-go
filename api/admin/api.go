@@ -14,9 +14,9 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/config"
-	"github.com/cloudinary/cloudinary-go/logger"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/config"
+	"github.com/cloudinary/cloudinary-go/v2/logger"
 )
 
 // API is the Admin API struct.

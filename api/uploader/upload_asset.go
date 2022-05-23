@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/v2/api"
 )
 
 // UploadParams struct allows to customize upload behaviour.

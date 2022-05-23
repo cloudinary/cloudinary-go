@@ -3,7 +3,7 @@ package admin_test
 import (
 	"testing"
 
-	"github.com/cloudinary/cloudinary-go/api/admin/search"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin/search"
 )
 
 func TestSearch_SearchQuery(t *testing.T) {

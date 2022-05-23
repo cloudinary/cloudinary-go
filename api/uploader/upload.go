@@ -24,11 +24,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/config"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/config"
 	"github.com/google/uuid"
 
-	"github.com/cloudinary/cloudinary-go/logger"
+	"github.com/cloudinary/cloudinary-go/v2/logger"
 )
 
 // API is the Upload API main struct.

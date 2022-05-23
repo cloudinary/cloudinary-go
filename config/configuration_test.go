@@ -3,8 +3,8 @@ package config_test
 import (
 	"testing"
 
-	"github.com/cloudinary/cloudinary-go/config"
-	"github.com/cloudinary/cloudinary-go/internal/signature"
+	"github.com/cloudinary/cloudinary-go/v2/config"
+	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -2,9 +2,9 @@ package uploader_test
 
 import (
 	"context"
-	"github.com/cloudinary/cloudinary-go/api/uploader"
-	"github.com/cloudinary/cloudinary-go/config"
-	"github.com/cloudinary/cloudinary-go/internal/cldtest"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
+	"github.com/cloudinary/cloudinary-go/v2/config"
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"testing"
 )
 

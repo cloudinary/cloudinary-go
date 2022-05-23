@@ -6,7 +6,7 @@ package admin
 import (
 	"context"
 
-	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/v2/api"
 )
 
 const (

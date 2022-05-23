@@ -1,11 +1,11 @@
 package cloudinary
 
 import (
-	"github.com/cloudinary/cloudinary-go/api/admin"
-	"github.com/cloudinary/cloudinary-go/api/uploader"
-	"github.com/cloudinary/cloudinary-go/asset"
-	"github.com/cloudinary/cloudinary-go/config"
-	"github.com/cloudinary/cloudinary-go/logger"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
+	"github.com/cloudinary/cloudinary-go/v2/asset"
+	"github.com/cloudinary/cloudinary-go/v2/config"
+	"github.com/cloudinary/cloudinary-go/v2/logger"
 )
 
 // Cloudinary main struct
