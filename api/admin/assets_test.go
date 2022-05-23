@@ -3,9 +3,9 @@ package admin_test
 import (
 	"testing"
 
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/api/admin"
-	"github.com/cloudinary/cloudinary-go/internal/cldtest"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin"
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 )
 
 func TestAssets_AssetTypes(t *testing.T) {

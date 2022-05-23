@@ -3,7 +3,7 @@ package admin_test
 import (
 	"testing"
 
-	"github.com/cloudinary/cloudinary-go/api/admin"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin"
 )
 
 const SPName = "00-go-sp"

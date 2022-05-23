@@ -38,7 +38,7 @@ For the complete documentation, see the [Go SDK Guide](https://cloudinary.com/do
 
 ## Installation
 ```bash
-go get github.com/cloudinary/cloudinary-go
+go get github.com/cloudinary/cloudinary-go/v2
 ```
 
 # Usage
@@ -46,7 +46,7 @@ go get github.com/cloudinary/cloudinary-go
 ### Setup
 ```go
 import (
-    "github.com/cloudinary/cloudinary-go"
+    "github.com/cloudinary/cloudinary-go/v2"
 )
 
 cld, _ := cloudinary.New()

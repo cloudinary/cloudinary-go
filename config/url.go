@@ -1,6 +1,6 @@
 package config
 
-import "github.com/cloudinary/cloudinary-go/internal/signature"
+import "github.com/cloudinary/cloudinary-go/v2/internal/signature"
 
 // URL defines the configuration applied when generating Cloudinary URLs.
 //

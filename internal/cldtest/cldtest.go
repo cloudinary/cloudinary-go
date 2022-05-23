@@ -3,7 +3,7 @@ package cldtest
 import (
 	"context"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/v2/api"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -19,9 +19,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudinary/cloudinary-go/api/admin"
-	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
-	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin/metadata"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
 // LogoURL is the URL of the publicly available logo.

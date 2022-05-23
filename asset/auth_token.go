@@ -4,7 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
-	"github.com/cloudinary/cloudinary-go/config"
+	"github.com/cloudinary/cloudinary-go/v2/config"
 	"regexp"
 	"strconv"
 	"time"

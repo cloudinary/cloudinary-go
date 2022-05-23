@@ -7,8 +7,8 @@ package admin
 import (
 	"context"
 
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/transformation"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/transformation"
 )
 
 const (

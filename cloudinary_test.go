@@ -2,12 +2,12 @@ package cloudinary
 
 import (
 	"context"
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/internal/cldtest"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"log"
 	"testing"
 
-	"github.com/cloudinary/cloudinary-go/api/uploader"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
 var c, _ = New()

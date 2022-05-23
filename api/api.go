@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/internal/signature"
+	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
 	"io"
 	"log"
 	"net/url"

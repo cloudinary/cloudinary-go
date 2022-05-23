@@ -2,9 +2,9 @@ package asset_test
 
 import (
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/asset"
-	"github.com/cloudinary/cloudinary-go/internal/cldtest"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/asset"
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

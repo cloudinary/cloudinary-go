@@ -2,8 +2,8 @@ package admin
 
 import (
 	"context"
-	"github.com/cloudinary/cloudinary-go/api"
-	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin/metadata"
 )
 
 const (

@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudinary/cloudinary-go/api/admin"
-	"github.com/cloudinary/cloudinary-go/api/admin/metadata"
-	"github.com/cloudinary/cloudinary-go/internal/cldtest"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin/metadata"
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 )
 
 var metadataField = metadata.Field{

@@ -1,6 +1,6 @@
 package testdata
 
-import "github.com/cloudinary/cloudinary-go/gen/generate_setters/testdata/anotherpackage"
+import "github.com/cloudinary/cloudinary-go/v2/gen/generate_setters/testdata/anotherpackage"
 
 type case1 struct {
 	struct1

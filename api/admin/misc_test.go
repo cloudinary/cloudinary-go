@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudinary/cloudinary-go/api/admin"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin"
 )
 
 func TestAdmin_Ping(t *testing.T) {

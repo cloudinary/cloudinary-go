@@ -1,11 +1,11 @@
 package admin_test
 
 import (
-	"github.com/cloudinary/cloudinary-go/api"
+	"github.com/cloudinary/cloudinary-go/v2/api"
 	"testing"
 
-	"github.com/cloudinary/cloudinary-go/api/admin"
-	"github.com/cloudinary/cloudinary-go/internal/cldtest"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin"
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 )
 
 func TestAsset_Asset(t *testing.T) {
