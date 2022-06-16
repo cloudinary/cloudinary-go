@@ -28,6 +28,7 @@ type AssetParams struct {
 	Coordinates           *bool            `json:"coordinates,omitempty"`
 	MaxResults            int              `json:"max_results,omitempty"`
 	DerivedNextCursor     string           `json:"derived_next_cursor,omitempty"`
+	Versions              *bool            `json:"versions,omitempty"`
 }
 
 // Asset returns the details of the specified asset and all its derived resources.
@@ -137,7 +138,7 @@ type UpdateAssetParams struct {
 	PublicID          string               `json:"-"`
 	ModerationStatus  api.ModerationStatus `json:"moderation_status,omitempty"`
 	RawConvert        string               `json:"raw_convert,omitempty"`
-	Ocr               string               `json:"ocr,omitempty"`
+	OCR               string               `json:"ocr,omitempty"`
 	Categorization    string               `json:"categorization,omitempty"`
 	Detection         string               `json:"detection,omitempty"`
 	SimilaritySearch  string               `json:"similarity_search,omitempty"`

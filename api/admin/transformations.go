@@ -111,7 +111,7 @@ type TransformationResult struct {
 // UpdateTransformationParams are the parameters for UpdateTransformation.
 type UpdateTransformationParams struct {
 	Transformation   transformation.RawTransformation `json:"transformation"`
-	AllowedForStrict bool                             `json:"allowed_for_strict,omitempty"`
+	AllowedForStrict *bool                            `json:"allowed_for_strict,omitempty"`
 	UnsafeUpdate     transformation.RawTransformation `json:"unsafe_update,omitempty"`
 }
 
