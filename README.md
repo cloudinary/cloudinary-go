@@ -33,6 +33,7 @@ For the complete documentation, see the [Go SDK Guide](https://cloudinary.com/do
 
 | SDK Version | Go > 1.13 |
 |-------------|-----------|
+| 2.x         | v         |
 | 1.x         | v         |
 
 
