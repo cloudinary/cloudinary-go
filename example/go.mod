@@ -1,7 +1,7 @@
-module github.com/cloudinary/cloudinary-go/example
+module github.com/cloudinary/cloudinary-go/v2/example
 
-replace github.com/cloudinary/cloudinary-go => ../
+replace github.com/cloudinary/cloudinary-go/v2 => ../
 
 go 1.15
 
-require github.com/cloudinary/cloudinary-go v0.3.0
+require github.com/cloudinary/cloudinary-go/v2 v2.0.2
