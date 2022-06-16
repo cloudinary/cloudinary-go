@@ -1,6 +1,6 @@
 [![Build Status](https://app.travis-ci.com/cloudinary/cloudinary-go.svg)](https://app.travis-ci.com/cloudinary/cloudinary-go) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/cloudinary/cloudinary-go)](https://goreportcard.com/report/github.com/cloudinary/cloudinary-go) 
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/cloudinary/cloudinary-go)](https://pkg.go.dev/github.com/cloudinary/cloudinary-go)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/cloudinary/cloudinary-go/v2)](https://pkg.go.dev/github.com/cloudinary/cloudinary-go/v2)
 
 Cloudinary Go SDK
 ==================
