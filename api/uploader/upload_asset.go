@@ -185,6 +185,7 @@ type UploadResult struct {
 	Bytes                 int                           `json:"bytes"`
 	Type                  string                        `json:"type"`
 	Etag                  string                        `json:"etag"`
+	Phash                 string                        `json:"phash,omitempty"`
 	Placeholder           bool                          `json:"placeholder,omitempty"`
 	URL                   string                        `json:"url"`
 	SecureURL             string                        `json:"secure_url"`
