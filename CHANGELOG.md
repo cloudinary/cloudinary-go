@@ -1,3 +1,11 @@
+2.1.0 / 2022-07-07
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `Phash` in `UploadResult`
+
 2.0.2 / 2022-06-16
 ==================
 
