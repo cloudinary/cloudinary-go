@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -32,6 +33,7 @@ func TestUploader_UploadLocalPath(t *testing.T) {
 		AccessibilityAnalysis: api.Bool(true),
 		CinemagraphAnalysis:   api.Bool(true),
 		Overwrite:             api.Bool(true),
+		Timestamp:             time.Now(),
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.ImageFilePath, params)

@@ -246,7 +246,9 @@ func BuildPath(parts ...interface{}) string {
 
 // SignParameters signs parameters using the provided secret.
 func SignParameters(params url.Values, secret string) (string, error) {
-	params.Set("timestamp", strconv.FormatInt(time.Now().Unix(), 10))
+	if !params.Has("timestamp") || params["timestamp"][0] == "0" {
+		params.Set("timestamp", strconv.FormatInt(time.Now().Unix(), 10))
+	}
 
 	encodedUnescapedParams, err := url.QueryUnescape(params.Encode())
 	if err != nil {
