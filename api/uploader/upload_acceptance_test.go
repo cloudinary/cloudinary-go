@@ -72,7 +72,7 @@ func getAuthorizationTestCases() []UploadAPIAcceptanceTestCase {
 
 // Acceptance test cases for folder decoupling
 func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
-	body := "asset_folder=asset_folder&display_name=test&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7&folder=folder%2Ftest&public_id_prefix=fd_public_id_prefix&timestamp=0001-01-01T00%3A00%3A00Z&unsigned=true&use_filename_as_display_name=true"
+	body := "asset_folder=asset_folder&display_name=test&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7&folder=folder%2Ftest&public_id_prefix=fd_public_id_prefix&timestamp=123456789&unsigned=true&use_filename_as_display_name=true"
 
 	return []UploadAPIAcceptanceTestCase{
 		{
@@ -85,6 +85,7 @@ func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
 					AssetFolder:              "asset_folder",
 					UseFilenameAsDisplayName: api.Bool(true),
 					Unsigned:                 api.Bool(true),
+					Timestamp:                123456789,
 				})
 			},
 			ResponseTest: func(response interface{}, t *testing.T) {},
@@ -100,7 +101,7 @@ func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
 
 // Acceptance test cases for handling of boolean values
 func getBooleanValuesTestCases() []UploadAPIAcceptanceTestCase {
-	body := "file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7&timestamp=0001-01-01T00%3A00%3A00Z&unique_filename=false&unsigned=true&use_filename=true"
+	body := "file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7&timestamp=123456789&unique_filename=false&unsigned=true&use_filename=true"
 
 	return []UploadAPIAcceptanceTestCase{
 		{
@@ -110,6 +111,7 @@ func getBooleanValuesTestCases() []UploadAPIAcceptanceTestCase {
 					UniqueFilename: api.Bool(false),
 					UseFilename:    api.Bool(true),
 					Unsigned:       api.Bool(true),
+					Timestamp:      123456789,
 				})
 			},
 			ResponseTest: func(response interface{}, t *testing.T) {},

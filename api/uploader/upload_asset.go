@@ -63,7 +63,7 @@ type UploadParams struct {
 	BackgroundRemoval        string                      `json:"background_removal,omitempty"`
 	Detection                string                      `json:"detection,omitempty"`
 	OCR                      string                      `json:"ocr,omitempty"`
-	Timestamp                time.Time                   `json:"timestamp,omitempty"`
+	Timestamp                int64                       `json:"timestamp,omitempty"`
 	QualityAnalysis          *bool                       `json:"quality_analysis,omitempty"`
 	AccessibilityAnalysis    *bool                       `json:"accessibility_analysis,omitempty"`
 	CinemagraphAnalysis      *bool                       `json:"cinemagraph_analysis,omitempty"`
