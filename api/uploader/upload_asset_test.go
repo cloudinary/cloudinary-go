@@ -33,7 +33,7 @@ func TestUploader_UploadLocalPath(t *testing.T) {
 		AccessibilityAnalysis: api.Bool(true),
 		CinemagraphAnalysis:   api.Bool(true),
 		Overwrite:             api.Bool(true),
-		Timestamp:             time.Now(),
+		Timestamp:             time.Now().Unix(),
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.ImageFilePath, params)

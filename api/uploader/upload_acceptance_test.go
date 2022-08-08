@@ -10,7 +10,6 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2/config"
 	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"testing"
-	"time"
 )
 
 var oAuthTokenConfig, _ = config.NewFromOAuthToken("TEST", "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
@@ -86,7 +85,7 @@ func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
 					AssetFolder:              "asset_folder",
 					UseFilenameAsDisplayName: api.Bool(true),
 					Unsigned:                 api.Bool(true),
-					Timestamp:                time.Unix(123456789, 0),
+					Timestamp:                123456789,
 				})
 			},
 			ResponseTest: func(response interface{}, t *testing.T) {},
@@ -112,7 +111,7 @@ func getBooleanValuesTestCases() []UploadAPIAcceptanceTestCase {
 					UniqueFilename: api.Bool(false),
 					UseFilename:    api.Bool(true),
 					Unsigned:       api.Bool(true),
-					Timestamp:      time.Unix(123456789, 0),
+					Timestamp:      123456789,
 				})
 			},
 			ResponseTest: func(response interface{}, t *testing.T) {},

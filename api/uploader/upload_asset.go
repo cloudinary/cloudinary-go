@@ -63,28 +63,10 @@ type UploadParams struct {
 	BackgroundRemoval        string                      `json:"background_removal,omitempty"`
 	Detection                string                      `json:"detection,omitempty"`
 	OCR                      string                      `json:"ocr,omitempty"`
-	Timestamp                time.Time                   `json:"timestamp,omitempty"`
+	Timestamp                int64                       `json:"timestamp,omitempty"`
 	QualityAnalysis          *bool                       `json:"quality_analysis,omitempty"`
 	AccessibilityAnalysis    *bool                       `json:"accessibility_analysis,omitempty"`
 	CinemagraphAnalysis      *bool                       `json:"cinemagraph_analysis,omitempty"`
-}
-
-// MarshalJSON is used to customize serialization of the struct.
-func (u UploadParams) MarshalJSON() ([]byte, error) {
-	type UploadParamsAlias UploadParams
-
-	var timestamp int64
-	if !u.Timestamp.IsZero() {
-		timestamp = u.Timestamp.Unix()
-	}
-
-	return json.Marshal(&struct {
-		Timestamp int64 `json:"timestamp,omitempty"`
-		UploadParamsAlias
-	}{
-		Timestamp:         timestamp,
-		UploadParamsAlias: (UploadParamsAlias)(u),
-	})
 }
 
 // SingleResponsiveBreakpointsParams represents params for a single responsive breakpoints generation request.
