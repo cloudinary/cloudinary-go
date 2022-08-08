@@ -37,7 +37,7 @@ func TestUploader_DownloadZipURL(t *testing.T) {
 	cldtest.UploadTestAsset(t, cldtest.PublicID2)
 
 	params := uploader.CreateArchiveParams{
-		Tags:           cldtest.Tags,
+		PublicIDs:      []string{cldtest.PublicID, cldtest.PublicID2},
 		TargetPublicID: "goArchive",
 	}
 
@@ -50,6 +50,9 @@ func TestUploader_DownloadZipURL(t *testing.T) {
 	if arURL == "" {
 		t.Error(arURL)
 	}
+
+	assert.Contains(t, arURL, url.QueryEscape("public_ids[0]")+"="+cldtest.PublicID)
+	assert.Contains(t, arURL, url.QueryEscape("public_ids[1]")+"="+cldtest.PublicID2)
 }
 
 func TestUploader_DownloadFolder(t *testing.T) {
