@@ -48,7 +48,7 @@ type CreateArchiveParams struct {
 	NotificationURL         string           `json:"notification_url,omitempty"`
 	Phash                   string           `json:"phash,omitempty"`
 	Prefixes                api.CldAPIArray  `json:"prefixes,omitempty"`
-	PublicIDs               api.CldAPIArray  `json:"public_ids,omitempty"`
+	PublicIDs               []string         `json:"public_ids,omitempty"`
 	ResourceType            api.AssetType    `json:"-"`
 	SkipTransformationName  *bool            `json:"skip_transformation_name,omitempty"`
 	TargetFormat            ArchiveFormat    `json:"target_format,omitempty"`
