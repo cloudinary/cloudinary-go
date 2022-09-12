@@ -72,20 +72,22 @@ func getAuthorizationTestCases() []UploadAPIAcceptanceTestCase {
 
 // Acceptance test cases for folder decoupling
 func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
-	body := "asset_folder=asset_folder&display_name=test&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7&folder=folder%2Ftest&public_id_prefix=fd_public_id_prefix&timestamp=123456789&unsigned=true&use_filename_as_display_name=true"
+	body := "asset_folder=asset_folder&display_name=test&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7&folder=folder%2Ftest&public_id_prefix=fd_public_id_prefix&timestamp=123456789&unique_display_name=true&unsigned=true&use_asset_folder_as_public_id_prefix=true&use_filename_as_display_name=true"
 
 	return []UploadAPIAcceptanceTestCase{
 		{
 			Name: "Upload Test Folder Decoupling",
 			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
 				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
-					PublicIDPrefix:           "fd_public_id_prefix",
-					DisplayName:              "test",
-					Folder:                   "folder/test",
-					AssetFolder:              "asset_folder",
-					UseFilenameAsDisplayName: api.Bool(true),
-					Unsigned:                 api.Bool(true),
-					Timestamp:                123456789,
+					PublicIDPrefix:                 "fd_public_id_prefix",
+					DisplayName:                    "test",
+					UniqueDisplayName:              api.Bool(true),
+					Folder:                         "folder/test",
+					AssetFolder:                    "asset_folder",
+					UseAssetFolderAsPublicIDPrefix: api.Bool(true),
+					UseFilenameAsDisplayName:       api.Bool(true),
+					Unsigned:                       api.Bool(true),
+					Timestamp:                      123456789,
 				})
 			},
 			ResponseTest: func(response interface{}, t *testing.T) {},

@@ -43,8 +43,11 @@ type SearchResult struct {
 // SearchAsset represents the details of a single asset that was found.
 type SearchAsset struct {
 	PublicID      string              `json:"public_id"`
+	AssetID       string              `json:"asset_id"`
 	Folder        string              `json:"folder"`
+	AssetFolder   string              `json:"asset_folder"`
 	Filename      string              `json:"filename"`
+	DisplayName   string              `json:"display_name"`
 	Format        string              `json:"format"`
 	Version       int                 `json:"version"`
 	ResourceType  string              `json:"resource_type"`

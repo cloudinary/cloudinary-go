@@ -5,10 +5,10 @@ type Query struct {
 	// Expression is the (Lucene-like) string expression specifying the search query.
 	// If not provided then all resources are listed (up to MaxResults).
 	Expression string `json:"expression,omitempty"`
-	// SortBy is the the field to sort by. You can specify more than one SortBy parameter; results will be sorted
+	// SortBy is the field to sort by. You can specify more than one SortBy parameter; results will be sorted
 	// according to the order of the fields provided.
 	SortBy []SortByField `json:"sort_by,omitempty"`
-	// Aggregate is the the name of a field (attribute) for which an aggregation count should be calculated and returned in the response.
+	// Aggregate is the name of a field (attribute) for which an aggregation count should be calculated and returned in the response.
 	// (Tier 2 only)
 	// You can specify more than one aggregate parameter.
 	// For aggregation fields without discrete values, the results are divided into categories.

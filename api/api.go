@@ -167,6 +167,8 @@ type Metadata map[string]interface{}
 type BriefAssetResult struct {
 	AssetID     string    `json:"asset_id"`
 	PublicID    string    `json:"public_id"`
+	AssetFolder string    `json:"asset_folder"`
+	DisplayName string    `json:"display_name"`
 	Format      string    `json:"format"`
 	Version     int       `json:"version"`
 	AssetType   string    `json:"resource_type"`

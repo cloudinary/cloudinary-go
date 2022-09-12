@@ -51,6 +51,8 @@ type AssetResult struct {
 	AssetID               string                      `json:"asset_id"`
 	PublicID              string                      `json:"public_id"`
 	Format                string                      `json:"format"`
+	AssetFolder           string                      `json:"asset_folder"`
+	DisplayName           string                      `json:"display_name"`
 	Version               int                         `json:"version"`
 	ResourceType          string                      `json:"resource_type"`
 	Type                  string                      `json:"type"`
@@ -136,6 +138,9 @@ type UpdateAssetParams struct {
 	AssetType         api.AssetType        `json:"-"`
 	DeliveryType      api.DeliveryType     `json:"-"`
 	PublicID          string               `json:"-"`
+	AssetFolder       string               `json:"asset_folder,omitempty"`
+	DisplayName       string               `json:"display_name,omitempty"`
+	UniqueDisplayName *bool                `json:"unique_display_name,omitempty"`
 	ModerationStatus  api.ModerationStatus `json:"moderation_status,omitempty"`
 	RawConvert        string               `json:"raw_convert,omitempty"`
 	OCR               string               `json:"ocr,omitempty"`

@@ -13,6 +13,7 @@ import (
 
 const (
 	assets        api.EndPoint = "resources"
+	byAssetFolder api.EndPoint = "by_asset_folder"
 	derivedAssets api.EndPoint = "derived_resources"
 	tags          api.EndPoint = "tags"
 	cldContext    api.EndPoint = "context"
@@ -153,6 +154,26 @@ type AssetsByIDsParams struct {
 func (a *API) AssetsByIDs(ctx context.Context, params AssetsByIDsParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
+
+	return res, err
+}
+
+// AssetsByAssetFolderParams are the parameters for AssetsByAssetFolder.
+type AssetsByAssetFolderParams struct {
+	AssetFolder string `json:"asset_folder"`
+	Tags        *bool  `json:"tags,omitempty"`
+	Context     *bool  `json:"context,omitempty"`
+	Moderations *bool  `json:"moderations,omitempty"`
+	NextCursor  string `json:"next_cursor,omitempty"`
+	MaxResults  int    `json:"max_results,omitempty"`
+}
+
+// AssetsByAssetFolder lists assets in the specified asset folder.
+//
+// https://cloudinary.com/documentation/admin_api#get_resources
+func (a *API) AssetsByAssetFolder(ctx context.Context, params AssetsByAssetFolderParams) (*AssetsResult, error) {
+	res := &AssetsResult{}
+	_, err := a.get(ctx, api.BuildPath(assets, byAssetFolder), params, res)
 
 	return res, err
 }
