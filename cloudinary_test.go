@@ -53,7 +53,7 @@ func TestCloudinary_Upload(t *testing.T) {
 		Overwrite:      api.Bool(true),
 	}
 
-	resp, err := c.Upload.Upload(ctx, "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png", params)
+	resp, err := c.Upload.Upload(ctx, cldtest.LogoURL, params)
 
 	if err != nil {
 		t.Error("Uploader failed: ", err)

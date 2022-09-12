@@ -69,6 +69,12 @@ const Transformation = "c_scale,w_500"
 // APIVersion is the version of the API.
 const APIVersion = "v1_1"
 
+// SkipDynamicFolders is the name of the dynamic folders feature we want to skip.
+const SkipDynamicFolders = "dynamic_folders"
+
+// UniqueFolder is the unique folder for the current test run.
+var UniqueFolder = UniqueID(Folder)
+
 // ImageInFolder is the test public ID in folder.
 var ImageInFolder = fmt.Sprintf("%s/%s", Folder, PublicID)
 
@@ -102,9 +108,10 @@ var stringMetadataField = metadata.Field{
 // UploadTestAsset uploads a test image asset for test purposes.
 func UploadTestAsset(t *testing.T, publicID string) *uploader.UploadResult {
 	params := uploader.UploadParams{
-		PublicID:  publicID,
-		Overwrite: api.Bool(true),
-		Tags:      Tags,
+		PublicID:    publicID,
+		Overwrite:   api.Bool(true),
+		Tags:        Tags,
+		AssetFolder: UniqueFolder,
 	}
 
 	resp, err := uploadAPI.Upload(ctx, LogoURL, params)
@@ -277,5 +284,12 @@ func GetTestHandler(response string, t *testing.T, callCounter *int, ep Expected
 		if err != nil {
 			t.Error(err)
 		}
+	}
+}
+
+func SkipFeature(t *testing.T, feature string) {
+	featuresToRun := strings.ToLower(os.Getenv("CLD_TEST_FEATURES"))
+	if featuresToRun != "all" && !strings.Contains(featuresToRun, feature) {
+		t.Skipf("Please enable %s feature in your account and set CLD_TEST_FEATURES environment variable", feature)
 	}
 }

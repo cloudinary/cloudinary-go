@@ -1,6 +1,7 @@
 package admin_test
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/v2/api"
@@ -44,6 +45,24 @@ func TestAssets_AssetsByIDs(t *testing.T) {
 	if err != nil || len(resp.Assets) != 1 {
 		t.Error(err, resp)
 	}
+}
+
+func TestAssets_AssetsByAssetFolder(t *testing.T) {
+	cldtest.SkipFeature(t, cldtest.SkipDynamicFolders)
+
+	asset1 := cldtest.UploadTestAsset(t, cldtest.PublicID)
+	asset2 := cldtest.UploadTestAsset(t, cldtest.PublicID2)
+
+	resp, err := adminAPI.AssetsByAssetFolder(ctx, admin.AssetsByAssetFolderParams{
+		AssetFolder: cldtest.UniqueFolder,
+	})
+
+	if err != nil || len(resp.Assets) != 2 {
+		t.Error(err, resp)
+	}
+
+	assert.Equal(t, asset1.AssetFolder, resp.Assets[0].AssetFolder)
+	assert.Equal(t, asset2.AssetFolder, resp.Assets[1].AssetFolder)
 }
 
 func TestAssets_RestoreAssets(t *testing.T) {
