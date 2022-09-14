@@ -1,3 +1,17 @@
+2.2.0 / 2022-09-14
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `AssetsByAssetFolder` Admin API
+
+Other Changes
+-------------
+
+  * Fix support for multiple `PublicIDs` in `CreateArchive`
+  * Fix support for custom `timestamp` in `api.SignParameters`
+
 2.1.0 / 2022-07-07
 ==================
 
