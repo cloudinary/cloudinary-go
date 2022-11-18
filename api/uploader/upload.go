@@ -185,7 +185,7 @@ func (u *API) postFile(ctx context.Context, file interface{}, formParams url.Val
 	case io.Reader:
 		return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams, map[string]string{}, 0)
 	default:
-		return nil, errors.New("unsupported file type")
+		return nil, fmt.Errorf("invalid file parameter of unsupported type %T", file)
 	}
 }
 
