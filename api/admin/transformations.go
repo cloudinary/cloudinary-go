@@ -71,6 +71,7 @@ type GetTransformationResult struct {
 	Named            bool                          `json:"named"`
 	Info             transformation.Transformation `json:"info"`
 	Derived          []DerivedAsset                `json:"derived"`
+	NextCursor       string                        `json:"next_cursor"`
 	Error            api.ErrorResp                 `json:"error,omitempty"`
 }
 
