@@ -71,6 +71,7 @@ type SearchAsset struct {
 	Etag          string              `json:"etag"`
 	CreatedBy     SearchUser          `json:"created_by"`
 	UploadedBy    SearchUser          `json:"uploaded_by"`
+	LastUpdated   api.LastUpdated     `json:"last_updated"`
 }
 
 // ImageAnalysis contains details about image analysis.

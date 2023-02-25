@@ -37,7 +37,7 @@ type AssetParams struct {
 // you can also use the uploader.Upload or uploader.Explicit methods, which return the same information and
 // are not rate limited.
 //
-//https://cloudinary.com/documentation/admin_api#get_the_details_of_a_single_resource
+// https://cloudinary.com/documentation/admin_api#get_the_details_of_a_single_resource
 func (a *API) Asset(ctx context.Context, params AssetParams) (*AssetResult, error) {
 	res := &AssetResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType,
@@ -66,6 +66,7 @@ type AssetResult struct {
 	SecureURL             string                      `json:"secure_url"`
 	Metadata              api.Metadata                `json:"metadata,omitempty"`
 	Tags                  []string                    `json:"tags"`
+	LastUpdated           api.LastUpdated             `json:"last_updated"`
 	NextCursor            string                      `json:"next_cursor"`
 	Derived               []interface{}               `json:"derived"`
 	Etag                  string                      `json:"etag"`
