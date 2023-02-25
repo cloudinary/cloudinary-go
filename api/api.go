@@ -188,6 +188,16 @@ type BriefAssetResult struct {
 	Error       string    `json:"error,omitempty"`
 }
 
+// LastUpdated represents the details of the asset last updated time.
+type LastUpdated struct {
+	AccessControlUpdatedAt time.Time `json:"access_control_updated_at,omitempty"`
+	ContextUpdatedAt       time.Time `json:"context_updated_at,omitempty"`
+	MetadataUpdatedAt      time.Time `json:"metadata_updated_at,omitempty"`
+	PublicIDUpdatedAt      time.Time `json:"public_id_updated_at,omitempty"`
+	TagsUpdatedAt          time.Time `json:"tags_updated_at,omitempty"`
+	UpdatedAt              time.Time `json:"updated_at,omitempty"`
+}
+
 // MarshalJSON writes a quoted string in the custom format.
 func (cldAPIMap Metadata) MarshalJSON() ([]byte, error) {
 	// FIXME: handle escaping
