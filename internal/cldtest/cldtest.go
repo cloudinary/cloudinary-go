@@ -37,7 +37,19 @@ const Base64Image = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAAL
 const PublicID = "go_test_image"
 
 // PublicID2 is another test public ID.
-const PublicID2 = "go_test_image_2"
+const PublicID2 = "go_test_video_2"
+
+// PublicID3 is even another test public ID.
+const PublicID3 = "go_test_file_3"
+
+// AssetID is the test Asset ID.
+const AssetID = "4af5a0d1d4047808528b5425d166c101"
+
+// AssetID2 is another test Asset ID.
+const AssetID2 = "4af5a0d1d4047808528b5425d166c102"
+
+// AssetID3 is (you won't believe it :)) another test Asset ID.
+const AssetID3 = "4af5a0d1d4047808528b5425d166c103"
 
 // ImgExt is the extension of the image.
 const ImgExt = ".png"
@@ -71,6 +83,15 @@ const APIVersion = "v1_1"
 
 // SkipDynamicFolders is the name of the dynamic folders feature we want to skip.
 const SkipDynamicFolders = "dynamic_folders"
+
+// FQPublicID is the Fully Qualified test Public ID.
+var FQPublicID = "image/upload/" + PublicID
+
+// FQPublicID2 is the Fully Qualified test Public ID.
+var FQPublicID2 = "video/upload/" + PublicID2
+
+// FQPublicID3 is the Fully Qualified test Public ID.
+var FQPublicID3 = "raw/upload/" + PublicID3
 
 // UniqueFolder is the unique folder for the current test run.
 var UniqueFolder = UniqueID(Folder)
