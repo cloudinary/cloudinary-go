@@ -104,17 +104,16 @@ func (a Asset) String() (result string, err error) {
 
 // distribution builds the hostname for the asset distribution.
 //
-//   1) Customers in shared distribution (e.g. res.cloudinary.com)
-//      If CDNSubDomain is true uses res-[1-5].cloudinary.com for both http and https.
-//      Setting secureCDNSubDomain to false disables this for https.
-//   2) Customers with private cdn
-//      If CDNSubDomain is true uses cloudName-res-[1-5].cloudinary.com for http
-//      If secureCDNSubDomain is true uses cloudName-res-[1-5].cloudinary.com for https
-//      (please contact support if you require this)
-//   3) Customers with cname
-//      If CDNSubDomain is true uses a[1-5].cname for http.
-//      For https, uses the same naming scheme as 1 for shared distribution and as 2 for private distribution.
-//
+//  1. Customers in shared distribution (e.g. res.cloudinary.com)
+//     If CDNSubDomain is true uses res-[1-5].cloudinary.com for both http and https.
+//     Setting secureCDNSubDomain to false disables this for https.
+//  2. Customers with private cdn
+//     If CDNSubDomain is true uses cloudName-res-[1-5].cloudinary.com for http
+//     If secureCDNSubDomain is true uses cloudName-res-[1-5].cloudinary.com for https
+//     (please contact support if you require this)
+//  3. Customers with cname
+//     If CDNSubDomain is true uses a[1-5].cname for http.
+//     For https, uses the same naming scheme as 1 for shared distribution and as 2 for private distribution.
 func (a Asset) distribution() string {
 	uc := a.Config.URL
 	useSharedHost := !uc.PrivateCDN
@@ -168,9 +167,12 @@ func (a Asset) distribution() string {
 }
 
 // buildHostName is a helper method for building hostname of form:
-// 		subDomainPrefix-subDomain-subDomainSuffix.domain
+//
+//	subDomainPrefix-subDomain-subDomainSuffix.domain
+//
 // For example:
-//      cloudName-res-3.cloudinary.com
+//
+//	cloudName-res-3.cloudinary.com
 func buildHostName(subDomainPrefix string, subDomainSuffix string, subDomain string, domain string) string {
 	return joinNonEmpty([]interface{}{joinNonEmpty([]interface{}{subDomainPrefix, subDomain, subDomainSuffix}, "-"), domain}, ".")
 }

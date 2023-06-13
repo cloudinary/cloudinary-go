@@ -96,11 +96,11 @@ func (rbpParams ResponsiveBreakpointsParams) MarshalJSON() ([]byte, error) {
 // Upload uploads an asset to a Cloudinary account.
 //
 // The asset can be:
-//   * a local file path
-//   * the actual data (io.Reader)
-//   * the Data URI (Base64 encoded), max ~60 MB (62,910,000 chars)
-//   * the remote FTP, HTTP or HTTPS URL address of an existing file
-//   * a private storage bucket (S3 or Google Storage) URL of a whitelisted bucket
+//   - a local file path
+//   - the actual data (io.Reader)
+//   - the Data URI (Base64 encoded), max ~60 MB (62,910,000 chars)
+//   - the remote FTP, HTTP or HTTPS URL address of an existing file
+//   - a private storage bucket (S3 or Google Storage) URL of a whitelisted bucket
 //
 // https://cloudinary.com/documentation/image_upload_api_reference#upload_method
 func (u *API) Upload(ctx context.Context, file interface{}, uploadParams UploadParams) (*UploadResult, error) {

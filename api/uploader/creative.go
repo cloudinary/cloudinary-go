@@ -106,7 +106,7 @@ type ExplodeParams struct {
 // Each derived image is stored with the same public ID as the original file, and can be accessed using the page
 // parameter, in order to deliver a specific image.
 //
-//https://cloudinary.com/documentation/image_upload_api_reference#explode_method
+// https://cloudinary.com/documentation/image_upload_api_reference#explode_method
 func (u *API) Explode(ctx context.Context, params ExplodeParams) (*ExplodeResult, error) {
 	params.Transformation = "pg_all" // Transformation must contain exactly one "pg_all" transformation parameter
 	res := &ExplodeResult{}

@@ -22,7 +22,7 @@ type CldType struct {
 	filePath    string
 }
 
-//ID returns the ID of the node.
+// ID returns the ID of the node.
 func (t *CldType) ID() string {
 	return t.id
 }

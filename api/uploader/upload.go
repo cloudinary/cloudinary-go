@@ -1,6 +1,6 @@
 // Package uploader is used for accessing Cloudinary Upload API functionality.
 //
-//https://cloudinary.com/documentation/image_upload_api_reference
+// https://cloudinary.com/documentation/image_upload_api_reference
 package uploader
 
 import (

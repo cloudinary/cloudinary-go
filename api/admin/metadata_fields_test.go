@@ -248,7 +248,7 @@ func TestAdmin_AddMetadataFields(t *testing.T) {
 	}
 }
 
-//FIXME; find a good library with a proper TearDown method
+// FIXME; find a good library with a proper TearDown method
 func TestAdmin_MetadataFieldsCleanup(t *testing.T) {
 	for _, extID := range mdIDs {
 		resp, err := adminAPI.DeleteMetadataField(ctx, admin.DeleteMetadataFieldParams{FieldExternalID: extID})

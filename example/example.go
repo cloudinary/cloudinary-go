@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-    "github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/admin"
 	"github.com/cloudinary/cloudinary-go/v2/api/admin/search"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
