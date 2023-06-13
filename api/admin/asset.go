@@ -28,6 +28,8 @@ type AssetParams struct {
 	Coordinates           *bool            `json:"coordinates,omitempty"`
 	MaxResults            int              `json:"max_results,omitempty"`
 	DerivedNextCursor     string           `json:"derived_next_cursor,omitempty"`
+	Related               *bool            `json:"related,omitempty"`
+	RelatedNextCursor     string           `json:"related_next_cursor,omitempty"`
 	Versions              *bool            `json:"versions,omitempty"`
 }
 

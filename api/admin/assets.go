@@ -15,6 +15,7 @@ const (
 	assets        api.EndPoint = "resources"
 	byAssetFolder api.EndPoint = "by_asset_folder"
 	derivedAssets api.EndPoint = "derived_resources"
+	relatedAssets api.EndPoint = "related_assets"
 	tags          api.EndPoint = "tags"
 	cldContext    api.EndPoint = "context"
 	moderations   api.EndPoint = "moderations"
@@ -51,7 +52,7 @@ type AssetsParams struct {
 
 // Assets lists all uploaded assets filtered by any specified AssetsParams.
 //
-//https://cloudinary.com/documentation/admin_api#get_resources
+// https://cloudinary.com/documentation/admin_api#get_resources
 func (a *API) Assets(ctx context.Context, params AssetsParams) (*AssetsResult, error) {
 	res := &AssetsResult{}
 	_, err := a.get(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
@@ -331,6 +332,85 @@ func (a *API) DeleteDerivedAssetsByTransformation(ctx context.Context, params De
 
 	res := &DeleteAssetsResult{}
 	_, err := a.delete(ctx, api.BuildPath(assets, params.AssetType, params.DeliveryType), params, res)
+
+	return res, err
+}
+
+// AddRelatedAssetsParams are the parameters for AddRelatedAssets.
+type AddRelatedAssetsParams struct {
+	AssetType      api.AssetType    `json:"-"`
+	DeliveryType   api.DeliveryType `json:"-"`
+	PublicID       string           `json:"-"`
+	AssetsToRelate []string         `json:"assets_to_relate"`
+}
+
+// AddRelatedAssets relates an asset to other assets by public IDs.
+func (a *API) AddRelatedAssets(ctx context.Context, params AddRelatedAssetsParams) (*AddRelatedAssetsResult, error) {
+	res := &AddRelatedAssetsResult{}
+	_, err := a.post(ctx, api.BuildPath(assets, relatedAssets, params.AssetType, params.DeliveryType, params.PublicID), params, res)
+
+	return res, err
+}
+
+// AddRelatedAssetsResult is the result of AddRelatedAssets.
+type AddRelatedAssetsResult struct {
+	Success []RelatedAssetResult `json:"success"`
+	Failed  []RelatedAssetResult `json:"failed"`
+}
+
+// AddRelatedAssetsByAssetIDsParams are the parameters for AddRelatedAssetsByAssetIDs.
+type AddRelatedAssetsByAssetIDsParams struct {
+	AssetID        string   `json:"-"`
+	AssetsToRelate []string `json:"assets_to_relate"`
+}
+
+// AddRelatedAssetsByAssetIDs relates an asset to other assets by asset IDs.
+func (a *API) AddRelatedAssetsByAssetIDs(ctx context.Context, params AddRelatedAssetsByAssetIDsParams) (*AddRelatedAssetsResult, error) {
+	res := &AddRelatedAssetsResult{}
+	_, err := a.post(ctx, api.BuildPath(assets, relatedAssets, params.AssetID), params, res)
+
+	return res, err
+}
+
+type RelatedAssetResult struct {
+	Message string `json:"message"`
+	Code    string `json:"code"`
+	Asset   string `json:"asset"`
+	Status  int    `json:"status"`
+}
+
+// DeleteRelatedAssetsParams are the parameters for DeleteRelatedAssets.
+type DeleteRelatedAssetsParams struct {
+	AssetType        api.AssetType    `json:"-"`
+	DeliveryType     api.DeliveryType `json:"-"`
+	PublicID         string           `json:"-"`
+	AssetsToUnrelate []string         `json:"assets_to_unrelate"`
+}
+
+// DeleteRelatedAssets unrelates an asset from other assets by public IDs.
+func (a *API) DeleteRelatedAssets(ctx context.Context, params DeleteRelatedAssetsParams) (*DeleteRelatedAssetsResult, error) {
+	res := &DeleteRelatedAssetsResult{}
+	_, err := a.delete(ctx, api.BuildPath(assets, relatedAssets, params.AssetType, params.DeliveryType, params.PublicID), params, res)
+
+	return res, err
+}
+
+// DeleteRelatedAssetsResult is the result of DeleteRelatedAssets.
+type DeleteRelatedAssetsResult struct {
+	Success []RelatedAssetResult `json:"success"`
+	Failed  []RelatedAssetResult `json:"failed"`
+}
+
+// DeleteRelatedAssetsByAssetIDsParams are the parameters for DeleteRelatedAssetsByAssetIDs.
+type DeleteRelatedAssetsByAssetIDsParams struct {
+	AssetID          string   `json:"-"`
+	AssetsToUnrelate []string `json:"assets_to_unrelate"`
+}
+
+// DeleteRelatedAssetsByAssetIDs unrelates an asset from other assets by asset IDs.
+func (a *API) DeleteRelatedAssetsByAssetIDs(ctx context.Context, params DeleteRelatedAssetsByAssetIDsParams) (*DeleteRelatedAssetsResult, error) {
+	res := &DeleteRelatedAssetsResult{}
+	_, err := a.delete(ctx, api.BuildPath(assets, relatedAssets, params.AssetID), params, res)
 
 	return res, err
 }
