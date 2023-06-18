@@ -96,7 +96,7 @@ func (a Asset) String() (result string, err error) {
 		}
 	}()
 
-	assetURL := joinURL([]interface{}{a.distribution(), a.path()})
+	assetURL := joinURL([]interface{}{distribution(a.PublicID, a.Config), a.path()})
 	query := a.query()
 
 	return joinNonEmpty([]interface{}{assetURL, query}, "?"), nil
@@ -114,15 +114,15 @@ func (a Asset) String() (result string, err error) {
 //  3. Customers with cname
 //     If CDNSubDomain is true uses a[1-5].cname for http.
 //     For https, uses the same naming scheme as 1 for shared distribution and as 2 for private distribution.
-func (a Asset) distribution() string {
-	uc := a.Config.URL
+func distribution(source string, conf config.Configuration) string {
+	uc := conf.URL
 	useSharedHost := !uc.PrivateCDN
 	var hostName string
 	if uc.Secure {
 		hostName = uc.SecureCName
 		if hostName == "" {
 			if uc.PrivateCDN {
-				hostName = buildHostName(a.Config.Cloud.CloudName, "", uc.SubDomain, uc.Domain)
+				hostName = buildHostName(conf.Cloud.CloudName, "", uc.SubDomain, uc.Domain)
 			} else {
 				hostName = uc.SharedHost
 				useSharedHost = true
@@ -135,23 +135,23 @@ func (a Asset) distribution() string {
 		}
 
 		if secureCDNSubDomain {
-			hostName = strings.Replace(hostName, uc.SharedHost, buildHostName("", domainShard(a.PublicID), uc.SubDomain, uc.Domain), 1)
+			hostName = strings.Replace(hostName, uc.SharedHost, buildHostName("", domainShard(source), uc.SubDomain, uc.Domain), 1)
 		}
 	} else {
 		if uc.CName != "" {
 			subDomain := ""
 			if uc.CDNSubDomain {
-				subDomain = "a" + domainShard(a.PublicID)
+				subDomain = "a" + domainShard(source)
 			}
 			hostName = buildHostName("", "", subDomain, uc.CName)
 		} else {
 			prefix := ""
 			if uc.PrivateCDN {
-				prefix = a.Config.Cloud.CloudName
+				prefix = conf.Cloud.CloudName
 			}
 			suffix := ""
 			if uc.CDNSubDomain {
-				suffix = domainShard(a.PublicID)
+				suffix = domainShard(source)
 			}
 			hostName = buildHostName(prefix, suffix, uc.SubDomain, uc.Domain)
 		}
@@ -160,7 +160,7 @@ func (a Asset) distribution() string {
 	distribution := fmt.Sprintf("%s://%s", uc.Protocol(), hostName)
 
 	if useSharedHost {
-		distribution += "/" + a.Config.Cloud.CloudName
+		distribution += "/" + conf.Cloud.CloudName
 	}
 
 	return distribution

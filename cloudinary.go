@@ -2,6 +2,7 @@ package cloudinary
 
 import (
 	"github.com/cloudinary/cloudinary-go/v2/api/admin"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin/search"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/cloudinary/cloudinary-go/v2/asset"
 	"github.com/cloudinary/cloudinary-go/v2/config"
@@ -89,4 +90,9 @@ func (c Cloudinary) File(publicID string) (*asset.Asset, error) {
 // Media creates a new asset.Media instance.
 func (c Cloudinary) Media(publicID string) (*asset.Asset, error) {
 	return asset.Media(publicID, &c.Config)
+}
+
+// SearchURL creates a new asset.SearchURL instance.
+func (c Cloudinary) SearchURL(query search.Query) (*asset.SearchURLAsset, error) {
+	return asset.SearchURL(query, &c.Config)
 }

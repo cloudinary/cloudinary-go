@@ -4,6 +4,7 @@
 package api
 
 import (
+	"bytes"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -272,6 +273,30 @@ func SignParameters(params url.Values, secret string) (string, error) {
 		return "", err
 	}
 	return hex.EncodeToString(rawSignature), nil
+}
+
+// MarshalJSONRaw marshals JSON without HTML characters escaping, which is enabled in the standard library.
+// In addition, it removes the last newline character from the resulting bytes since there is no reason to keep it.
+func MarshalJSONRaw(t interface{}) ([]byte, error) {
+	buffer := &bytes.Buffer{}
+	encoder := json.NewEncoder(buffer)
+	encoder.SetEscapeHTML(false)
+	err := encoder.Encode(t)
+	bufferBytes := buffer.Bytes()
+	if len(bufferBytes) > 0 {
+		bufferBytes = bufferBytes[:len(bufferBytes)-1]
+	}
+	return bufferBytes, err
+}
+
+// ReMarshalJSON unmarshals and then marshals data - as the result the data is sorted by key.
+func ReMarshalJSON(bytes []byte) ([]byte, error) {
+	var data interface{}
+	err := json.Unmarshal(bytes, &data)
+	if err != nil {
+		return nil, err
+	}
+	return MarshalJSONRaw(data)
 }
 
 // StructToParams serializes struct to url.Values, which can be further sent to the http client.

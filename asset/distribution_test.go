@@ -107,7 +107,11 @@ func assertURLProtocol(t *testing.T, a *asset.Asset, protocol string) {
 	assert.Regexp(t, fmt.Sprintf("^%s://", protocol), url)
 }
 
-func getAssetUrl(t *testing.T, a *asset.Asset) string {
+type AssetInterface interface {
+	String() (string, error)
+}
+
+func getAssetUrl(t *testing.T, a AssetInterface) string {
 	url, err := a.String()
 	if err != nil {
 		t.Fatal(err)

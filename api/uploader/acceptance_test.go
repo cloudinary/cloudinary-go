@@ -50,7 +50,7 @@ func testUploadAPIByTestCases(cases []UploadAPIAcceptanceTestCase, t *testing.T)
 func getTestableUploadAPI(mockServerUrl string, c *config.Configuration, t *testing.T) *uploader.API {
 	if c == nil {
 		var err error
-		c, err = config.NewFromParams("TEST", "key", "secret")
+		c, err = config.NewFromParams(cldtest.CloudName, cldtest.APIKey, cldtest.APISecret)
 		if err != nil {
 			t.Error(err)
 		}
