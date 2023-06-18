@@ -64,5 +64,5 @@ const (
 	Descending = "desc"
 )
 
-// SortByField is the the field to sort by and direction.
+// SortByField is the field to sort by and direction.
 type SortByField map[string]Direction

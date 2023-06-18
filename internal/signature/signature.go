@@ -31,6 +31,9 @@ const (
 
 // Sign signs the content with the provided signature.
 func Sign(content string, secret string, algo Algo) ([]byte, error) {
+	if len(secret) < 1 {
+		return nil, errors.New("must supply api_secret")
+	}
 	var hashFunc hash.Hash
 	switch algo {
 	case SHA1:

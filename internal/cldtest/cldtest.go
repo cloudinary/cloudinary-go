@@ -23,6 +23,15 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2/api/admin/metadata"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
+// CloudName is the test cloud name.
+const CloudName = "test123"
+// APIKey is the test API Key.
+const APIKey = "key"
+// APISecret is the test API Secret.
+const APISecret = "secret"
+
+// CldURL is the test CLOUDINARY_URL
+var CldURL = fmt.Sprintf("cloudinary://%s:%s@%s", APIKey, APISecret, CloudName)
 
 // LogoURL is the URL of the publicly available logo.
 const LogoURL = "https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png"
@@ -83,6 +92,9 @@ const APIVersion = "v1_1"
 
 // SkipDynamicFolders is the name of the dynamic folders feature we want to skip.
 const SkipDynamicFolders = "dynamic_folders"
+
+// NextCursor is the test cursor.
+const NextCursor = "db27cfb02b3f69cb39049969c23ca430c6d33d5a3a7c3ad1d870c54e1a54ee0faa5acdd9f6d288666986001711759d10"
 
 // FQPublicID is the Fully Qualified test Public ID.
 var FQPublicID = "image/upload/" + PublicID
@@ -277,7 +289,7 @@ func GetTestHandler(response string, t *testing.T, callCounter *int, ep Expected
 			}
 		}
 
-		expectedURI := "/" + APIVersion + "/TEST" + ep.URI
+		expectedURI := "/" + APIVersion + "/" + CloudName + ep.URI
 		if expectedURI != r.URL.Path {
 			t.Errorf(
 				"Expected request URI: %s, got: %s\n",

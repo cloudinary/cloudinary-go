@@ -50,7 +50,7 @@ func testAdminAPIByTestCases(cases []AdminAPIAcceptanceTestCase, t *testing.T) {
 func getTestableAdminAPI(mockServerUrl string, c *config.Configuration, t *testing.T) *admin.API {
 	if c == nil {
 		var err error
-		c, err = config.NewFromParams("TEST", "key", "secret")
+		c, err = config.NewFromParams(cldtest.CloudName, cldtest.APIKey, cldtest.APISecret)
 		if err != nil {
 			t.Error(err)
 		}

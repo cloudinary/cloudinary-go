@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-var oAuthTokenConfig, _ = config.NewFromOAuthToken("TEST", "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
+var oAuthTokenConfig, _ = config.NewFromOAuthToken(cldtest.CloudName, "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
 
 // Acceptance test cases for `ping` method
 func getPingTestCases() []AdminAPIAcceptanceTestCase {

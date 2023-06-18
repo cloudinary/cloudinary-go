@@ -20,9 +20,9 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 		t.Error("Please set up CLOUDINARY_URL environment variable to run the test.")
 	}
 
-	c, _ = NewFromURL("cloudinary://key:secret@test123")
+	c, _ = NewFromURL(cldtest.CldURL)
 
-	if c.Config.Cloud.CloudName != "test123" {
+	if c.Config.Cloud.CloudName != cldtest.CloudName {
 		t.Error("Failed creating Cloudinary instance from Cloudinary URL.")
 	}
 
@@ -31,15 +31,15 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 		t.Error("Error expected, got: ", err)
 	}
 
-	c, _ = NewFromParams("test123", "key", "secret")
+	c, _ = NewFromParams(cldtest.CloudName, cldtest.APIKey, cldtest.APISecret)
 
-	if c.Config.Cloud.CloudName != "test123" {
+	if c.Config.Cloud.CloudName != cldtest.CloudName {
 		t.Error("Failed creating Cloudinary instance from parameters.")
 	}
 
-	c, _ = NewFromOAuthToken("test123", "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
+	c, _ = NewFromOAuthToken(cldtest.CloudName, "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
 
-	if c.Config.Cloud.CloudName != "test123" {
+	if c.Config.Cloud.CloudName != cldtest.CloudName {
 		t.Error("Failed creating Cloudinary instance from OAuth token.")
 	}
 }

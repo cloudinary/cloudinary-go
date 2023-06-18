@@ -1,6 +1,7 @@
 package config_test
 
 import (
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/v2/config"
@@ -8,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var cldURL = "cloudinary://key:secret@test123"
+
 var fakeOAuthToken = "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4"
 
 func TestConfiguration_CreateInstance(t *testing.T) {
@@ -18,12 +19,12 @@ func TestConfiguration_CreateInstance(t *testing.T) {
 		t.Error("Please set up CLOUDINARY_URL environment variable to run the test.")
 	}
 
-	c, err := config.NewFromURL(cldURL + "?signature_algorithm=sha256")
+	c, err := config.NewFromURL(cldtest.CldURL + "?signature_algorithm=sha256")
 	if err != nil {
 		t.Error("Error: ", err)
 	}
 
-	assert.Equal(t, "test123", c.Cloud.CloudName)
+	assert.Equal(t, cldtest.CloudName, c.Cloud.CloudName)
 	assert.Equal(t, signature.SHA256, c.Cloud.SignatureAlgorithm)
 
 	c, err = config.NewFromURL("")
@@ -31,15 +32,15 @@ func TestConfiguration_CreateInstance(t *testing.T) {
 		t.Error("Error expected, got: ", err)
 	}
 
-	c, _ = config.NewFromParams("test123", "key", "secret")
+	c, _ = config.NewFromParams(cldtest.CloudName, cldtest.APIKey, cldtest.APISecret)
 
-	assert.Equal(t, "test123", c.Cloud.CloudName)
-	assert.Equal(t, "key", c.Cloud.APIKey)
-	assert.Equal(t, "secret", c.Cloud.APISecret)
+	assert.Equal(t, cldtest.CloudName, c.Cloud.CloudName)
+	assert.Equal(t, cldtest.APIKey, c.Cloud.APIKey)
+	assert.Equal(t, cldtest.APISecret, c.Cloud.APISecret)
 
-	c, _ = config.NewFromOAuthToken("test123", fakeOAuthToken)
+	c, _ = config.NewFromOAuthToken(cldtest.CloudName, fakeOAuthToken)
 
-	assert.Equal(t, "test123", c.Cloud.CloudName)
+	assert.Equal(t, cldtest.CloudName, c.Cloud.CloudName)
 	assert.Equal(t, fakeOAuthToken, c.Cloud.OAuthToken)
 	assert.Equal(t, "", c.Cloud.APIKey)
 	assert.Equal(t, "", c.Cloud.APISecret)
@@ -51,13 +52,13 @@ func TestConfiguration_CreateInstance(t *testing.T) {
 }
 
 func TestConfiguration_API(t *testing.T) {
-	c, err := config.NewFromURL(cldURL +
+	c, err := config.NewFromURL(cldtest.CldURL +
 		"?upload_prefix=https://test.prefix.com&timeout=59&upload_timeout=59&chunk_size=7357")
 	if err != nil {
 		t.Error("Error: ", err)
 	}
 
-	assert.Equal(t, "test123", c.Cloud.CloudName)
+	assert.Equal(t, cldtest.CloudName, c.Cloud.CloudName)
 
 	assert.Equal(t, "https://test.prefix.com", c.API.UploadPrefix)
 	assert.EqualValues(t, 59, c.API.Timeout)
@@ -66,7 +67,7 @@ func TestConfiguration_API(t *testing.T) {
 }
 
 func TestConfiguration_URL(t *testing.T) {
-	c, err := config.NewFromURL(cldURL +
+	c, err := config.NewFromURL(cldtest.CldURL +
 		"?cname=cname.com&secure_cname=secure.cname.com&secure=false&cdn_sub_domain=true" +
 		"&secure_cdn_sub_domain=true&private_cdn=true&sign_url=true&long_url_signature=true" +
 		"&shorten=true&use_root_path=true&force_version=false&analytics=false")
@@ -74,7 +75,7 @@ func TestConfiguration_URL(t *testing.T) {
 		t.Error("Error: ", err)
 	}
 
-	assert.Equal(t, "test123", c.Cloud.CloudName)
+	assert.Equal(t, cldtest.CloudName, c.Cloud.CloudName)
 
 	assert.Equal(t, "cname.com", c.URL.CName)
 	assert.Equal(t, "secure.cname.com", c.URL.SecureCName)
@@ -91,13 +92,13 @@ func TestConfiguration_URL(t *testing.T) {
 }
 
 func TestConfiguration_AuthToken(t *testing.T) {
-	c, err := config.NewFromURL(cldURL +
+	c, err := config.NewFromURL(cldtest.CldURL +
 		"?key=key&ip=127.0.0.1&acl=*&start_time=1&expiration=3&duration=2")
 	if err != nil {
 		t.Error("Error: ", err)
 	}
 
-	assert.Equal(t, "test123", c.Cloud.CloudName)
+	assert.Equal(t, cldtest.CloudName, c.Cloud.CloudName)
 
 	assert.Equal(t, "key", c.AuthToken.Key)
 	assert.Equal(t, "127.0.0.1", c.AuthToken.IP)
