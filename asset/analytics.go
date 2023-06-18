@@ -7,6 +7,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 const queryString = "_a"
@@ -21,6 +22,8 @@ const binaryPadSize = 6
 
 var charCodes = map[string]string{}
 var analyticsSignature = ""
+
+var mutex = &sync.Mutex{}
 
 func sdkAnalyticsSignature() string {
 	if analyticsSignature != "" {
@@ -76,9 +79,13 @@ func encodeVersion(version string) (string, error) {
 
 func getKey(binaryValue string) string {
 	if len(charCodes) == 0 {
-		for i, char := range chars {
-			charCodes[intToPaddedBin(i, binaryPadSize)] = string(char)
+		mutex.Lock()
+		if len(charCodes) == 0 {
+			for i, char := range chars {
+				charCodes[intToPaddedBin(i, binaryPadSize)] = string(char)
+			}
 		}
+		mutex.Unlock()
 	}
 
 	return charCodes[binaryValue]
