@@ -1,3 +1,20 @@
+2.3.0 / 2023-06-19
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for Search URL
+  * Add support for related assets APIs
+  * Add support for `LastUpdated` field in `AssetResult`
+  * Add support for `NextCursor` in `GetTransformationResult`
+
+Other Changes
+-------------
+
+  * Fix race condition in analytics token generation
+  * Clarify error message when unsupported file parameter is provided
+
 2.2.0 / 2022-09-14
 ==================
 
