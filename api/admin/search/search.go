@@ -50,8 +50,6 @@ const (
 	TagsField = "tags"
 	// ImageMetadataField is the image metadata field.
 	ImageMetadataField = "image_metadata"
-	// MediaMetadataField is the media metadata field.
-	MediaMetadataField = "media_metadata"
 	// ImageAnalysisField is the image analysis field.
 	ImageAnalysisField = "image_analysis"
 )

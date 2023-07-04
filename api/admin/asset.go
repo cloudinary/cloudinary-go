@@ -74,7 +74,7 @@ type AssetResult struct {
 	Derived               []interface{}               `json:"derived"`
 	Etag                  string                      `json:"etag"`
 	ImageMetadata         ImageMetadataResult         `json:"image_metadata"`
-	MediaMetadata         MediaMetadataResult         `json:"media_metadata"`
+	VideoMetadata         MediaMetadataResult         `json:"video_metadata"`
 	Coordinates           interface{}                 `json:"coordinates"`
 	Info                  interface{}                 `json:"info"`
 	Exif                  interface{}                 `json:"exif"`
@@ -133,7 +133,7 @@ type CinemagraphAnalysisResult struct {
 type ImageMetadataResult map[string]string
 
 // MediaMetadataResult contains the media metadata.
-type MediaMetadataResult map[string]string
+type MediaMetadataResult map[string]interface{}
 
 // PredominantResult contains the details about predominant colors.
 type PredominantResult struct {
