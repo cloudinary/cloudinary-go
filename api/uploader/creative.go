@@ -2,8 +2,6 @@ package uploader
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/cloudinary/cloudinary-go/v2/api"
 )
 
@@ -49,7 +47,7 @@ type GenerateSpriteResult struct {
 	PublicID       string               `json:"public_id"`
 	ImageInfos     map[string]ImageInfo `json:"image_infos"`
 	Error          api.ErrorResp        `json:"error,omitempty"`
-	Response       http.Response
+	Response       interface{}
 }
 
 // ImageInfo contains information about the image.
@@ -88,7 +86,7 @@ type MultiResult struct {
 	PublicID  string        `json:"public_id"`
 	Version   int           `json:"version"`
 	Error     api.ErrorResp `json:"error,omitempty"`
-	Response  http.Response
+	Response  interface{}
 }
 
 // ExplodeParams are the parameters for Explode.
@@ -120,7 +118,7 @@ type ExplodeResult struct {
 	Status   string        `json:"status"`
 	BatchID  string        `json:"batch_id"`
 	Error    api.ErrorResp `json:"error,omitempty"`
-	Response http.Response
+	Response interface{}
 }
 
 // TextParams are the parameters for Text.

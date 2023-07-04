@@ -2,7 +2,6 @@ package uploader
 
 import (
 	"context"
-	"net/http"
 	"net/url"
 	"time"
 
@@ -88,7 +87,7 @@ type CreateArchiveResult struct {
 	ResourceCount int           `json:"resource_count"`
 	FileCount     int           `json:"file_count"`
 	Error         api.ErrorResp `json:"error,omitempty"`
-	Response      http.Response
+	Response      interface{}
 }
 
 // CreateZip creates a new zip archive in the server and returns information in JSON format.

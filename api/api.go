@@ -361,6 +361,35 @@ func DeferredClose(c io.Closer) {
 	}
 }
 
+// HandleRawResponse sets a raw Response field value (JSON) in the Result structs that support it, for future proofing
+func HandleRawResponse(bodyBytes []byte, result interface{}) error {
+	resultMetaValue := reflect.ValueOf(result).Elem()
+
+	if resultMetaValue.Kind() != reflect.Struct {
+		return nil
+	}
+
+	responseField := resultMetaValue.FieldByName("Response")
+	if responseField == (reflect.Value{}) {
+		// no 'Response' field
+		return nil
+	}
+
+	var rawResponse interface{}
+
+	err := json.Unmarshal(bodyBytes, &rawResponse)
+	if err != nil {
+		return err
+	}
+
+	rawResponseValue := reflect.New(reflect.TypeOf(rawResponse))
+	rawResponseValue.Elem().Set(reflect.ValueOf(rawResponse))
+
+	responseField.Set(rawResponseValue)
+
+	return nil
+}
+
 // IsValidURL checks whether urlCandidate string is a valid URL.
 func IsValidURL(urlCandidate string) bool {
 	urlStruct, err := url.Parse(urlCandidate)

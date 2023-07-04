@@ -3,8 +3,6 @@ package uploader
 import (
 	"context"
 	"fmt"
-	"net/http"
-
 	"github.com/cloudinary/cloudinary-go/v2/api"
 )
 
@@ -44,7 +42,7 @@ type AddContextResult = ContextResult
 type ContextResult struct {
 	PublicIDs []string      `json:"public_ids"`
 	Error     api.ErrorResp `json:"error,omitempty"`
-	Response  http.Response
+	Response  interface{}
 }
 
 // RemoveAllContextParams struct

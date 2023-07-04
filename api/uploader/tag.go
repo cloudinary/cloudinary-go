@@ -3,8 +3,6 @@ package uploader
 import (
 	"context"
 	"fmt"
-	"net/http"
-
 	"github.com/cloudinary/cloudinary-go/v2/api"
 )
 
@@ -116,7 +114,7 @@ type ReplaceTagResult struct {
 type TagResult struct {
 	PublicIDs []string      `json:"public_ids"` // The public IDs of the assets that were affected.
 	Error     api.ErrorResp `json:"error,omitempty"`
-	Response  http.Response
+	Response  interface{}
 }
 
 // callTagsAPI is an internal method that is used to call to the tags API.
