@@ -75,6 +75,11 @@ func (u *API) callUploadAPIWithParams(ctx context.Context, path string, formPara
 	u.Logger.Debug(string(resp))
 
 	err = json.Unmarshal(resp, result)
+	if err != nil {
+		return err
+	}
+
+	err = api.HandleRawResponse(resp, result)
 
 	return err
 

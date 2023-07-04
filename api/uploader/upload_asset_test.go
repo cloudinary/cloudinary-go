@@ -92,9 +92,10 @@ func TestUploader_UploadURL(t *testing.T) {
 
 func TestUploader_UploadVideoURL(t *testing.T) {
 	params := uploader.UploadParams{
-		PublicID:     cldtest.PublicID,
-		ResourceType: "video",
-		Overwrite:    api.Bool(true),
+		PublicID:      cldtest.PublicID,
+		ResourceType:  "video",
+		Overwrite:     api.Bool(true),
+		MediaMetadata: api.Bool(true),
 	}
 
 	resp, err := uploadAPI.Upload(ctx, cldtest.VideoURL, params)

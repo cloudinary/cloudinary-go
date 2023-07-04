@@ -48,6 +48,7 @@ type UploadParams struct {
 	EagerNotificationURL           string                      `json:"eager_notification_url,omitempty"`
 	Faces                          *bool                       `json:"faces,omitempty"`
 	ImageMetadata                  *bool                       `json:"image_metadata,omitempty"`
+	MediaMetadata                  *bool                       `json:"media_metadata,omitempty"`
 	Exif                           *bool                       `json:"exif,omitempty"`
 	Colors                         *bool                       `json:"colors,omitempty"`
 	Phash                          *bool                       `json:"phash,omitempty"`
@@ -110,18 +111,19 @@ func (u *API) Upload(ctx context.Context, file interface{}, uploadParams UploadP
 	}
 
 	body, err := u.postFile(ctx, file, formParams)
-
-	if err != nil {
-		return nil, err
-	}
-	upload := &UploadResult{}
-	err = json.Unmarshal(body, upload)
-
 	if err != nil {
 		return nil, err
 	}
 
-	return upload, nil
+	result := &UploadResult{}
+	err = json.Unmarshal(body, result)
+	if err != nil {
+		return nil, err
+	}
+
+	err = api.HandleRawResponse(body, result)
+
+	return result, nil
 }
 
 // Eager contains information about eagerly transformed derived assets.
@@ -202,6 +204,7 @@ type UploadResult struct {
 	Eager                 []Eager                       `json:"eager"`
 	ResponsiveBreakpoints []ResponsiveBreakpointsResult `json:"responsive_breakpoints"`
 	Error                 api.ErrorResp                 `json:"error,omitempty"`
+	Response              interface{}
 }
 
 // UnsignedUpload uploads an asset to a Cloudinary account.

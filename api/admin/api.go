@@ -11,7 +11,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudinary/cloudinary-go/v2/api"
@@ -143,38 +142,9 @@ func (a *API) callAPI(ctx context.Context, method string, path interface{}, requ
 		return resp, err
 	}
 
-	err = handleRawResponse(bodyBytes, result)
+	err = api.HandleRawResponse(bodyBytes, result)
 
 	return resp, err
-}
-
-// handleRawResponse sets a raw Response field value (JSON) in the Result structs that support it, for future proofing
-func handleRawResponse(bodyBytes []byte, result interface{}) error {
-	resultMetaValue := reflect.ValueOf(result).Elem()
-
-	if resultMetaValue.Kind() != reflect.Struct {
-		return nil
-	}
-
-	responseField := resultMetaValue.FieldByName("Response")
-	if responseField == (reflect.Value{}) {
-		// no 'Response' field
-		return nil
-	}
-
-	var rawResponse interface{}
-
-	err := json.Unmarshal(bodyBytes, &rawResponse)
-	if err != nil {
-		return err
-	}
-
-	rawResponseValue := reflect.New(reflect.TypeOf(rawResponse))
-	rawResponseValue.Elem().Set(reflect.ValueOf(rawResponse))
-
-	responseField.Set(rawResponseValue)
-
-	return nil
 }
 
 func setAuth(a *API, req *http.Request) {

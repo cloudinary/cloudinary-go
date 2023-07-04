@@ -2,8 +2,6 @@ package uploader
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/cloudinary/cloudinary-go/v2/api"
 )
 
@@ -41,7 +39,7 @@ func (u *API) Destroy(ctx context.Context, params DestroyParams) (*DestroyResult
 type DestroyResult struct {
 	Result   string        `json:"result"`
 	Error    api.ErrorResp `json:"error,omitempty"`
-	Response http.Response
+	Response interface{}
 }
 
 // RenameParams are the parameters for Rename.
