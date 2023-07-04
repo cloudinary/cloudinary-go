@@ -21,6 +21,7 @@ type AssetParams struct {
 	Faces                 *bool            `json:"faces,omitempty"`
 	QualityAnalysis       *bool            `json:"quality_analysis,omitempty"`
 	ImageMetadata         *bool            `json:"image_metadata,omitempty"`
+	MediaMetadata         *bool            `json:"media_metadata,omitempty"`
 	Phash                 *bool            `json:"phash,omitempty"`
 	Pages                 *bool            `json:"pages,omitempty"`
 	AccessibilityAnalysis *bool            `json:"accessibility_analysis,omitempty"`
@@ -73,6 +74,7 @@ type AssetResult struct {
 	Derived               []interface{}               `json:"derived"`
 	Etag                  string                      `json:"etag"`
 	ImageMetadata         ImageMetadataResult         `json:"image_metadata"`
+	MediaMetadata         MediaMetadataResult         `json:"media_metadata"`
 	Coordinates           interface{}                 `json:"coordinates"`
 	Info                  interface{}                 `json:"info"`
 	Exif                  interface{}                 `json:"exif"`
@@ -130,6 +132,9 @@ type CinemagraphAnalysisResult struct {
 // ImageMetadataResult contains the image metadata.
 type ImageMetadataResult map[string]string
 
+// MediaMetadataResult contains the media metadata.
+type MediaMetadataResult map[string]string
+
 // PredominantResult contains the details about predominant colors.
 type PredominantResult struct {
 	Google     [][]interface{} `json:"google"`
@@ -182,6 +187,7 @@ type AssetByAssetIDParams struct {
 	Faces                 *bool  `json:"faces,omitempty"`
 	QualityAnalysis       *bool  `json:"quality_analysis,omitempty"`
 	ImageMetadata         *bool  `json:"image_metadata,omitempty"`
+	MediaMetadata         *bool  `json:"media_metadata,omitempty"`
 	Phash                 *bool  `json:"phash,omitempty"`
 	Pages                 *bool  `json:"pages,omitempty"`
 	CinemagraphAnalysis   *bool  `json:"cinemagraph_analysis,omitempty"`

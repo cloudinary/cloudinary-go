@@ -62,6 +62,7 @@ type SearchAsset struct {
 	Pixels        int                 `json:"pixels"`
 	Tags          []string            `json:"tags"`
 	ImageMetadata ImageMetadataResult `json:"image_metadata"`
+	MediaMetadata MediaMetadataResult `json:"media_metadata"`
 	ImageAnalysis ImageAnalysis       `json:"image_analysis"`
 	URL           string              `json:"url"`
 	SecureURL     string              `json:"secure_url"`

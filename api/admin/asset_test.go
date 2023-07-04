@@ -17,7 +17,7 @@ func TestAsset_Asset(t *testing.T) {
 		Colors:                api.Bool(true),
 		Faces:                 api.Bool(true),
 		QualityAnalysis:       api.Bool(true),
-		ImageMetadata:         api.Bool(true),
+		MediaMetadata:         api.Bool(true),
 		Phash:                 api.Bool(true),
 		Pages:                 api.Bool(true),
 		AccessibilityAnalysis: api.Bool(true),
