@@ -1208,6 +1208,74 @@ func getDeleteRelatedAssetsByAssetIDsTestCases() []AdminAPIAcceptanceTestCase {
 	return testCases
 }
 
+// Acceptance test cases for `VisualSearch` method
+func getVisualSearchTestCases() []AdminAPIAcceptanceTestCase {
+	type visualSearchTestCase struct {
+		requestParams  admin.VisualSearchParams
+		uri            string
+		expectedParams *url.Values
+	}
+
+	getTestCase := func(num int, t visualSearchTestCase) AdminAPIAcceptanceTestCase {
+		return AdminAPIAcceptanceTestCase{
+			Name: fmt.Sprintf("VisualSearch #%d", num),
+			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+				return api.VisualSearch(ctx, t.requestParams)
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {
+				_, ok := response.(*admin.VisualSearchResult)
+				if !ok {
+					t.Errorf("Response should be type of VisualSearchResult, %s given", reflect.TypeOf(response))
+				}
+			},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "GET",
+				URI:    t.uri,
+				Params: t.expectedParams,
+			},
+			JsonResponse:      "{}",
+			ExpectedCallCount: 1,
+		}
+	}
+
+	var testCases []AdminAPIAcceptanceTestCase
+	addRelatedAssetsTestCases := []visualSearchTestCase{
+		{
+			requestParams: admin.VisualSearchParams{
+				Text: "TEST",
+			},
+			uri: "/resources/visual_search",
+			expectedParams: &url.Values{
+				"text": []string{"TEST"},
+			},
+		},
+		{
+			requestParams: admin.VisualSearchParams{
+				ImageAssetID: cldtest.AssetID,
+			},
+			uri: "/resources/visual_search",
+			expectedParams: &url.Values{
+				"image_asset_id": []string{cldtest.AssetID},
+			},
+		},
+		{
+			requestParams: admin.VisualSearchParams{
+				ImageURL: cldtest.LogoURL,
+			},
+			uri: "/resources/visual_search",
+			expectedParams: &url.Values{
+				"image_url": []string{cldtest.LogoURL},
+			},
+		},
+	}
+
+	for num, testCase := range addRelatedAssetsTestCases {
+		testCases = append(testCases, getTestCase(num, testCase))
+	}
+
+	return testCases
+}
+
 // Run tests
 func TestAssets_Acceptance(t *testing.T) {
 	t.Parallel()
@@ -1217,6 +1285,7 @@ func TestAssets_Acceptance(t *testing.T) {
 	testAdminAPIByTestCases(getAddRelatedAssetsByAssetIDsTestCases(), t)
 	testAdminAPIByTestCases(getDeleteRelatedAssetsByAssetIDsTestCases(), t)
 	testAdminAPIByTestCases(getAssetsByModerationTestCases(), t)
+	testAdminAPIByTestCases(getVisualSearchTestCases(), t)
 	testAdminAPIByTestCases(getDeleteAssetsTestCases(), t)
 	testAdminAPIByTestCases(getRestoreAssetsTestCases(), t)
 }
