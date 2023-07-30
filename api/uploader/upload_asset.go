@@ -62,6 +62,7 @@ type UploadParams struct {
 	UploadPreset                   string                      `json:"upload_preset,omitempty"`
 	RawConvert                     string                      `json:"raw_convert,omitempty"`
 	Categorization                 string                      `json:"categorization,omitempty"`
+	VisualSearch                   *bool                       `json:"visual_search,omitempty"`
 	AutoTagging                    float64                     `json:"auto_tagging,omitempty"`
 	BackgroundRemoval              string                      `json:"background_removal,omitempty"`
 	Detection                      string                      `json:"detection,omitempty"`

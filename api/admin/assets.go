@@ -14,6 +14,7 @@ import (
 const (
 	assets        api.EndPoint = "resources"
 	byAssetFolder api.EndPoint = "by_asset_folder"
+	visualSearch  api.EndPoint = "visual_search"
 	derivedAssets api.EndPoint = "derived_resources"
 	relatedAssets api.EndPoint = "related_assets"
 	tags          api.EndPoint = "tags"
@@ -177,6 +178,27 @@ func (a *API) AssetsByAssetFolder(ctx context.Context, params AssetsByAssetFolde
 	_, err := a.get(ctx, api.BuildPath(assets, byAssetFolder), params, res)
 
 	return res, err
+}
+
+// VisualSearchParams are the parameters for VisualSearch.
+type VisualSearchParams struct {
+	ImageURL     string `json:"image_url,omitempty"`
+	ImageAssetID string `json:"image_asset_id,omitempty"`
+	Text         string `json:"text,omitempty"`
+}
+
+// VisualSearch finds images based on their visual content.
+func (a *API) VisualSearch(ctx context.Context, params VisualSearchParams) (*VisualSearchResult, error) {
+	res := &VisualSearchResult{}
+	_, err := a.get(ctx, api.BuildPath(assets, visualSearch), params, res)
+
+	return res, err
+}
+
+type VisualSearchResult struct {
+	Assets     []api.BriefAssetResult `json:"resources"`
+	TotalCount int                    `json:"total_count"`
+	Error      api.ErrorResp          `json:"error,omitempty"`
 }
 
 // RestoreAssetsParams are the parameters for RestoreAssets.

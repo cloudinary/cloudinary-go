@@ -155,6 +155,7 @@ type UpdateAssetParams struct {
 	Categorization    string               `json:"categorization,omitempty"`
 	Detection         string               `json:"detection,omitempty"`
 	SimilaritySearch  string               `json:"similarity_search,omitempty"`
+	VisualSearch      *bool                `json:"visual_search,omitempty"`
 	AutoTagging       float64              `json:"auto_tagging,omitempty"`
 	BackgroundRemoval string               `json:"background_removal,omitempty"`
 	QualityOverride   int                  `json:"quality_override,omitempty"`
