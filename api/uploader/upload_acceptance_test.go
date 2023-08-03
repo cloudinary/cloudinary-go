@@ -14,6 +14,8 @@ import (
 
 var oAuthTokenConfig, _ = config.NewFromOAuthToken(cldtest.CloudName, "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
 
+const onSuccessStr = "current_asset.update({tags: [\"autocaption\"]});"
+
 // Acceptance test cases for user agent and user platform
 func getUserAgentTestCases() []UploadAPIAcceptanceTestCase {
 	return []UploadAPIAcceptanceTestCase{
@@ -103,7 +105,8 @@ func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
 
 // Acceptance test cases for handling of boolean values
 func getBooleanValuesTestCases() []UploadAPIAcceptanceTestCase {
-	body := "file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7&timestamp=123456789&unique_filename=false&unsigned=true&use_filename=true"
+	body := "file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
+		"&timestamp=123456789&unique_filename=false&unsigned=true&use_filename=true"
 
 	return []UploadAPIAcceptanceTestCase{
 		{
@@ -127,6 +130,34 @@ func getBooleanValuesTestCases() []UploadAPIAcceptanceTestCase {
 	}
 }
 
+// Acceptance test cases for handling of various values.
+func getVariousValuesTestCases() []UploadAPIAcceptanceTestCase {
+	body := "file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
+		"&on_success=current_asset.update%28%7Btags%3A+%5B%22autocaption%22%5D%7D%29%3B" +
+		"&timestamp=123456789" +
+		"&unsigned=true"
+
+	return []UploadAPIAcceptanceTestCase{
+		{
+			Name: "Upload Test Various Values",
+			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
+				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
+					Timestamp: 123456789,
+					Unsigned:  api.Bool(true),
+					OnSuccess: onSuccessStr,
+				})
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "POST",
+				URI:    "/auto/upload",
+				Body:   &body,
+			},
+			ExpectedCallCount: 1,
+		},
+	}
+}
+
 // Run tests
 func TestUploadAPI_Acceptance(t *testing.T) {
 	t.Parallel()
@@ -134,4 +165,5 @@ func TestUploadAPI_Acceptance(t *testing.T) {
 	testUploadAPIByTestCases(getAuthorizationTestCases(), t)
 	testUploadAPIByTestCases(getFolderDecouplingTestCases(), t)
 	testUploadAPIByTestCases(getBooleanValuesTestCases(), t)
+	testUploadAPIByTestCases(getVariousValuesTestCases(), t)
 }
