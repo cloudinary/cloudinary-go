@@ -38,6 +38,7 @@ type UploadParams struct {
 	Eager                          string                      `json:"eager,omitempty"`
 	ResponsiveBreakpoints          ResponsiveBreakpointsParams `json:"responsive_breakpoints,omitempty"`
 	Eval                           string                      `json:"eval,omitempty"`
+	OnSuccess                      string                      `json:"on_success,omitempty"`
 	Async                          *bool                       `json:"async,omitempty"`
 	EagerAsync                     *bool                       `json:"eager_async,omitempty"`
 	Unsigned                       *bool                       `json:"unsigned,omitempty"`
@@ -204,6 +205,7 @@ type UploadResult struct {
 	OriginalFilename      string                        `json:"original_filename"`
 	Eager                 []Eager                       `json:"eager"`
 	ResponsiveBreakpoints []ResponsiveBreakpointsResult `json:"responsive_breakpoints"`
+	HookExecution         api.HookExecution             `json:"hook_execution"`
 	Error                 api.ErrorResp                 `json:"error,omitempty"`
 	Response              interface{}
 }

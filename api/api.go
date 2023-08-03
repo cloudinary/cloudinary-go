@@ -164,6 +164,9 @@ type CldAPIMap map[string]string
 // Metadata is the Cloudinary structured metadata.
 type Metadata map[string]interface{}
 
+// HookExecution is the result of a hook execution.
+type HookExecution map[string]interface{}
+
 // BriefAssetResult represents a partial asset result that is returned when assets are listed.
 type BriefAssetResult struct {
 	AssetID     string    `json:"asset_id"`
