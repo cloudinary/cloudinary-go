@@ -1,3 +1,16 @@
+2.5.0 / 2023-09-19
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `OnSuccess` upload parameter
+
+Other Changes
+-------------
+
+  * Fix `AuthToken` generation without ACL
+
 2.4.0 / 2023-07-31
 ==================
 
