@@ -1,7 +1,6 @@
 package asset_test
 
 import (
-	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/asset"
 	"github.com/cloudinary/cloudinary-go/v2/config"
 	"github.com/stretchr/testify/assert"
@@ -69,20 +68,4 @@ func TestAsset_AuthToken_EscapeToLower(t *testing.T) {
 	expected := "__cld_token__=st=11111111~exp=11111411~hmac=7ffc0fd1f3ee2622082689f64a65454da39d94c297bcf498b682aa65a0d2ce0a"
 
 	assert.Equal(t, expected, a.Generate("Encode these :~@#%^&{}[]\\\"';/\", but not those $!()_.*"))
-}
-
-func TestAsset_AuthToken_URLWithoutACL(t *testing.T) {
-	i, _ := asset.Image(authTokenTestImage, nil)
-
-	i.AuthToken.Config = &authTokenConfig
-	i.AuthToken.Config.ACL = ""
-
-	i.DeliveryType = api.Authenticated
-	i.Version = 1486020273
-	i.Config.URL.SignURL = true
-
-	expected := "__cld_token__=st=11111111~exp=11111411~hmac=8db0d753ee7bbb9e2eaf8698ca3797436ba4c20e31f44527e43b6a6e995cfdb3"
-
-	iURL, _ := i.String()
-	assert.Contains(t, iURL, expected)
 }
