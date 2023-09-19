@@ -28,18 +28,26 @@ func TestAsset_LongURLSignature(t *testing.T) {
 }
 
 func TestAsset_WithAuthToken(t *testing.T) {
-	localTokenConfig := authTokenConfig
-	i := getTestImage(t)
+	i, _ := asset.Image(authTokenTestImage, nil)
+	i.DeliveryType = api.Authenticated
+	i.Version = 1486020273
+
 	i.Config.URL.SignURL = true
+
+	localTokenConfig := authTokenConfig
 	i.AuthToken.Config = &localTokenConfig
 
+	i.AuthToken.Config.StartTime = 1111111111
+
 	assert.Contains(t, getAssetUrl(t, i), "1751370bcc6cfe9e03f30dd1a9722ba0f2cdca283fa3e6df3342a00a7528cc51")
+
 	assert.NotContains(t, getAssetUrl(t, i), "s--") // no simple signature
 	assert.NotContains(t, getAssetUrl(t, i), "_a=") // no analytics
 
 	i.AuthToken.Config.ACL = ""
+	i.AuthToken.Config.StartTime = startTime
 
-	assert.Contains(t, getAssetUrl(t, i), "bdef2f6869faa4cde0f5d943440df9a592301a6e695a0e82687eb5bbaccd12f4")
+	assert.Contains(t, getAssetUrl(t, i), "8db0d753ee7bbb9e2eaf8698ca3797436ba4c20e31f44527e43b6a6e995cfdb3")
 }
 
 func TestAsset_ForceVersion(t *testing.T) {

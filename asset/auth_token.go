@@ -66,21 +66,21 @@ func (a AuthToken) Generate(path string) string {
 }
 
 func (a AuthToken) handleLifetime() (int64, int64) {
-	start := a.Config.StartTime
 	expiration := a.Config.Expiration
-	if start == 0 {
-		start = time.Now().Unix()
-	}
 
 	if expiration == 0 {
 		if a.Config.Duration != 0 {
+			start := a.Config.StartTime
+			if start == 0 {
+				start = time.Now().Unix()
+			}
 			expiration = start + a.Config.Duration
 		} else {
 			panic("must provide Expiration or Duration")
 		}
 	}
 
-	return start, expiration
+	return a.Config.StartTime, expiration
 }
 
 func escapeToLower(str string) string {
