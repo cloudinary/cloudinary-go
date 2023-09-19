@@ -295,7 +295,7 @@ func (a *Asset) path() string {
 func (a *Asset) query() string {
 	// Currently, analytics is not supported with AuthToken. Just return AuthToken if it is configured.
 	if a.Config.URL.SignURL && a.AuthToken.isEnabled() {
-		return a.AuthToken.Generate(a.path())
+		return a.AuthToken.Generate("/" + a.path())
 	}
 
 	if !a.Config.URL.Analytics {
