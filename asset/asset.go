@@ -96,7 +96,7 @@ func (a Asset) String() (result string, err error) {
 		}
 	}()
 
-	assetURL := joinURL([]interface{}{distribution(a.PublicID, a.Config), a.path()})
+	assetURL := a.assetURL()
 	query := a.query()
 
 	return joinNonEmpty([]interface{}{assetURL, query}, "?"), nil
@@ -292,10 +292,19 @@ func (a *Asset) path() string {
 	return joinURL([]interface{}{a.assetType(), a.signature(), a.Transformation, a.version(), a.source()})
 }
 
+func (a *Asset) assetURL() string {
+	return joinURL([]interface{}{distribution(a.PublicID, a.Config), a.path()})
+}
+
 func (a *Asset) query() string {
 	// Currently, analytics is not supported with AuthToken. Just return AuthToken if it is configured.
 	if a.Config.URL.SignURL && a.AuthToken.isEnabled() {
-		return a.AuthToken.Generate("/" + a.path())
+		u, err := url.Parse(a.assetURL())
+		if err != nil {
+			panic(err)
+		}
+
+		return a.AuthToken.Generate(u.Path)
 	}
 
 	if !a.Config.URL.Analytics {

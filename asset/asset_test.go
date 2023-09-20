@@ -47,6 +47,8 @@ func TestAsset_WithAuthToken(t *testing.T) {
 	i.AuthToken.Config.ACL = ""
 	i.AuthToken.Config.StartTime = startTime
 
+	i.Config.URL.PrivateCDN = true
+
 	assert.Contains(t, getAssetUrl(t, i), "8db0d753ee7bbb9e2eaf8698ca3797436ba4c20e31f44527e43b6a6e995cfdb3")
 }
 
