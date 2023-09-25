@@ -61,6 +61,7 @@ type SearchAsset struct {
 	AspectRatio   float64             `json:"aspect_ratio"`
 	Pixels        int                 `json:"pixels"`
 	Tags          []string            `json:"tags"`
+	Context       ImageMetadataResult `json:"context"`
 	ImageMetadata ImageMetadataResult `json:"image_metadata"`
 	VideoMetadata MediaMetadataResult `json:"video_metadata"`
 	ImageAnalysis ImageAnalysis       `json:"image_analysis"`
