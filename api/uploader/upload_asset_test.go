@@ -106,6 +106,9 @@ func TestUploader_UploadVideoURL(t *testing.T) {
 	if resp == nil || resp.PublicID != cldtest.PublicID || resp.Error.Message != "" {
 		t.Error(resp)
 	}
+	if resp.PlaybackURL == "" {
+        t.Error("PlaybackURL is empty")
+    }
 }
 
 func TestUploader_UploadBase64Image(t *testing.T) {
