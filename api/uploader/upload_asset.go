@@ -199,7 +199,7 @@ type UploadResult struct {
 	Placeholder           bool                          `json:"placeholder,omitempty"`
 	URL                   string                        `json:"url"`
 	SecureURL             string                        `json:"secure_url"`
-	PlaybackURL		   string `json:"playback_url,omitempty"`
+	PlaybackURL		   	  string 						`json:"playback_url,omitempty"`
 	AccessMode            string                        `json:"access_mode"`
 	Context               api.Metadata                  `json:"context,omitempty"`
 	Metadata              api.Metadata                  `json:"metadata,omitempty"`
