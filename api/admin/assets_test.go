@@ -1,7 +1,9 @@
 package admin_test
 
 import (
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/stretchr/testify/assert"
+	"net/http"
 	"testing"
 
 	"github.com/cloudinary/cloudinary-go/v2/api"
@@ -78,4 +80,31 @@ func TestAssets_DeleteAssets(t *testing.T) {
 	if err != nil {
 		t.Error(err, resp)
 	}
+}
+
+func TestAssets_VisualSearchImageFile(t *testing.T) {
+
+	cldtest.SkipFeature(t, cldtest.SkipVisualSearch)
+
+	uploadAPI, _ := uploader.New()
+
+	asset1, err := uploadAPI.Upload(ctx, cldtest.LogoURL, uploader.UploadParams{VisualSearch: api.Bool(true)})
+	if err != nil {
+		t.Error(err, asset1)
+	}
+
+	// Get the data
+	res, err := http.Get(cldtest.LogoURL)
+	if err != nil {
+		t.Error(err, res)
+	}
+
+	defer api.DeferredClose(res.Body)
+
+	resp, err := adminAPI.VisualSearch(ctx, admin.VisualSearchParams{ImageFile: res.Body})
+	if err != nil {
+		t.Error(err, resp)
+	}
+
+	assert.GreaterOrEqual(t, len(resp.Assets), 1)
 }

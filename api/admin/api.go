@@ -10,7 +10,9 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/cloudinary/cloudinary-go/v2/api"
@@ -86,6 +88,7 @@ func (a *API) delete(ctx context.Context, path interface{}, requestParams interf
 
 func (a *API) callAPI(ctx context.Context, method string, path interface{}, requestParams interface{}, result interface{}) (*http.Response, error) {
 	var body io.Reader = nil
+	var queryParams = ""
 
 	// Populate body for POST/PUT/DELETE.
 	if method == http.MethodPost || method == http.MethodPut || method == http.MethodDelete {
@@ -95,6 +98,75 @@ func (a *API) callAPI(ctx context.Context, method string, path interface{}, requ
 		}
 		body = bytes.NewBuffer(jsonReq)
 	}
+
+	// Handle GET request query parameters
+	if body == nil {
+		params, err := api.StructToParams(requestParams)
+		if err != nil {
+			return nil, err
+		}
+		queryParams = params.Encode()
+	}
+
+	return a.executeRequest(ctx, method, path, body, queryParams, map[string]string{}, result)
+}
+
+func (a *API) postFile(ctx context.Context, path interface{}, file interface{}, fieldName string,
+	requestParams interface{}, result interface{}) (*http.Response, error) {
+	var fileReader io.Reader = nil
+	switch fileValue := file.(type) {
+	case string:
+		fileHandle, err := os.Open(fileValue)
+		if err != nil {
+			return nil, err
+		}
+
+		defer api.DeferredClose(fileHandle)
+
+		fileReader = fileHandle
+	case io.Reader:
+		fileReader = fileValue
+	default:
+		return nil, fmt.Errorf("invalid file parameter of unsupported type %T", file)
+	}
+
+	bodyBuf := new(bytes.Buffer)
+	formWriter := multipart.NewWriter(bodyBuf)
+
+	formParams, err := api.StructToParams(requestParams)
+	if err != nil {
+		return nil, err
+	}
+
+	for key, val := range formParams {
+		_ = formWriter.WriteField(key, val[0])
+	}
+
+	partWriter, err := formWriter.CreateFormFile(fieldName, "file")
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = io.Copy(partWriter, fileReader)
+
+	if err != nil {
+		return nil, err
+	}
+
+	headers := map[string]string{
+		"Content-Type": formWriter.FormDataContentType(),
+	}
+
+	err = formWriter.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return a.executeRequest(ctx, http.MethodPost, path, bodyBuf, "", headers, result)
+}
+
+func (a *API) executeRequest(ctx context.Context, method string, path interface{}, body io.Reader, queryParams string,
+	headers map[string]string, result interface{}) (*http.Response, error) {
 	req, err := http.NewRequest(method,
 		fmt.Sprintf("%v/%v/%v", api.BaseURL(a.Config.API.UploadPrefix), a.Config.Cloud.CloudName, api.BuildPath(path)),
 		body,
@@ -104,19 +176,17 @@ func (a *API) callAPI(ctx context.Context, method string, path interface{}, requ
 		return nil, err
 	}
 
-	// Handle GET request query parameters
-	if body == nil {
-		params, err := api.StructToParams(requestParams)
-		if err != nil {
-			return nil, err
-		}
-		req.URL.RawQuery = params.Encode()
-	}
+	req.URL.RawQuery = queryParams
 
 	req.Header.Set("User-Agent", api.GetUserAgent())
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	setAuth(a, req)
+
+	// provided headers may overwrite defaults.
+	for key, val := range headers {
+		req.Header.Set(key, val)
+	}
 
 	ctx, cancel := context.WithTimeout(ctx, time.Duration(a.Config.API.Timeout)*time.Second)
 	defer cancel()
