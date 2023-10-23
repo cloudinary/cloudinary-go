@@ -91,7 +91,7 @@ func TestAssets_VisualSearchImageFile(t *testing.T) {
 	}
 
 	// Get the data
-	res, err := http.Get(asset1.SecureURL)
+	res, err := http.Get(cldtest.LogoURL)
 	if err != nil {
 		t.Error(err, res)
 	}
