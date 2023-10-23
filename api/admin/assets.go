@@ -182,15 +182,22 @@ func (a *API) AssetsByAssetFolder(ctx context.Context, params AssetsByAssetFolde
 
 // VisualSearchParams are the parameters for VisualSearch.
 type VisualSearchParams struct {
-	ImageURL     string `json:"image_url,omitempty"`
-	ImageAssetID string `json:"image_asset_id,omitempty"`
-	Text         string `json:"text,omitempty"`
+	ImageURL     string      `json:"image_url,omitempty"`
+	ImageAssetID string      `json:"image_asset_id,omitempty"`
+	Text         string      `json:"text,omitempty"`
+	ImageFile    interface{} `json:"-"`
 }
 
 // VisualSearch finds images based on their visual content.
 func (a *API) VisualSearch(ctx context.Context, params VisualSearchParams) (*VisualSearchResult, error) {
 	res := &VisualSearchResult{}
-	_, err := a.get(ctx, api.BuildPath(assets, visualSearch), params, res)
+	visualSearchPath := api.BuildPath(assets, visualSearch)
+	var err error
+	if params.ImageFile != nil {
+		_, err = a.postFile(ctx, visualSearchPath, params.ImageFile, "image_file", params, res)
+	} else {
+		_, err = a.get(ctx, visualSearchPath, params, res)
+	}
 
 	return res, err
 }
