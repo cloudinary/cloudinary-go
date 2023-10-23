@@ -83,6 +83,9 @@ func TestAssets_DeleteAssets(t *testing.T) {
 }
 
 func TestAssets_VisualSearchImageFile(t *testing.T) {
+
+	cldtest.SkipFeature(t, cldtest.SkipVisualSearch)
+
 	uploadAPI, _ := uploader.New()
 
 	asset1, err := uploadAPI.Upload(ctx, cldtest.LogoURL, uploader.UploadParams{VisualSearch: api.Bool(true)})
