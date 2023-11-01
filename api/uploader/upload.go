@@ -133,7 +133,8 @@ func (u *API) signRequest(requestParams url.Values) (url.Values, error) {
 		signatureParams[k] = []string{strings.Join(v, ",")}
 	}
 
-	signature, err := api.SignParameters(signatureParams, u.Config.Cloud.APISecret)
+	signature, err := api.SignParametersUsingAlgo(signatureParams, u.Config.Cloud.APISecret,
+		u.Config.Cloud.GetSignatureAlgorithm())
 	if err != nil {
 		return nil, err
 	}
