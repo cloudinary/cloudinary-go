@@ -9,6 +9,7 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/cloudinary/cloudinary-go/v2/config"
 	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
+	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
 	"testing"
 )
 
@@ -158,6 +159,33 @@ func getVariousValuesTestCases() []UploadAPIAcceptanceTestCase {
 	}
 }
 
+// Acceptance test cases for handling upload configuration.
+func getUploadConfigTestCases() []UploadAPIAcceptanceTestCase {
+	body := "api_key=key&" +
+		"file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
+		"&signature=06dbb2b05a8fdce468026e104596e6b8009dee3d08a6a62956ee7fef9aef8c74" +
+		"&timestamp=123456789"
+
+	return []UploadAPIAcceptanceTestCase{
+		{
+			Name: "Upload Test Configuration",
+			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
+				uploadAPI.Config.Cloud.SignatureAlgorithm = signature.SHA256
+				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
+					Timestamp: 123456789,
+				})
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "POST",
+				URI:    "/auto/upload",
+				Body:   &body,
+			},
+			ExpectedCallCount: 1,
+		},
+	}
+}
+
 // Run tests
 func TestUploadAPI_Acceptance(t *testing.T) {
 	t.Parallel()
@@ -166,4 +194,5 @@ func TestUploadAPI_Acceptance(t *testing.T) {
 	testUploadAPIByTestCases(getFolderDecouplingTestCases(), t)
 	testUploadAPIByTestCases(getBooleanValuesTestCases(), t)
 	testUploadAPIByTestCases(getVariousValuesTestCases(), t)
+	testUploadAPIByTestCases(getUploadConfigTestCases(), t)
 }

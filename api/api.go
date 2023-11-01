@@ -260,8 +260,8 @@ func BuildPath(parts ...interface{}) string {
 	return strings.Join(partsSlice, "/")
 }
 
-// SignParameters signs parameters using the provided secret.
-func SignParameters(params url.Values, secret string) (string, error) {
+// SignParametersUsingAlgo signs parameters using the provided secret and sign algorithm.
+func SignParametersUsingAlgo(params url.Values, secret string, algo signature.Algo) (string, error) {
 	if _, withTimestamp := params["timestamp"]; !withTimestamp || params["timestamp"][0] == "0" {
 		params.Set("timestamp", strconv.FormatInt(time.Now().Unix(), 10))
 	}
@@ -271,11 +271,16 @@ func SignParameters(params url.Values, secret string) (string, error) {
 		return "", err
 	}
 
-	rawSignature, err := signature.Sign(encodedUnescapedParams, secret, signature.SHA1)
+	rawSignature, err := signature.Sign(encodedUnescapedParams, secret, algo)
 	if err != nil {
 		return "", err
 	}
 	return hex.EncodeToString(rawSignature), nil
+}
+
+// SignParameters signs parameters using the provided secret.
+func SignParameters(params url.Values, secret string) (string, error) {
+	return SignParametersUsingAlgo(params, secret, signature.SHA1)
 }
 
 // MarshalJSONRaw marshals JSON without HTML characters escaping, which is enabled in the standard library.
