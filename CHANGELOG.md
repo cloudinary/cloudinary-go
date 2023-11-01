@@ -1,3 +1,15 @@
+2.6.0 / 2023-11-01
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `ImageFile` in `VisualSearch` Admin API
+  * Add support for `PlaybackURL` in `UploadResult` on video upload
+  * Add support for `Context` field in `SearchResult`
+  * Add support for configured signature algorithm in Upload API
+
+
 2.5.1 / 2023-09-20
 ==================
 
