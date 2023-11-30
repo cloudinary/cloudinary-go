@@ -188,6 +188,8 @@ func (u *API) postFile(ctx context.Context, file interface{}, formParams url.Val
 		}
 
 		return u.postLocalFile(ctx, uploadEndpoint, fileValue, formParams)
+	case *os.File:
+		return u.postOSFile(ctx, uploadEndpoint, fileValue, formParams)
 	case io.Reader:
 		return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams, map[string]string{}, 0)
 	default:
@@ -204,6 +206,11 @@ func (u *API) postLocalFile(ctx context.Context, urlPath string, filePath string
 
 	defer api.DeferredClose(file)
 
+	return u.postOSFile(ctx, urlPath, file, formParams)
+}
+
+// postOSFile creates a new file upload http request with optional extra params.
+func (u *API) postOSFile(ctx context.Context, urlPath string, file *os.File, formParams url.Values) ([]byte, error) {
 	fi, err := file.Stat()
 	if err != nil {
 		return nil, err
