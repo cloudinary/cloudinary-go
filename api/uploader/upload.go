@@ -188,11 +188,27 @@ func (u *API) postFile(ctx context.Context, file interface{}, formParams url.Val
 		}
 
 		return u.postLocalFile(ctx, uploadEndpoint, fileValue, formParams)
+	case *os.File:
+		return u.postOSFile(ctx, uploadEndpoint, fileValue, formParams)
 	case io.Reader:
 		return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams, map[string]string{}, 0)
 	default:
 		return nil, fmt.Errorf("invalid file parameter of unsupported type %T", file)
 	}
+}
+
+// postOSFile creates a new file upload http request with optional extra params.
+func (u *API) postOSFile(ctx context.Context, urlPath string, file *os.File, formParams url.Values) ([]byte, error) {
+	fi, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+
+	if fi.Size() > u.Config.API.ChunkSize {
+		return u.postLargeFile(ctx, urlPath, file, formParams)
+	}
+
+	return u.postIOReader(ctx, urlPath, file, fi.Name(), formParams, map[string]string{}, 0)
 }
 
 // postLocalFile creates a new file upload http request with optional extra params.
@@ -204,16 +220,7 @@ func (u *API) postLocalFile(ctx context.Context, urlPath string, filePath string
 
 	defer api.DeferredClose(file)
 
-	fi, err := file.Stat()
-	if err != nil {
-		return nil, err
-	}
-
-	if fi.Size() > u.Config.API.ChunkSize {
-		return u.postLargeFile(ctx, urlPath, file, formParams)
-	}
-
-	return u.postIOReader(ctx, urlPath, file, fi.Name(), formParams, map[string]string{}, 0)
+	return u.postOSFile(ctx, urlPath, file, formParams)
 }
 
 func (u *API) postLargeFile(ctx context.Context, urlPath string, file *os.File, formParams url.Values) ([]byte, error) {
