@@ -197,6 +197,18 @@ func (u *API) postFile(ctx context.Context, file interface{}, formParams url.Val
 	}
 }
 
+// postLocalFile creates a new file upload http request with optional extra params.
+func (u *API) postLocalFile(ctx context.Context, urlPath string, filePath string, formParams url.Values) ([]byte, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	defer api.DeferredClose(file)
+
+	return u.postOSFile(ctx, urlPath, file, formParams)
+}
+
 // postOSFile creates a new file upload http request with optional extra params.
 func (u *API) postOSFile(ctx context.Context, urlPath string, file *os.File, formParams url.Values) ([]byte, error) {
 	fi, err := file.Stat()
@@ -209,18 +221,6 @@ func (u *API) postOSFile(ctx context.Context, urlPath string, file *os.File, for
 	}
 
 	return u.postIOReader(ctx, urlPath, file, fi.Name(), formParams, map[string]string{}, 0)
-}
-
-// postLocalFile creates a new file upload http request with optional extra params.
-func (u *API) postLocalFile(ctx context.Context, urlPath string, filePath string, formParams url.Values) ([]byte, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return nil, err
-	}
-
-	defer api.DeferredClose(file)
-
-	return u.postOSFile(ctx, urlPath, file, formParams)
 }
 
 func (u *API) postLargeFile(ctx context.Context, urlPath string, file *os.File, formParams url.Values) ([]byte, error) {
