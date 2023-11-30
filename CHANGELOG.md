@@ -1,3 +1,8 @@
+2.6.2 / 2023-11-30
+==================
+
+  * Add support for uploading large `io.SectionReader` type
+
 2.6.1 / 2023-11-30
 ==================
 
