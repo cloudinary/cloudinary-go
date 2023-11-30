@@ -190,6 +190,8 @@ func (u *API) postFile(ctx context.Context, file interface{}, formParams url.Val
 		return u.postLocalFile(ctx, uploadEndpoint, fileValue, formParams)
 	case *os.File:
 		return u.postOSFile(ctx, uploadEndpoint, fileValue, formParams)
+	case *io.SectionReader:
+		return u.postSectionReader(ctx, uploadEndpoint, fileValue, formParams)
 	case io.Reader:
 		return u.postIOReader(ctx, uploadEndpoint, fileValue, "file", formParams, map[string]string{}, 0)
 	default:
@@ -223,26 +225,41 @@ func (u *API) postOSFile(ctx context.Context, urlPath string, file *os.File, for
 	return u.postIOReader(ctx, urlPath, file, fi.Name(), formParams, map[string]string{}, 0)
 }
 
+// postSectionReader creates a new file upload http request with optional extra params.
+func (u *API) postSectionReader(ctx context.Context, urlPath string, reader *io.SectionReader, formParams url.Values) ([]byte, error) {
+	if reader.Size() > u.Config.API.ChunkSize {
+		return u.postLargeIOReader(ctx, urlPath, reader, reader.Size(), "file", formParams)
+	}
+
+	return u.postIOReader(ctx, urlPath, reader, "file", formParams, map[string]string{}, 0)
+}
+
+// postLargeFile upload a large os.File in chunks.
 func (u *API) postLargeFile(ctx context.Context, urlPath string, file *os.File, formParams url.Values) ([]byte, error) {
 	fi, err := file.Stat()
 	if err != nil {
 		return nil, err
 	}
 
+	return u.postLargeIOReader(ctx, urlPath, file, fi.Size(), fi.Name(), formParams)
+}
+
+// postLargeFile upload a large io.Reader in chunks.
+func (u *API) postLargeIOReader(ctx context.Context, urlPath string, reader io.Reader, size int64, name string, formParams url.Values) ([]byte, error) {
 	headers := map[string]string{
 		"X-Unique-Upload-Id": randomPublicID(),
 	}
 
 	var res []byte
+	var err error
 
-	fileSize := fi.Size()
 	var currPos int64 = 0
-	for currPos < fileSize {
-		currChunkSize := min(fileSize-currPos, u.Config.API.ChunkSize)
+	for currPos < size {
+		currChunkSize := min(size-currPos, u.Config.API.ChunkSize)
 
-		headers["Content-Range"] = fmt.Sprintf("bytes %v-%v/%v", currPos, currPos+currChunkSize-1, fileSize)
+		headers["Content-Range"] = fmt.Sprintf("bytes %v-%v/%v", currPos, currPos+currChunkSize-1, size)
 
-		res, err = u.postIOReader(ctx, urlPath, file, fi.Name(), formParams, headers, currChunkSize)
+		res, err = u.postIOReader(ctx, urlPath, reader, name, formParams, headers, currChunkSize)
 		if err != nil {
 			return nil, err
 		}

@@ -3,6 +3,7 @@ package uploader_test
 import (
 	"context"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -107,8 +108,8 @@ func TestUploader_UploadVideoURL(t *testing.T) {
 		t.Error(resp)
 	}
 	if resp.PlaybackURL == "" {
-        t.Error("PlaybackURL is empty")
-    }
+		t.Error("PlaybackURL is empty")
+	}
 }
 
 func TestUploader_UploadBase64Image(t *testing.T) {
@@ -151,34 +152,54 @@ func TestUploader_UploadLargeFile(t *testing.T) {
 
 	largeImage := populateLargeImage()
 
-	defer func() {
-		err := os.Remove(largeImage)
-		if err != nil {
-			t.Error(err)
-		}
-	}()
-
 	params := uploader.UploadParams{
 		PublicID:  largeImagePublicID,
 		Overwrite: api.Bool(true),
 	}
 
-	resp, err := uploadAPI.Upload(ctx, largeImage, params)
-
+	largeImageHandle, err := os.Open(largeImage)
 	if err != nil {
 		t.Error(err)
 	}
 
-	// FIXME: destroy in teardown when available
-	_, _ = uploadAPI.Destroy(ctx, uploader.DestroyParams{PublicID: largeImagePublicID})
+	defer api.DeferredClose(largeImageHandle)
 
-	if resp == nil ||
-		resp.PublicID != largeImagePublicID ||
-		resp.Width != largeImageWidth ||
-		resp.Height != largeImageHeight {
-		t.Error(resp)
+	fi, err := largeImageHandle.Stat()
+	if err != nil {
+		t.Error(err)
 	}
 
+	sectionReader := io.NewSectionReader(largeImageHandle, 0, fi.Size())
+
+	largeUploads := []interface{}{
+		largeImage,
+		largeImageHandle,
+		sectionReader,
+	}
+
+	for _, largeFile := range largeUploads {
+		resp, err := uploadAPI.Upload(ctx, largeFile, params)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		if resp == nil ||
+			resp.PublicID != largeImagePublicID ||
+			resp.Width != largeImageWidth ||
+			resp.Height != largeImageHeight {
+			t.Error(resp)
+		}
+	}
+
+	defer func() {
+		err := os.Remove(largeImage)
+		if err != nil {
+			t.Error(err)
+		}
+
+		_, _ = uploadAPI.Destroy(ctx, uploader.DestroyParams{PublicID: largeImagePublicID})
+	}()
 }
 
 func TestUploader_Timeout(t *testing.T) {
