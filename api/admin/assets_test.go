@@ -67,6 +67,22 @@ func TestAssets_AssetsByAssetFolder(t *testing.T) {
 	assert.Equal(t, asset2.AssetFolder, resp.Assets[1].AssetFolder)
 }
 
+func TestAssets_AssetsFields(t *testing.T) {
+	cldtest.UploadTestAsset(t, cldtest.PublicID)
+	resp, err := adminAPI.AssetsByTag(ctx, admin.AssetsByTagParams{
+		Tag:        cldtest.Tag1,
+		Fields:     []string{"tags", "secure_url"},
+		MaxResults: 1})
+
+	if err != nil || len(resp.Assets) != 1 {
+		t.Error(err, resp)
+	}
+
+	assert.NotEmpty(t, resp.Assets[0].SecureURL)
+	assert.NotEmpty(t, resp.Assets[0].Tags)
+	assert.Empty(t, resp.Assets[0].URL)
+}
+
 func TestAssets_RestoreAssets(t *testing.T) {
 	resp, err := adminAPI.RestoreAssets(ctx, admin.RestoreAssetsParams{PublicIDs: []string{"api_test_restore_20891", "api_test_restore_94060"}})
 	if err != nil {

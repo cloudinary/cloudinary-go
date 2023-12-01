@@ -533,6 +533,19 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 				"max_results": []string{"100"},
 				"prefix":      []string{"PREFIX"},
 			},
+		}, {
+			requestParams: admin.AssetsParams{
+				AssetType:  "ASSET_TYPE",
+				NextCursor: "NEXT_CURSOR",
+				MaxResults: 100,
+				Fields:     []string{"tags", "secure_url"},
+			},
+			uri: "/resources/ASSET_TYPE",
+			expectedParams: &url.Values{
+				"next_cursor": []string{"NEXT_CURSOR"},
+				"max_results": []string{"100"},
+				"fields":      []string{"tags,secure_url"},
+			},
 		},
 	}
 
@@ -587,7 +600,10 @@ func getAssetsTestCases() []AdminAPIAcceptanceTestCase {
 				t.Errorf("Response should be type of %s, %s given", reflect.TypeOf(expectedResponse), reflect.TypeOf(response))
 			}
 
-			if !reflect.DeepEqual(expectedResponse, *v) {
+			if !reflect.DeepEqual(expectedResponse.Assets, v.Assets) {
+				t.Errorf("Expected response to be %v, %v given", expectedResponse, v)
+			}
+			if !reflect.DeepEqual(expectedResponse.NextCursor, v.NextCursor) {
 				t.Errorf("Expected response to be %v, %v given", expectedResponse, v)
 			}
 		},
@@ -789,6 +805,7 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 				Tags:        api.Bool(false),
 				Context:     api.Bool(false),
 				Moderations: api.Bool(false),
+				Fields:      []string{"tags", "secure_url"},
 			},
 			uri: "/resources/ASSET_TYPE/moderations/KIND/STATUS",
 			expectedParams: &url.Values{
@@ -797,6 +814,7 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 				"tags":        []string{"false"},
 				"context":     []string{"false"},
 				"moderations": []string{"false"},
+				"fields":      []string{"tags,secure_url"},
 			},
 		},
 		{
@@ -874,7 +892,11 @@ func getAssetsByModerationTestCases() []AdminAPIAcceptanceTestCase {
 				t.Errorf("Response should be type of %s, %s given", reflect.TypeOf(expectedResponse), reflect.TypeOf(response))
 			}
 
-			if !reflect.DeepEqual(expectedResponse, *v) {
+			if !reflect.DeepEqual(expectedResponse.Assets, v.Assets) {
+				t.Errorf("Expected response to be %v, %v given", expectedResponse, v)
+			}
+
+			if !reflect.DeepEqual(expectedResponse.NextCursor, v.NextCursor) {
 				t.Errorf("Expected response to be %v, %v given", expectedResponse, v)
 			}
 		},
