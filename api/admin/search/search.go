@@ -15,6 +15,8 @@ type Query struct {
 	Aggregate []Aggregation `json:"aggregate,omitempty"`
 	// WithField contains names of additional asset attributes to include for each asset in the response.
 	WithField []WithField `json:"with_field,omitempty"`
+	// Fields contains names of the asset attributes to keep for each asset in the response.
+	Fields []string `json:"fields,omitempty"`
 	// MaxResults is the maximum number of results to return. Default 50. Maximum 500.
 	MaxResults int `json:"max_results,omitempty"`
 	// NextCursor value is returned as part of the response when a search request has more results to return than MaxResults.

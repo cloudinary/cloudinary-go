@@ -39,16 +39,17 @@ type AssetTypesResult struct {
 
 // AssetsParams are the parameters for Assets.
 type AssetsParams struct {
-	AssetType    api.AssetType `json:"-"`
-	DeliveryType string        `json:"-"`
-	Prefix       string        `json:"prefix,omitempty"`
-	StartAt      *time.Time    `json:"start_at,omitempty"`
-	NextCursor   string        `json:"next_cursor,omitempty"`
-	MaxResults   int           `json:"max_results,omitempty"`
-	Tags         *bool         `json:"tags,omitempty"`
-	Context      *bool         `json:"context,omitempty"`
-	Moderations  *bool         `json:"moderations,omitempty"`
-	Direction    string        `json:"direction,omitempty"`
+	AssetType    api.AssetType   `json:"-"`
+	DeliveryType string          `json:"-"`
+	Prefix       string          `json:"prefix,omitempty"`
+	StartAt      *time.Time      `json:"start_at,omitempty"`
+	NextCursor   string          `json:"next_cursor,omitempty"`
+	MaxResults   int             `json:"max_results,omitempty"`
+	Tags         *bool           `json:"tags,omitempty"`
+	Context      *bool           `json:"context,omitempty"`
+	Moderations  *bool           `json:"moderations,omitempty"`
+	Direction    string          `json:"direction,omitempty"`
+	Fields       api.CldAPIArray `json:"fields,omitempty"`
 }
 
 // Assets lists all uploaded assets filtered by any specified AssetsParams.
@@ -66,18 +67,20 @@ type AssetsResult struct {
 	Assets     []api.BriefAssetResult `json:"resources"`
 	NextCursor string                 `json:"next_cursor"`
 	Error      api.ErrorResp          `json:"error,omitempty"`
+	Response   interface{}
 }
 
 // AssetsByTagParams are the parameters for AssetsByTag.
 type AssetsByTagParams struct {
-	AssetType   api.AssetType `json:"-"`
-	Tag         string        `json:"-"`
-	NextCursor  string        `json:"next_cursor,omitempty"`
-	MaxResults  int           `json:"max_results,omitempty"`
-	Tags        *bool         `json:"tags,omitempty"`
-	Context     *bool         `json:"context,omitempty"`
-	Moderations *bool         `json:"moderations,omitempty"`
-	Direction   string        `json:"direction,omitempty"`
+	AssetType   api.AssetType   `json:"-"`
+	Tag         string          `json:"-"`
+	NextCursor  string          `json:"next_cursor,omitempty"`
+	MaxResults  int             `json:"max_results,omitempty"`
+	Tags        *bool           `json:"tags,omitempty"`
+	Context     *bool           `json:"context,omitempty"`
+	Moderations *bool           `json:"moderations,omitempty"`
+	Direction   string          `json:"direction,omitempty"`
+	Fields      api.CldAPIArray `json:"fields,omitempty"`
 }
 
 // AssetsByTag lists assets with the specified tag.
@@ -94,15 +97,16 @@ func (a *API) AssetsByTag(ctx context.Context, params AssetsByTagParams) (*Asset
 
 // AssetsByContextParams are the parameters for AssetsByContext.
 type AssetsByContextParams struct {
-	AssetType   api.AssetType `json:"-"`
-	Key         string        `json:"key"`
-	Value       string        `json:"value,omitempty"`
-	NextCursor  string        `json:"next_cursor,omitempty"`
-	MaxResults  int           `json:"max_results,omitempty"`
-	Tags        *bool         `json:"tags,omitempty"`
-	Context     *bool         `json:"context,omitempty"`
-	Moderations *bool         `json:"moderations,omitempty"`
-	Direction   string        `json:"direction,omitempty"`
+	AssetType   api.AssetType   `json:"-"`
+	Key         string          `json:"key"`
+	Value       string          `json:"value,omitempty"`
+	NextCursor  string          `json:"next_cursor,omitempty"`
+	MaxResults  int             `json:"max_results,omitempty"`
+	Tags        *bool           `json:"tags,omitempty"`
+	Context     *bool           `json:"context,omitempty"`
+	Moderations *bool           `json:"moderations,omitempty"`
+	Direction   string          `json:"direction,omitempty"`
+	Fields      api.CldAPIArray `json:"fields,omitempty"`
 }
 
 // AssetsByContext lists assets with the specified contextual metadata.
@@ -119,15 +123,16 @@ func (a *API) AssetsByContext(ctx context.Context, params AssetsByContextParams)
 
 // AssetsByModerationParams are the parameters for AssetsByModeration.
 type AssetsByModerationParams struct {
-	AssetType   api.AssetType `json:"-"`
-	Kind        string        `json:"-"`
-	Status      string        `json:"-"`
-	NextCursor  string        `json:"next_cursor,omitempty"`
-	MaxResults  int           `json:"max_results,omitempty"`
-	Tags        *bool         `json:"tags,omitempty"`
-	Context     *bool         `json:"context,omitempty"`
-	Moderations *bool         `json:"moderations,omitempty"`
-	Direction   string        `json:"direction,omitempty"`
+	AssetType   api.AssetType   `json:"-"`
+	Kind        string          `json:"-"`
+	Status      string          `json:"-"`
+	NextCursor  string          `json:"next_cursor,omitempty"`
+	MaxResults  int             `json:"max_results,omitempty"`
+	Tags        *bool           `json:"tags,omitempty"`
+	Context     *bool           `json:"context,omitempty"`
+	Moderations *bool           `json:"moderations,omitempty"`
+	Direction   string          `json:"direction,omitempty"`
+	Fields      api.CldAPIArray `json:"fields,omitempty"`
 }
 
 // AssetsByModeration lists assets currently in the specified moderation queue and status.
@@ -148,6 +153,7 @@ type AssetsByIDsParams struct {
 	Tags         *bool            `json:"tags,omitempty"`
 	Context      *bool            `json:"context,omitempty"`
 	Moderations  *bool            `json:"moderations,omitempty"`
+	Fields       api.CldAPIArray  `json:"fields,omitempty"`
 }
 
 // AssetsByIDs lists assets with the specified public IDs.
@@ -162,12 +168,13 @@ func (a *API) AssetsByIDs(ctx context.Context, params AssetsByIDsParams) (*Asset
 
 // AssetsByAssetFolderParams are the parameters for AssetsByAssetFolder.
 type AssetsByAssetFolderParams struct {
-	AssetFolder string `json:"asset_folder"`
-	Tags        *bool  `json:"tags,omitempty"`
-	Context     *bool  `json:"context,omitempty"`
-	Moderations *bool  `json:"moderations,omitempty"`
-	NextCursor  string `json:"next_cursor,omitempty"`
-	MaxResults  int    `json:"max_results,omitempty"`
+	AssetFolder string          `json:"asset_folder"`
+	Tags        *bool           `json:"tags,omitempty"`
+	Context     *bool           `json:"context,omitempty"`
+	Moderations *bool           `json:"moderations,omitempty"`
+	NextCursor  string          `json:"next_cursor,omitempty"`
+	MaxResults  int             `json:"max_results,omitempty"`
+	Fields      api.CldAPIArray `json:"fields,omitempty"`
 }
 
 // AssetsByAssetFolder lists assets in the specified asset folder.
