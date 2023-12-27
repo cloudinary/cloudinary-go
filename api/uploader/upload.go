@@ -190,6 +190,8 @@ func (u *API) postFile(ctx context.Context, file interface{}, formParams url.Val
 		return u.postLocalFile(ctx, uploadEndpoint, fileValue, formParams)
 	case *os.File:
 		return u.postOSFile(ctx, uploadEndpoint, fileValue, formParams)
+	case *multipart.FileHeader:
+		return u.postFileHeader(ctx, uploadEndpoint, fileValue, formParams)
 	case *io.SectionReader:
 		return u.postSectionReader(ctx, uploadEndpoint, fileValue, formParams)
 	case io.Reader:
@@ -223,6 +225,19 @@ func (u *API) postOSFile(ctx context.Context, urlPath string, file *os.File, for
 	}
 
 	return u.postIOReader(ctx, urlPath, file, fi.Name(), formParams, map[string]string{}, 0)
+}
+
+func (u *API) postFileHeader(ctx context.Context, urlPath string, fileHeader *multipart.FileHeader, formParams url.Values) ([]byte, error) {
+	file, err := fileHeader.Open()
+	if err != nil {
+		return nil, err
+	}
+
+	if fileHeader.Size > u.Config.API.ChunkSize {
+		return u.postLargeIOReader(ctx, urlPath, file, fileHeader.Size, fileHeader.Filename, formParams)
+	}
+
+	return u.postIOReader(ctx, urlPath, file, fileHeader.Filename, formParams, map[string]string{}, 0)
 }
 
 // postSectionReader creates a new file upload http request with optional extra params.
