@@ -233,6 +233,8 @@ func (u *API) postFileHeader(ctx context.Context, urlPath string, fileHeader *mu
 		return nil, err
 	}
 
+	defer api.DeferredClose(file)
+
 	if fileHeader.Size > u.Config.API.ChunkSize {
 		return u.postLargeIOReader(ctx, urlPath, file, fileHeader.Size, fileHeader.Filename, formParams)
 	}
