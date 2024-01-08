@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -277,8 +278,8 @@ func (u *API) postIOReader(ctx context.Context, urlPath string, reader io.Reader
 	headers["Content-Type"] = formWriter.FormDataContentType()
 
 	go func() {
-		defer pipeWriter.Close()
-		defer formWriter.Close()
+		defer api.DeferredClose(pipeWriter)
+		defer api.DeferredClose(formWriter)
 
 		for key, val := range formParams {
 			_ = formWriter.WriteField(key, val[0])
@@ -286,7 +287,9 @@ func (u *API) postIOReader(ctx context.Context, urlPath string, reader io.Reader
 
 		partWriter, err := formWriter.CreateFormFile("file", name)
 		if err != nil {
-			pipeWriter.CloseWithError(err)
+			if err = pipeWriter.CloseWithError(err); err != nil {
+				log.Println(err)
+			}
 			return
 		}
 
@@ -296,7 +299,9 @@ func (u *API) postIOReader(ctx context.Context, urlPath string, reader io.Reader
 			_, err = io.Copy(partWriter, reader)
 		}
 		if err != nil {
-			pipeWriter.CloseWithError(err)
+			if err = pipeWriter.CloseWithError(err); err != nil {
+				log.Println(err)
+			}
 		}
 	}()
 
