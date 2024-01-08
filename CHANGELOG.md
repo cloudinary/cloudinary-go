@@ -1,3 +1,17 @@
+2.7.0 / 2024-01-08
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for uploading `multipart.FileHeader`
+  * Add support for `Fields` parameter in Search and Admin APIs
+
+Other Changes
+-------------
+
+    * Reduce memory consumption in `Upload` API
+
 2.6.2 / 2023-11-30
 ==================
 
