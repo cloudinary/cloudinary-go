@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -148,6 +149,9 @@ func TestUploader_UploadAuthenticated(t *testing.T) {
 }
 
 func TestUploader_UploadLargeFile(t *testing.T) {
+	// buffered upload allocated about 10000000 bytes and piped allocated 100000, so assertion value is between them
+	const memoryAllocationLimit uint64 = 1000000
+
 	uploadAPI.Config.API.ChunkSize = largeChunkSize
 
 	largeImage := populateLargeImage()
@@ -178,7 +182,9 @@ func TestUploader_UploadLargeFile(t *testing.T) {
 	}
 
 	for _, largeFile := range largeUploads {
+		stop := watchMemoryAllocation()
 		resp, err := uploadAPI.Upload(ctx, largeFile, params)
+		maxAllocation := stop()
 
 		if err != nil {
 			t.Error(err)
@@ -189,6 +195,10 @@ func TestUploader_UploadLargeFile(t *testing.T) {
 			resp.Width != largeImageWidth ||
 			resp.Height != largeImageHeight {
 			t.Error(resp)
+		}
+
+		if maxAllocation > memoryAllocationLimit {
+			t.Errorf("Uploading took too much memory (allocated %d bytes, expected %d at most)", maxAllocation, memoryAllocationLimit)
 		}
 	}
 
@@ -332,4 +342,34 @@ func populateLargeImage() string {
 	}
 
 	return tmpFile.Name()
+}
+
+func readMemoryAlloc() uint64 {
+	runtime.GC()
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	return m.Alloc
+}
+
+func watchMemoryAllocation() func() uint64 {
+	var maxAlloc uint64
+	proceed := true
+	initialRead := readMemoryAlloc()
+	go func() {
+		for i := 0; i < 10000; i++ {
+			if !proceed {
+				return
+			}
+			read := readMemoryAlloc()
+			if read-initialRead > maxAlloc {
+				maxAlloc = read - initialRead
+			}
+			time.Sleep(time.Millisecond * 500)
+		}
+	}()
+
+	return func() uint64 {
+		proceed = false
+		return maxAlloc
+	}
 }

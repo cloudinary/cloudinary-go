@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -288,33 +289,38 @@ func (u *API) postLargeIOReader(ctx context.Context, urlPath string, reader io.R
 }
 
 func (u *API) postIOReader(ctx context.Context, urlPath string, reader io.Reader, name string, formParams url.Values, headers map[string]string, chunkSize int64) ([]byte, error) {
-	bodyBuf := new(bytes.Buffer)
-	formWriter := multipart.NewWriter(bodyBuf)
+	pipeReader, pipeWriter := io.Pipe()
+	formWriter := multipart.NewWriter(pipeWriter)
 
 	headers["Content-Type"] = formWriter.FormDataContentType()
 
-	for key, val := range formParams {
-		_ = formWriter.WriteField(key, val[0])
-	}
+	go func() {
+		defer api.DeferredClose(pipeWriter)
+		defer api.DeferredClose(formWriter)
 
-	partWriter, err := formWriter.CreateFormFile("file", name)
-	if err != nil {
-		return nil, err
-	}
+		for key, val := range formParams {
+			_ = formWriter.WriteField(key, val[0])
+		}
 
-	if chunkSize != 0 {
-		_, err = io.CopyN(partWriter, reader, chunkSize)
-	} else {
-		_, err = io.Copy(partWriter, reader)
-	}
-	if err != nil {
-		return nil, err
-	}
+		partWriter, err := formWriter.CreateFormFile("file", name)
+		if err != nil {
+			if err = pipeWriter.CloseWithError(err); err != nil {
+				log.Println(err)
+			}
+			return
+		}
 
-	err = formWriter.Close()
-	if err != nil {
-		return nil, err
-	}
+		if chunkSize != 0 {
+			_, err = io.CopyN(partWriter, reader, chunkSize)
+		} else {
+			_, err = io.Copy(partWriter, reader)
+		}
+		if err != nil {
+			if err = pipeWriter.CloseWithError(err); err != nil {
+				log.Println(err)
+			}
+		}
+	}()
 
 	if u.Config.API.UploadTimeout != 0 {
 		var cancel context.CancelFunc
@@ -322,13 +328,13 @@ func (u *API) postIOReader(ctx context.Context, urlPath string, reader io.Reader
 		defer cancel()
 	}
 
-	return u.postBody(ctx, urlPath, bodyBuf, headers)
+	return u.postBody(ctx, urlPath, pipeReader, headers)
 }
 
-func (u *API) postBody(ctx context.Context, urlPath interface{}, bodyBuf *bytes.Buffer, headers map[string]string) ([]byte, error) {
+func (u *API) postBody(ctx context.Context, urlPath interface{}, bodyReader io.Reader, headers map[string]string) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPost,
 		u.getUploadURL(urlPath),
-		bodyBuf,
+		bodyReader,
 	)
 	if err != nil {
 		return nil, err
