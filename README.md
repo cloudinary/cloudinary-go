@@ -31,10 +31,11 @@ For the complete documentation, see the [Go SDK Guide](https://cloudinary.com/do
 
 ## Version Support
 
-| SDK Version | Go > 1.13 |
-|-------------|-----------|
-| 2.x         | v         |
-| 1.x         | v         |
+| SDK Version | Go 1.13 to 1.19 | Go 1.20 | Go 1.21 |
+|-------------|-----------------|---------|---------|
+| 2.8 & up    | ✘               | ✔       | ✔       |
+| 2.7         | ✔               | ✔       | ✔       |
+| 1.x         | ✔               | ✔       | ✔       |
 
 
 ## Installation

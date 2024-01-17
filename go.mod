@@ -1,6 +1,6 @@
 module github.com/cloudinary/cloudinary-go/v2
 
-go 1.21
+go 1.20
 
 require (
 	github.com/creasty/defaults v1.7.0
