@@ -46,10 +46,9 @@ Currently supports the following analysis options:
 * Custom
 */
 func (a *API) Analyze(ctx context.Context, params AnalyzeParams) (*AnalyzeResult, error) {
-
-	v2ApiCtx := context.WithValue(ctx, "api_version", "2") // base context
+	v2APICtx := context.WithValue(ctx, "api_version", "2")
 	res := &AnalyzeResult{}
-	_, err := a.post(v2ApiCtx, api.BuildPath(analysis, analyze, uri), params, res)
+	_, err := a.post(v2APICtx, api.BuildPath(analysis, analyze, uri), params, res)
 
 	return res, err
 }

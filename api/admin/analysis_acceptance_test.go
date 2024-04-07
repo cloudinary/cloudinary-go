@@ -52,7 +52,7 @@ func getAnalysisTestCases() []AdminAPIAcceptanceTestCase {
 				AnalysisType: "captioning",
 			},
 			uri:          "/analysis/analyze/uri",
-			expectedBody: `{"uri":"https://cloudinary-res.cloudinary.com/image/upload/cloudinary_logo.png","analysis_type":"captioning"}`,
+			expectedBody: `{"uri":"` + cldtest.LogoURL + `","analysis_type":"captioning"}`,
 		},
 	}
 
