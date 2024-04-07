@@ -367,7 +367,7 @@ func setAuth(u *API, req *http.Request) {
 }
 
 func (u *API) getUploadURL(urlPath interface{}) string {
-	return fmt.Sprintf("%v/%v/%v", api.BaseURL(u.Config.API.UploadPrefix), u.Config.Cloud.CloudName, api.BuildPath(urlPath))
+	return fmt.Sprintf("%v/%v/%v", api.BaseURL(u.Config.API.UploadPrefix, ""), u.Config.Cloud.CloudName, api.BuildPath(urlPath))
 }
 
 func getAssetType(requestParams interface{}) string {

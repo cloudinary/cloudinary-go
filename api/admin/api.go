@@ -167,8 +167,13 @@ func (a *API) postFile(ctx context.Context, path interface{}, file interface{}, 
 
 func (a *API) executeRequest(ctx context.Context, method string, path interface{}, body io.Reader, queryParams string,
 	headers map[string]string, result interface{}) (*http.Response, error) {
+	apiVersion := ""
+	if apiVersionRaw := ctx.Value("api_version"); apiVersionRaw != nil {
+		apiVersion = apiVersionRaw.(string)
+	}
+
 	req, err := http.NewRequest(method,
-		fmt.Sprintf("%v/%v/%v", api.BaseURL(a.Config.API.UploadPrefix), a.Config.Cloud.CloudName, api.BuildPath(path)),
+		fmt.Sprintf("%v/%v/%v", api.BaseURL(a.Config.API.UploadPrefix, apiVersion), a.Config.Cloud.CloudName, api.BuildPath(path)),
 		body,
 	)
 	if err != nil {

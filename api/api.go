@@ -54,8 +54,11 @@ func GetUserAgent() string {
 var apiVersion = "1_1"
 
 // BaseURL is the base API url.
-func BaseURL(uploadPrefix string) string {
-	return fmt.Sprintf("%s/v%s", uploadPrefix, apiVersion)
+func BaseURL(uploadPrefix string, apiVer string) string {
+	if apiVer == "" {
+		apiVer = apiVersion
+	}
+	return fmt.Sprintf("%s/v%s", uploadPrefix, apiVer)
 }
 
 // base64DataRegex is the regular expression for detecting base64 encoded strings.

@@ -258,11 +258,12 @@ type TestFunction func(w http.ResponseWriter, r *http.Request)
 
 // ExpectedRequestParams are the expected request parameters
 type ExpectedRequestParams struct {
-	Method  string             // Expected HTTP method of the request
-	URI     string             // Expected URI
-	Params  *url.Values        // Expected URI params
-	Body    *string            // Expected HTTP body (for POST / PUT requests)
-	Headers *map[string]string // Expected HTTP request headers
+	Method     string             // Expected HTTP method of the request
+	URI        string             // Expected URI
+	APIVersion string             // Expected API version
+	Params     *url.Values        // Expected URI params
+	Body       *string            // Expected HTTP body (for POST / PUT requests)
+	Headers    *map[string]string // Expected HTTP request headers
 }
 
 // GetTestHandler gets the test handler for HTTP server. Contains basic checks by expected request params.
@@ -294,8 +295,10 @@ func GetTestHandler(response string, t *testing.T, callCounter *int, ep Expected
 
 			}
 		}
-
-		expectedURI := "/" + APIVersion + "/" + CloudName + ep.URI
+		if ep.APIVersion == "" {
+			ep.APIVersion = APIVersion
+		}
+		expectedURI := "/" + ep.APIVersion + "/" + CloudName + ep.URI
 		if expectedURI != r.URL.Path {
 			t.Errorf(
 				"Expected request URI: %s, got: %s\n",

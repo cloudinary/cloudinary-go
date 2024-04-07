@@ -30,7 +30,7 @@ func TestAdmin_Usage(t *testing.T) {
 }
 
 func TestAdmin_UsageYesterday(t *testing.T) {
-	resp, err := adminAPI.Usage(ctx, admin.UsageParams{Date: time.Now().AddDate(0, 0, -1)})
+	resp, err := adminAPI.Usage(ctx, admin.UsageParams{Date: time.Now().AddDate(0, 0, -2)})
 
 	if err != nil || len(resp.Plan) < 1 {
 		t.Error(err, resp)

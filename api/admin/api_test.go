@@ -14,7 +14,7 @@ var adminAPI, _ = admin.New()
 func TestAPI_Timeout(t *testing.T) {
 	var originalTimeout = adminAPI.Config.API.Timeout
 
-	adminAPI.Config.API.Timeout = 0 // should timeout immediately
+	adminAPI.Config.API.Timeout = 0 // should time out immediately
 
 	_, err := adminAPI.Ping(ctx)
 
