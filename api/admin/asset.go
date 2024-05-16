@@ -65,6 +65,7 @@ type AssetResult struct {
 	Height                int                         `json:"height"`
 	Backup                bool                        `json:"backup"`
 	AccessMode            string                      `json:"access_mode"`
+	AccessControl         api.AccessControl           `json:"access_control,omitempty"`
 	URL                   string                      `json:"url"`
 	SecureURL             string                      `json:"secure_url"`
 	Metadata              api.Metadata                `json:"metadata,omitempty"`

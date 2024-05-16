@@ -37,6 +37,7 @@ type UploadParams struct {
 	AllowedFormats                 api.CldAPIArray             `json:"allowed_formats,omitempty"`
 	Eager                          string                      `json:"eager,omitempty"`
 	ResponsiveBreakpoints          ResponsiveBreakpointsParams `json:"responsive_breakpoints,omitempty"`
+	AccessControl                  api.AccessControl           `json:"access_control,omitempty"`
 	Eval                           string                      `json:"eval,omitempty"`
 	OnSuccess                      string                      `json:"on_success,omitempty"`
 	Async                          *bool                       `json:"async,omitempty"`
@@ -198,6 +199,7 @@ type UploadResult struct {
 	SecureURL             string                        `json:"secure_url"`
 	PlaybackURL           string                        `json:"playback_url,omitempty"`
 	AccessMode            string                        `json:"access_mode"`
+	AccessControl         api.AccessControl             `json:"access_control,omitempty"`
 	Context               api.Metadata                  `json:"context,omitempty"`
 	Metadata              api.Metadata                  `json:"metadata,omitempty"`
 	Moderation            []Moderation                  `json:"moderation,omitempty"`

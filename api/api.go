@@ -205,6 +205,38 @@ type LastUpdated struct {
 	UpdatedAt              time.Time `json:"updated_at,omitempty"`
 }
 
+// AccessType represents the access type for the asset.
+type AccessType string
+
+const (
+	// Anonymous allows public access to the asset. The anonymous access type can optionally include start and/or end
+	// dates (in ISO 8601 format) that define when the asset is publicly available.
+	Anonymous AccessType = "anonymous"
+	// Token requires either token-based authentication or cookie-based authentication for accessing the asset.
+	Token AccessType = "token"
+)
+
+// AccessControlRule stores parameters for the asset access management.
+type AccessControlRule struct {
+	// AccessType sets the access type for the asset.
+	AccessType AccessType `json:"access_type"`
+	// Start defines when the asset starts to be publicly available.
+	Start *time.Time `json:"start,omitempty"`
+	// End defines when the asset ends to be publicly available.
+	End *time.Time `json:"end,omitempty"`
+}
+
+// AccessControl represents access control params.
+type AccessControl []AccessControlRule
+
+// MarshalJSON writes a quoted string in the custom format.
+func (acParams AccessControl) MarshalJSON() ([]byte, error) {
+	acParamsArray := ([]AccessControlRule)(acParams)
+	paramsJSONObj, _ := json.Marshal(acParamsArray)
+
+	return []byte(strconv.Quote(string(paramsJSONObj))), nil
+}
+
 // MarshalJSON writes a quoted string in the custom format.
 func (cldAPIMap Metadata) MarshalJSON() ([]byte, error) {
 	// FIXME: handle escaping
@@ -432,4 +464,9 @@ func IsLocalFilePath(path interface{}) bool {
 // Bool returns a pointer for the provided boolean.
 func Bool(b bool) *bool {
 	return &b
+}
+
+// TimePtr returns a pointer for the provided time.Time.
+func TimePtr(t time.Time) *time.Time {
+	return &t
 }
