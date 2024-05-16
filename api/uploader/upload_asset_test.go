@@ -319,6 +319,45 @@ func TestUploader_UploadWithResponsiveBreakpoints(t *testing.T) {
 	assert.Equal(t, "a_45", eResp.ResponsiveBreakpoints[1].Transformation)
 }
 
+func TestUploader_UploadWithAccessControl(t *testing.T) {
+	now := time.Now()
+	tomorrow := time.Now().AddDate(0, 0, 1)
+
+	params := uploader.UploadParams{
+		PublicID:  cldtest.PublicID,
+		Type:      api.Authenticated,
+		Overwrite: api.Bool(true),
+		AccessControl: api.AccessControl{
+			{
+				AccessType: api.Anonymous,
+				Start:      api.TimePtr(now),
+				End:        api.TimePtr(tomorrow),
+			},
+			{
+				AccessType: api.Token,
+			},
+		},
+	}
+
+	resp, err := uploadAPI.Upload(ctx, cldtest.LogoURL, params)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp == nil {
+		t.Error(resp)
+	}
+
+	assert.Len(t, resp.AccessControl, 2)
+
+	assert.Equal(t, api.Anonymous, resp.AccessControl[0].AccessType)
+	assert.Equal(t, now.Unix(), resp.AccessControl[0].Start.Unix())
+	assert.Equal(t, tomorrow.Unix(), resp.AccessControl[0].End.Unix())
+
+	assert.Equal(t, api.Token, resp.AccessControl[1].AccessType)
+}
+
 func populateLargeImage() string {
 	head := "BMJ\xB9Y\x00\x00\x00\x00\x00\x8A\x00\x00\x00|\x00\x00\x00x\x05\x00\x00x\x05\x00\x00\x01\x00\x18\x00" +
 		"\x00\x00\x00\x00\xC0\xB8Y\x00a\x0F\x00\x00a\x0F\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF" +
