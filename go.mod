@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/creasty/defaults v1.7.0
 	github.com/google/uuid v1.5.0
-	github.com/gorilla/schema v1.2.1
+	github.com/gorilla/schema v1.4.1
 	github.com/heimdalr/dag v1.4.0
 	github.com/stretchr/testify v1.8.4
 )
