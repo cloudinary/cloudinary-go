@@ -1,3 +1,18 @@
+2.8.0 / 2024-07-30
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `AccessControl` in `uploader.UploadParams`
+  * Add support for `Analyze` API
+
+Other Changes
+-------------
+
+  * Bump `go` version to `1.20`
+  * Bump vulnerable dependencies
+
 2.7.0 / 2024-01-08
 ==================
 
