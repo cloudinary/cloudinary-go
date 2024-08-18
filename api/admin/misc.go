@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	ping  api.EndPoint = "ping"
-	usage api.EndPoint = "usage"
+	ping        api.EndPoint = "ping"
+	cloudConfig api.EndPoint = "config"
+	usage       api.EndPoint = "usage"
 )
 
 // Ping tests the reachability of the Cloudinary API.
@@ -27,6 +28,35 @@ type PingResult struct {
 	Status   string        `json:"status"`
 	Error    api.ErrorResp `json:"error,omitempty"`
 	Response interface{}
+}
+
+// GetConfigParams are the parameters for GetConfig.
+type GetConfigParams struct {
+	Settings *bool `json:"settings,omitempty"`
+}
+
+// GetConfig gets cloud config details.
+//
+// https://cloudinary.com/documentation/admin_api#config
+func (a *API) GetConfig(ctx context.Context, params GetConfigParams) (*GetConfigResult, error) {
+	res := &GetConfigResult{}
+	_, err := a.get(ctx, cloudConfig, params, res)
+
+	return res, err
+}
+
+// GetConfigResult represents the result of the GetConfig request.
+type GetConfigResult struct {
+	CloudName string        `json:"cloud_name"`
+	CreatedAt time.Time     `json:"created_at"`
+	Settings  CloudSettings `json:"settings"`
+	Error     api.ErrorResp `json:"error,omitempty"`
+	Response  interface{}
+}
+
+// CloudSettings represents the settings of the cloud.
+type CloudSettings struct {
+	FolderMode string `json:"folder_mode"`
 }
 
 // UsageParams are the parameters for Usage.

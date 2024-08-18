@@ -1,6 +1,8 @@
 package admin_test
 
 import (
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 
@@ -19,6 +21,17 @@ func TestAdmin_Ping(t *testing.T) {
 	if (*rawResponse)["status"] != "ok" {
 		t.Error(resp)
 	}
+}
+
+func TestAdmin_GetConfig(t *testing.T) {
+	resp, err := adminAPI.GetConfig(ctx, admin.GetConfigParams{Settings: api.Bool(true)})
+
+	if err != nil || resp.Error.Message != "" {
+		t.Error(resp)
+	}
+
+	assert.Equal(t, adminAPI.Config.Cloud.CloudName, resp.CloudName)
+	assert.NotEmpty(t, resp.Settings.FolderMode)
 }
 
 func TestAdmin_Usage(t *testing.T) {
