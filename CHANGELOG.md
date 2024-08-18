@@ -1,3 +1,12 @@
+2.9.0 / 2024-08-18
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `RenameFolder` Admin API
+  * Add support for `GetConfig` Admin API
+
 2.8.0 / 2024-07-30
 ==================
 
