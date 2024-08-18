@@ -85,6 +85,28 @@ type CreateFolderResult struct {
 	Error   api.ErrorResp `json:"error,omitempty"`
 }
 
+// RenameFolderParams are the parameters for RenameFolder.
+type RenameFolderParams struct {
+	FromPath string `json:"-"`         // The full path of the existing folder.
+	ToPath   string `json:"to_folder"` // The full path of the new folder.
+}
+
+// RenameFolder renames an existing asset folder.
+//
+// https://cloudinary.com/documentation/admin_api#update_folder
+func (a *API) RenameFolder(ctx context.Context, params RenameFolderParams) (*RenameFolderResult, error) {
+	res := &RenameFolderResult{}
+	_, err := a.put(ctx, api.BuildPath(folders, params.FromPath), params, res)
+
+	return res, err
+}
+
+type RenameFolderResult struct {
+	From  FolderResult  `json:"from"`
+	To    FolderResult  `json:"to"`
+	Error api.ErrorResp `json:"error,omitempty"`
+}
+
 // DeleteFolderParams are the parameters for DeleteFolder.
 type DeleteFolderParams struct {
 	Folder string `json:"-"` // The full path of the empty folder to delete.

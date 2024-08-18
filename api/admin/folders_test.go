@@ -1,6 +1,8 @@
 package admin_test
 
 import (
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
+	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 
@@ -8,6 +10,7 @@ import (
 )
 
 const testFolder = "000-go-folder"
+const testFolderRenamed = testFolder + "-renamed"
 
 func TestFolders_CreateFolder(t *testing.T) {
 	resp, err := adminAPI.CreateFolder(ctx, admin.CreateFolderParams{Folder: testFolder})
@@ -30,6 +33,33 @@ func TestFolders_DeleteFolder(t *testing.T) {
 
 	if err != nil || len(resp.Deleted) < 1 {
 		t.Error(resp, err)
+	}
+}
+
+func TestFolders_RenameFolder(t *testing.T) {
+	cldtest.SkipFixedFolderMode(t)
+
+	resp, err := adminAPI.CreateFolder(ctx, admin.CreateFolderParams{Folder: testFolder})
+
+	if err != nil || resp.Success != true {
+		t.Error(resp, err)
+	}
+
+	renameResp, err := adminAPI.RenameFolder(ctx, admin.RenameFolderParams{FromPath: testFolder, ToPath: testFolderRenamed})
+
+	if err != nil || renameResp.Error.Message != "" {
+		t.Error(renameResp, err)
+	}
+
+	assert.Equal(t, testFolder, renameResp.From.Path)
+	assert.Equal(t, testFolder, renameResp.From.Name)
+	assert.Equal(t, testFolderRenamed, renameResp.To.Path)
+	assert.Equal(t, testFolderRenamed, renameResp.To.Name)
+
+	delResp, err := adminAPI.DeleteFolder(ctx, admin.DeleteFolderParams{Folder: testFolderRenamed})
+
+	if err != nil || len(delResp.Deleted) < 1 {
+		t.Error(delResp, err)
 	}
 }
 

@@ -335,3 +335,13 @@ func SkipFeature(t *testing.T, feature string) {
 		t.Skipf("Please enable %s feature in your account and set CLD_TEST_FEATURES environment variable", feature)
 	}
 }
+
+func SkipFixedFolderMode(t *testing.T) {
+	res, err := adminAPI.GetConfig(ctx, admin.GetConfigParams{Settings: api.Bool(true)})
+	if err != nil {
+		t.Error(err)
+	}
+	if res.Settings.FolderMode == "fixed" {
+		t.Skip("Please enable dynamic folders in your account to run this test.")
+	}
+}
