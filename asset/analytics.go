@@ -21,9 +21,9 @@ const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 const binaryPadSize = 6
 
 var charCodes = map[string]string{}
-var analyticsSignature = ""
+var initialize sync.Once
 
-var mutex = &sync.Mutex{}
+var analyticsSignature = ""
 
 func sdkAnalyticsSignature() string {
 	if analyticsSignature != "" {
@@ -77,16 +77,14 @@ func encodeVersion(version string) (string, error) {
 	return strings.Join(encodedChars, ""), nil
 }
 
-func getKey(binaryValue string) string {
-	if len(charCodes) == 0 {
-		mutex.Lock()
-		if len(charCodes) == 0 {
-			for i, char := range chars {
-				charCodes[intToPaddedBin(i, binaryPadSize)] = string(char)
-			}
-		}
-		mutex.Unlock()
+func initializeCharCodes() {
+	for i, char := range chars {
+		charCodes[intToPaddedBin(i, binaryPadSize)] = string(char)
 	}
+}
+
+func getKey(binaryValue string) string {
+	initialize.Do(initializeCharCodes)
 
 	return charCodes[binaryValue]
 }
