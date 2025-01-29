@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: 🐹 Build & Test with Go ${{ matrix.go-version }}
+    name: 🐹 Test with Go ${{ matrix.go-version }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,21 +24,6 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
-      - name: 🧹 Clean Go Module Cache
-        run: rm -rf ~/go/pkg/mod
-
-      - name: 💾 Cache Go Modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}-v2
-          restore-keys: |
-            ${{ runner.os }}-go-${{ matrix.go-version }}-
-            ${{ runner.os }}-go-
-            ${{ runner.os }}-
-
       - name: 📦 Install Dependencies
         run: go mod download
 
@@ -51,11 +36,11 @@ jobs:
       - name: 🧰 Install gotestsum
         run: go install gotest.tools/gotestsum@latest
 
-      - name: 🧪 Run Tests with gotestsum
+      - name: 🧪 Run Tests
         run: |
           gotestsum --junitfile unit-tests.xml --format pkgname ./...
 
-      - name: 📊 Display Test Summary
+      - name: 📊 Test Summary
         uses: test-summary/action@v2
         with:
           paths: "unit-tests.xml"
