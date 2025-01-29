@@ -1,4 +1,4 @@
-[![Build Status](https://app.travis-ci.com/cloudinary/cloudinary-go.svg)](https://app.travis-ci.com/cloudinary/cloudinary-go)
+[![Tests](https://github.com/cloudinary/cloudinary-go/actions/workflows/test.yaml/badge.svg)](https://github.com/cloudinary/cloudinary-go/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/cloudinary/cloudinary-go/v2)](https://goreportcard.com/report/github.com/cloudinary/cloudinary-go/v2)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/cloudinary/cloudinary-go/v2)](https://pkg.go.dev/github.com/cloudinary/cloudinary-go/v2)
 
