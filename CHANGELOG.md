@@ -1,3 +1,8 @@
+2.9.1 / 2025-01-29
+==================
+
+  * Fix possible race condition when generating analytics token
+
 2.9.0 / 2024-08-18
 ==================
 
