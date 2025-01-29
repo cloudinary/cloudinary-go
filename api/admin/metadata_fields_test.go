@@ -216,7 +216,7 @@ func TestAdmin_AddMetadataFields(t *testing.T) {
 		ExternalID:   mdIDs["date"],
 		Label:        cldtest.UniqueID("GoDate"),
 		DefaultValue: time.Now().Format("2006-01-02"),
-		Validation:   metadata.GreaterThanValidation(time.Now().AddDate(0, 0, -1), false),
+		Validation:   metadata.GreaterThanValidation(time.Now().AddDate(0, 0, -1).Format("2006-01-02"), false),
 	}
 
 	var enumMetadataField = metadata.Field{
