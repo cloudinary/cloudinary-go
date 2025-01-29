@@ -24,13 +24,16 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
+      - name: 🧹 Clean Go Module Cache
+        run: rm -rf ~/go/pkg/mod
+
       - name: 💾 Cache Go Modules
         uses: actions/cache@v3
         with:
           path: |
             ~/.cache/go-build
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}-v2
           restore-keys: |
             ${{ runner.os }}-go-${{ matrix.go-version }}-
             ${{ runner.os }}-go-
