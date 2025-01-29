@@ -44,5 +44,8 @@ jobs:
           echo "CLOUDINARY_URL=$CLOUDINARY_URL" >> $GITHUB_ENV
           echo "cloud_name: $(echo $CLOUDINARY_URL | cut -d'@' -f2)"
 
+      - name: Install gotestsum
+        run: go install gotest.tools/gotestsum@latest
+
       - name: Run tests
-        run: go test -v ./...
+        run: gotestsum --format short -- ./...
