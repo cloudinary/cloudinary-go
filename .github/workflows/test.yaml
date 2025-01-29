@@ -48,4 +48,11 @@ jobs:
         run: go install gotest.tools/gotestsum@latest
 
       - name: Run tests
-        run: gotestsum --format short -- ./...
+        run: |
+          gotestsum --junitfile unit-tests.xml --format pkgname ./...
+
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "unit-tests.xml"
+        if: always()
