@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"strings"
 
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/admin"
@@ -29,8 +31,29 @@ func main() {
 	getAssetDetails(cld, ctx)
 
 	searchAssets(cld, ctx)
-}
 
+
+
+	// Generate responsive srcset for the "logo" image
+	srcset, err := generateResponsiveSrcSet(cld, "logo")
+	if err != nil {
+		log.Fatalf("Failed to build srcset, %v", err)
+	}
+	log.Printf("SrcSet: %s", srcset)
+
+	// Upload a video with transformations applied on upload
+	videoResult := uploadVideoWithTransformation(cld, ctx)
+	log.Println(videoResult.SecureURL)
+
+	// Delete a single asset by Public ID
+	deleteAsset(cld, ctx, "logo")
+
+	// Bulk delete multiple assets by Public IDs
+	bulkDeleteAssets(cld, ctx, []string{"old_img1", "old_img2", "old_img3"})
+
+	// List assets with pagination (first 50 per page)
+	listAssetsWithPagination(cld, ctx, 50)
+}
 
 // Upload an image to your Cloudinary account from a specified URL.
 //
@@ -45,7 +68,7 @@ func main() {
 func uploadImage(cld *cloudinary.Cloudinary, ctx context.Context) *uploader.UploadResult {
 	uploadResult, err := cld.Upload.Upload(
 		ctx,
-		"./1.jpg",
+		"./2.jpg",
 		uploader.UploadParams{PublicID: "logo"},
 	)
 	if err != nil {
@@ -64,14 +87,14 @@ func uploadImage(cld *cloudinary.Cloudinary, ctx context.Context) *uploader.Uplo
 func buildImageURL(cld *cloudinary.Cloudinary) string {
 	image, err := cld.Image("logo")
 	if err != nil {
-		log.Fatalf("Failed to build image URL, %v\n", err)
+		log.Fatalf("Failed to build image URL, %v", err)
 	}
 
 	image.Transformation = "c_scale,w_500/f_auto/q_auto"
 
 	imageURL, err := image.String()
 	if err != nil {
-		log.Fatalf("Failed to serialize image URL, %v\n", err)
+		log.Fatalf("Failed to serialize image URL, %v", err)
 	}
 
 	return imageURL
@@ -82,7 +105,7 @@ func buildImageURL(cld *cloudinary.Cloudinary) string {
 func getAssetDetails(cld *cloudinary.Cloudinary, ctx context.Context) {
 	asset, err := cld.Admin.Asset(ctx, admin.AssetParams{PublicID: "logo"})
 	if err != nil {
-		log.Fatalf("Failed to get asset details, %v\n", err)
+		log.Fatalf("Failed to get asset details, %v", err)
 	}
 
 	// Print some basic information about the asset.
@@ -108,5 +131,100 @@ func searchAssets(cld *cloudinary.Cloudinary, ctx context.Context) {
 
 	for _, asset := range searchResult.Assets {
 		log.Printf("Public ID: %v, URL: %v\n", asset.PublicID, asset.SecureURL)
+	}
+}
+
+
+
+// Generate a responsive srcset string for a given public ID by building URLs at multiple widths.
+func generateResponsiveSrcSet(cld *cloudinary.Cloudinary, publicID string) (string, error) {
+	widths := []int{200, 400, 800, 1200}
+	var parts []string
+
+	for _, w := range widths {
+		img, err := cld.Image(publicID)
+		if err != nil {
+			return "", fmt.Errorf("Failed to initialize image %s, %v", publicID, err)
+		}
+		img.Transformation = fmt.Sprintf("c_scale,w_%d/f_auto/q_auto", w)
+
+		url, err := img.String()
+		if err != nil {
+			return "", fmt.Errorf("Failed to build URL for width %d, %v", w, err)
+		}
+		parts = append(parts, fmt.Sprintf("%s %dw", url, w))
+	}
+
+	return strings.Join(parts, ", "), nil
+}
+
+// Upload a video with transformations applied on upload to generate posters or clips.
+func uploadVideoWithTransformation(cld *cloudinary.Cloudinary, ctx context.Context) *uploader.UploadResult {
+	uploadResult, err := cld.Upload.Upload(
+		ctx,
+		"./promo.mp4",
+		uploader.UploadParams{
+			PublicID:     "promo_clip",
+			Folder:       "videos/promos",
+			ResourceType: "video",
+			Eager:        "c_fill,h_360,w_640,b_black|c_crop,ar_16:9,e_volume:0.5,du_15",
+			Tags:         []string{"video", "promo"},
+		},
+	)
+	if err != nil {
+		log.Fatalf("Failed to upload video, %v", err)
+	}
+
+	// uploadResult.SecureURL points to the original video; uploadResult.Eager to derivatives.
+	return uploadResult
+}
+
+// Delete a single asset by its Public ID.
+func deleteAsset(cld *cloudinary.Cloudinary, ctx context.Context, publicID string) {
+	_, err := cld.Upload.Destroy(
+		ctx,
+		uploader.DestroyParams{PublicID: publicID, ResourceType: "image"},
+	)
+	if err != nil {
+		log.Fatalf("Failed to delete asset %s, %v", publicID, err)
+	}
+
+	// Asset deleted successfully.
+}
+
+// Bulk delete multiple assets by their Public IDs.
+func bulkDeleteAssets(cld *cloudinary.Cloudinary, ctx context.Context, publicIDs []string) {
+	resp, err := cld.Admin.DeleteAssets(
+		ctx,
+		admin.DeleteAssetsParams{PublicIDs: publicIDs},
+	)
+	if err != nil {
+		log.Fatalf("Failed to bulk delete assets, %v", err)
+	}
+
+	// Print how many were deleted.
+	log.Printf("Deleted assets count: %d", len(resp.Deleted))
+}
+
+// List all assets in pages of up to maxResults, using cursor-based pagination.
+func listAssetsWithPagination(cld *cloudinary.Cloudinary, ctx context.Context, maxResults int) {
+	nextCursor := ""
+	for {
+		page, err := cld.Admin.Assets(
+			ctx,
+			admin.AssetsParams{MaxResults: maxResults, NextCursor: nextCursor},
+		)
+		if err != nil {
+			log.Fatalf("Failed to list assets, %v", err)
+		}
+
+		for _, asset := range page.Assets {
+			log.Printf("Public ID: %v, URL: %v", asset.PublicID, asset.SecureURL)
+		}
+
+		if page.NextCursor == "" {
+			break // no more assets
+		}
+		nextCursor = page.NextCursor
 	}
 }
