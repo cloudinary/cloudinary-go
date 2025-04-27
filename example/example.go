@@ -50,9 +50,13 @@ func main() {
 	log.Println(videoResult.SecureURL)
 
 	// Delete a single asset by Public ID
+	// Note: Once an asset is deleted, the associated URL will no longer work.
+	// If you want to access the uploaded asset via the logged URL, comment out this deleteAsset() call.
 	deleteAsset(cld, ctx, "logo")
 
 	// Bulk delete multiple assets by Public IDs
+	// Note: Assets deleted here will also become inaccessible through their URLs.
+	// Comment out this bulkDeleteAssets() call if you want to keep them available for testing.
 	bulkDeleteAssets(cld, ctx, []string{"old_img1", "old_img2", "old_img3"})
 
 	// List assets with pagination (first 5 per page)
