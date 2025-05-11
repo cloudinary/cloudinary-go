@@ -93,6 +93,7 @@ type AssetResult struct {
 	CinemagraphAnalysis   CinemagraphAnalysisResult   `json:"cinemagraph_analysis"`
 	Usage                 interface{}                 `json:"usage"`
 	OriginalFilename      string                      `json:"original_filename"`
+	Context               AssetContextResult          `json:"context"`
 	Error                 api.ErrorResp               `json:"error,omitempty"`
 	Response              interface{}
 }
@@ -140,6 +141,11 @@ type MediaMetadataResult map[string]interface{}
 type PredominantResult struct {
 	Google     [][]interface{} `json:"google"`
 	Cloudinary [][]interface{} `json:"cloudinary"`
+}
+
+// AssetContextResult contains the contextual metadata
+type AssetContextResult struct {
+	Custom map[string]string `json:"custom"`
 }
 
 // UpdateAssetParams are the parameters for UpdateAsset.
