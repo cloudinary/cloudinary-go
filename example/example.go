@@ -215,8 +215,15 @@ func bulkDeleteAssets(cld *cloudinary.Cloudinary, ctx context.Context, publicIDs
 // List all assets in pages of up to maxResults, using cursor-based pagination.
 func listAssetsWithPagination(cld *cloudinary.Cloudinary, ctx context.Context, maxResults int) {
 	nextCursor := ""
+	loopCount := 0
+	maxLoops := 4 // Limit the number of loops for demo purposes
 
 	for {
+		if loopCount >= maxLoops {
+			log.Println("Reached maximum number of loops for demo purposes.")
+			break
+		}
+
 		page, err := cld.Admin.Assets(
 			ctx,
 			admin.AssetsParams{MaxResults: maxResults, NextCursor: nextCursor},
@@ -233,5 +240,6 @@ func listAssetsWithPagination(cld *cloudinary.Cloudinary, ctx context.Context, m
 			break // no more assets
 		}
 		nextCursor = page.NextCursor
+		loopCount++
 	}
 }
