@@ -59,8 +59,8 @@ func main() {
 	// Comment out this bulkDeleteAssets() call if you want to keep them available for testing.
 	bulkDeleteAssets(cld, ctx, []string{"old_img1", "old_img2", "old_img3"})
 
-	// List assets with pagination (first 5 per page)
-	listAssetsWithPagination(cld, ctx, 5)
+	// List assets with pagination (retrieves up to 2 assets per page)
+	listAssetsWithPagination(cld, ctx, 2)
 }
 
 // Upload an image to your Cloudinary account from a specified URL.
@@ -206,6 +206,11 @@ func bulkDeleteAssets(cld *cloudinary.Cloudinary, ctx context.Context, publicIDs
 	)
 	if err != nil {
 		log.Fatalf("failed to bulk delete assets: %v", err)
+	}
+	
+	// Print details of deleted assets.
+	for publicID, status := range resp.Deleted {
+		log.Printf("Public ID: %s, Status: %s", publicID, status)
 	}
 
 	// Print how many were deleted.
