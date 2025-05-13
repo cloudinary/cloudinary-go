@@ -221,7 +221,7 @@ func bulkDeleteAssets(cld *cloudinary.Cloudinary, ctx context.Context, publicIDs
 func listAssetsWithPagination(cld *cloudinary.Cloudinary, ctx context.Context, maxResults int) {
 	nextCursor := ""
 	loopCount := 0
-	maxLoops := 4 // Limit the number of loops for demo purposes
+	maxLoops := 2 // Limit the number of loops for demo purposes
 
 	for {
 		if loopCount >= maxLoops {
