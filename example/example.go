@@ -173,7 +173,7 @@ func uploadVideoWithTransformations(cld *cloudinary.Cloudinary, ctx context.Cont
 			PublicID:     "promo_clip",
 			Folder:       "videos/promos",
 			ResourceType: "video",
-			Eager:        "c_fill,h_360,w_640,b_black|c_crop,ar_16:9,e_volume:0.5,du_15",
+			Eager:        "c_fill,h_360,w_640,b_black|c_crop,ar_16:9,du_15",
 			Tags:         []string{"video", "promo"},
 		},
 	)
