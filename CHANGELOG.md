@@ -1,3 +1,16 @@
+2.10.0 / 2025-05-14
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `Context` in `AssetResult`
+
+Other Changes
+-------------
+
+  * Add advanced examples
+
 2.9.1 / 2025-01-29
 ==================
 
