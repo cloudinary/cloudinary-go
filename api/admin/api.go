@@ -198,6 +198,9 @@ func (a *API) executeRequest(ctx context.Context, method string, path interface{
 
 	req = req.WithContext(ctx)
 
+	if a.Config.API.BeforeSend != nil {
+		a.Config.API.BeforeSend(req)
+	}
 	resp, err := a.Client.Do(req)
 	if err != nil {
 		return nil, err

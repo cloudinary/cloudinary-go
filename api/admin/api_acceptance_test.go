@@ -5,12 +5,14 @@ package admin_test
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"reflect"
+	"testing"
+
 	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/api/admin"
 	"github.com/cloudinary/cloudinary-go/v2/config"
 	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
-	"reflect"
-	"testing"
 )
 
 var oAuthTokenConfig, _ = config.NewFromOAuthToken(cldtest.CloudName, "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
@@ -148,10 +150,34 @@ func getAuthorizationTestCases() []AdminAPIAcceptanceTestCase {
 	}
 }
 
+// Acceptance test cases for before send
+func getBeforeSendTestCases() []AdminAPIAcceptanceTestCase {
+	return []AdminAPIAcceptanceTestCase{
+		{
+			Name: "Ping Test Before Send",
+			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+				api.Config.API.BeforeSend = func(req *http.Request) {
+					req.Header.Set("X-Test-Header", "test")
+				}
+				return api.Ping(ctx)
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method:  "GET",
+				URI:     "/ping",
+				Headers: &map[string]string{"X-Test-Header": "test"},
+			},
+			JsonResponse:      "{\"status\": \"OK\"}",
+			ExpectedCallCount: 1,
+		},
+	}
+}
+
 // Run tests
 func TestAdminAPI_Acceptance(t *testing.T) {
 	t.Parallel()
 	testAdminAPIByTestCases(getPingTestCases(), t)
 	testAdminAPIByTestCases(getUserAgentTestCases(), t)
 	testAdminAPIByTestCases(getAuthorizationTestCases(), t)
+	testAdminAPIByTestCases(getBeforeSendTestCases(), t)
 }

@@ -350,6 +350,9 @@ func (u *API) postBody(ctx context.Context, urlPath interface{}, bodyReader io.R
 
 	req = req.WithContext(ctx)
 
+	if u.Config.API.BeforeSend != nil {
+		u.Config.API.BeforeSend(req)
+	}
 	resp, err := u.Client.Do(req)
 	if err != nil {
 		return nil, err

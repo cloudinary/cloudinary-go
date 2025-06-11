@@ -5,12 +5,14 @@ package uploader_test
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"testing"
+
 	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/cloudinary/cloudinary-go/v2/config"
 	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
-	"testing"
 )
 
 var oAuthTokenConfig, _ = config.NewFromOAuthToken(cldtest.CloudName, "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
@@ -186,6 +188,35 @@ func getUploadConfigTestCases() []UploadAPIAcceptanceTestCase {
 	}
 }
 
+// Acceptance test cases for before send
+func getBeforeSendTestCases() []UploadAPIAcceptanceTestCase {
+	body := "file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
+		"&timestamp=123456789&unsigned=true"
+
+	return []UploadAPIAcceptanceTestCase{
+		{
+			Name: "Upload Test Before Send",
+			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
+				uploadAPI.Config.API.BeforeSend = func(req *http.Request) {
+					req.Header.Set("X-Test-Header", "test")
+				}
+				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
+					Timestamp: 123456789,
+					Unsigned:  api.Bool(true),
+				})
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method:  "POST",
+				URI:     "/auto/upload",
+				Body:    &body,
+				Headers: &map[string]string{"X-Test-Header": "test"},
+			},
+			ExpectedCallCount: 1,
+		},
+	}
+}
+
 // Run tests
 func TestUploadAPI_Acceptance(t *testing.T) {
 	t.Parallel()
@@ -195,4 +226,5 @@ func TestUploadAPI_Acceptance(t *testing.T) {
 	testUploadAPIByTestCases(getBooleanValuesTestCases(), t)
 	testUploadAPIByTestCases(getVariousValuesTestCases(), t)
 	testUploadAPIByTestCases(getUploadConfigTestCases(), t)
+	testUploadAPIByTestCases(getBeforeSendTestCases(), t)
 }
