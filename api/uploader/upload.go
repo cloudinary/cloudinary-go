@@ -9,7 +9,6 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -96,14 +95,11 @@ func (u *API) postAndSignForm(ctx context.Context, urlPath string, formParams ur
 }
 
 func (u *API) signRequest(requestParams url.Values) (url.Values, error) {
-	// No signing for OAuth Token
-	if u.Config.Cloud.OAuthToken != "" {
+	// No signing for OAuth Token or when API Secret is missing
+	if u.Config.Cloud.OAuthToken != "" || u.Config.Cloud.APISecret == "" {
 		return requestParams, nil
 	}
 
-	if u.Config.Cloud.APISecret == "" {
-		return nil, errors.New("must provide API Secret")
-	}
 	// https://cloudinary.com/documentation/upload_images#generating_authentication_signatures
 	// All parameters added to the method call should be included except: file, cloud_name, resource_type and your api_key.
 
