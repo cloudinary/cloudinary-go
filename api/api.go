@@ -295,13 +295,28 @@ func BuildPath(parts ...interface{}) string {
 	return strings.Join(partsSlice, "/")
 }
 
+// encodeParam encodes a parameter for safe inclusion in URL query strings.
+//
+// Specifically replaces "&" characters with their percent-encoded equivalent "%26"
+// to prevent them from being interpreted as parameter separators in URL query strings.
+func encodeParam(value string) string {
+	return strings.Replace(value, "&", "%26", -1)
+}
+
 // SignParametersUsingAlgo signs parameters using the provided secret and sign algorithm.
 func SignParametersUsingAlgo(params url.Values, secret string, algo signature.Algo) (string, error) {
 	if _, withTimestamp := params["timestamp"]; !withTimestamp || params["timestamp"][0] == "0" {
 		params.Set("timestamp", strconv.FormatInt(time.Now().Unix(), 10))
 	}
 
-	encodedUnescapedParams, err := url.QueryUnescape(params.Encode())
+	encodedParams := make(url.Values)
+	for key, values := range params {
+		for _, value := range values {
+			encodedParams.Add(key, encodeParam(value))
+		}
+	}
+
+	encodedUnescapedParams, err := url.QueryUnescape(encodedParams.Encode())
 	if err != nil {
 		return "", err
 	}
