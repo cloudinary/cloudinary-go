@@ -44,4 +44,4 @@ func TestAPISignRequestPreventsParameterSmuggling(t *testing.T) {
 	// Verify the expected signature for the smuggled parameters case
 	const expectedSmuggledSignature = "7b4e3a539ff1fa6e6700c41b3a2ee77586a025f9"
 	assert.Equal(t, expectedSmuggledSignature, signatureSmuggled)
-} 
+}
