@@ -20,7 +20,6 @@ import (
 )
 
 var ctx = context.Background()
-var uploadAPI, _ = uploader.New()
 
 const largeImagePublicID = "go_test_large_image"
 const largeImageSize = 5880138

@@ -299,12 +299,17 @@ func BuildPath(parts ...interface{}) string {
 //
 // Specifically replaces "&" characters with their percent-encoded equivalent "%26"
 // to prevent them from being interpreted as parameter separators in URL query strings.
-func encodeParam(value string) string {
-	return strings.Replace(value, "&", "%26", -1)
+// This encoding is only applied when signatureVersion is 2 or higher.
+func encodeParam(value string, signatureVersion int) string {
+	// Version 2: URL encode & characters in values to prevent parameter smuggling
+	if signatureVersion >= 2 {
+		return strings.Replace(value, "&", "%26", -1)
+	}
+	return value
 }
 
-// SignParametersUsingAlgo signs parameters using the provided secret and sign algorithm.
-func SignParametersUsingAlgo(params url.Values, secret string, algo signature.Algo) (string, error) {
+// SignParametersUsingAlgoAndVersion signs parameters using the provided secret, sign algorithm, and signature version.
+func SignParametersUsingAlgoAndVersion(params url.Values, secret string, algo signature.Algo, signatureVersion int) (string, error) {
 	if _, withTimestamp := params["timestamp"]; !withTimestamp || params["timestamp"][0] == "0" {
 		params.Set("timestamp", strconv.FormatInt(time.Now().Unix(), 10))
 	}
@@ -312,7 +317,7 @@ func SignParametersUsingAlgo(params url.Values, secret string, algo signature.Al
 	encodedParams := make(url.Values)
 	for key, values := range params {
 		for _, value := range values {
-			encodedParams.Add(key, encodeParam(value))
+			encodedParams.Add(key, encodeParam(value, signatureVersion))
 		}
 	}
 
@@ -326,6 +331,11 @@ func SignParametersUsingAlgo(params url.Values, secret string, algo signature.Al
 		return "", err
 	}
 	return hex.EncodeToString(rawSignature), nil
+}
+
+// SignParametersUsingAlgo signs parameters using the provided secret and sign algorithm.
+func SignParametersUsingAlgo(params url.Values, secret string, algo signature.Algo) (string, error) {
+	return SignParametersUsingAlgoAndVersion(params, secret, algo, 2)
 }
 
 // SignParameters signs parameters using the provided secret.

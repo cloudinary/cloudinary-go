@@ -219,7 +219,8 @@ func GetTestSuffix() string {
 
 	if testSuffix == "" {
 		rand.Seed(time.Now().UnixNano())
-		testSuffix = strconv.Itoa(rand.Intn(999999))
+		// Generate a random number between 100000 and 999999 to ensure 6 digits
+		testSuffix = strconv.Itoa(rand.Intn(900000) + 100000)
 	}
 
 	return testSuffix

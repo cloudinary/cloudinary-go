@@ -47,6 +47,7 @@ func TestConfiguration_CreateInstance(t *testing.T) {
 
 	// check a few default values
 	assert.EqualValues(t, signature.SHA1, c.Cloud.GetSignatureAlgorithm())
+	assert.EqualValues(t, 2, c.Cloud.GetSignatureVersion())
 	assert.EqualValues(t, 60, c.API.Timeout)
 	assert.EqualValues(t, true, c.URL.Secure)
 }
@@ -106,4 +107,22 @@ func TestConfiguration_AuthToken(t *testing.T) {
 	assert.EqualValues(t, 1, c.AuthToken.StartTime)
 	assert.EqualValues(t, 3, c.AuthToken.Expiration)
 	assert.EqualValues(t, 2, c.AuthToken.Duration)
+}
+
+func TestConfiguration_SignatureVersion(t *testing.T) {
+	c, err := config.NewFromURL(cldtest.CldURL + "?signature_version=1")
+	if err != nil {
+		t.Error("Error: ", err)
+	}
+
+	assert.Equal(t, cldtest.CloudName, c.Cloud.CloudName)
+	assert.EqualValues(t, 1, c.Cloud.GetSignatureVersion())
+
+	// Test default signature version
+	c2, err := config.NewFromURL(cldtest.CldURL)
+	if err != nil {
+		t.Error("Error: ", err)
+	}
+
+	assert.EqualValues(t, 2, c2.Cloud.GetSignatureVersion())
 }

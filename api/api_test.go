@@ -45,3 +45,28 @@ func TestAPISignRequestPreventsParameterSmuggling(t *testing.T) {
 	const expectedSmuggledSignature = "7b4e3a539ff1fa6e6700c41b3a2ee77586a025f9"
 	assert.Equal(t, expectedSmuggledSignature, signatureSmuggled)
 }
+
+// TestConfiguredSignatureVersionIsApplied tests that the configured signature version is applied.
+func TestConfiguredSignatureVersionIsApplied(t *testing.T) {
+	const testSecret = "hdcixPpR2iKERPwqvH6sHdK9cyac"
+
+	params := url.Values{}
+	params.Set("cloud_name", "dn6ot3ged")
+	params.Set("timestamp", "1568810420")
+	params.Set("notification_url", "https://fake.com/callback?a=1&tags=hello,world")
+
+	// Test version 1 (no encoding)
+	signatureV1, err := api.SignParametersUsingAlgoAndVersion(params, testSecret, signature.SHA1, 1)
+	assert.NoError(t, err)
+
+	// Test version 2 (with encoding)
+	signatureV2, err := api.SignParametersUsingAlgoAndVersion(params, testSecret, signature.SHA1, 2)
+	assert.NoError(t, err)
+
+	// Should be different
+	assert.NotEqual(t, signatureV1, signatureV2, "Signatures should be different between versions")
+
+	// Version 2 should match expected signature from smuggling test
+	assert.Equal(t, "4fdf465dd89451cc1ed8ec5b3e314e8a51695704", signatureV2,
+		"Version 2 should match expected encoded signature")
+}
