@@ -27,6 +27,7 @@ import (
 
 	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/config"
+	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
 	"github.com/google/uuid"
 
 	"github.com/cloudinary/cloudinary-go/v2/logger"
@@ -134,8 +135,8 @@ func (u *API) signRequest(requestParams url.Values) (url.Values, error) {
 		signatureParams[k] = []string{strings.Join(v, ",")}
 	}
 
-	signature, err := api.SignParametersUsingAlgo(signatureParams, u.Config.Cloud.APISecret,
-		u.Config.Cloud.GetSignatureAlgorithm())
+	signature, err := api.SignParametersUsingAlgoAndVersion(signatureParams, u.Config.Cloud.APISecret,
+		u.Config.Cloud.GetSignatureAlgorithm(), u.Config.Cloud.GetSignatureVersion())
 	if err != nil {
 		return nil, err
 	}
@@ -394,4 +395,44 @@ func min(a, b int64) int64 {
 		return a
 	}
 	return b
+}
+
+// VerifyApiResponseSignature validates API response signature against Cloudinary configuration.
+// It validates that the response came from Cloudinary by checking the signature.
+func (u *API) VerifyApiResponseSignature(publicID string, version string, signature string) bool {
+	urlParams := make(url.Values)
+	urlParams.Set("public_id", publicID)
+	urlParams.Set("version", version)
+
+	// Use signature version 1 for API response validation (legacy behavior)
+	expectedSignature, err := api.SignParametersUsingAlgoAndVersion(urlParams, u.Config.Cloud.APISecret,
+		u.Config.Cloud.GetSignatureAlgorithm(), 1)
+	if err != nil {
+		return false
+	}
+
+	return signature == expectedSignature
+}
+
+// VerifyNotificationSignature validates notification signature against Cloudinary configuration.
+// It validates webhook notifications by checking the signature against the expected payload hash.
+func (u *API) VerifyNotificationSignature(body string, timestamp int64, receivedSignature string, validFor int64) bool {
+	if validFor <= 0 {
+		validFor = 7200 // Default: 2 hours
+	}
+
+	currentTimestamp := time.Now().Unix()
+	isSignatureExpired := timestamp <= currentTimestamp-validFor
+	if isSignatureExpired {
+		return false
+	}
+
+	payload := fmt.Sprintf("%s%d", body, timestamp)
+	rawSignature, err := signature.Sign(payload, u.Config.Cloud.APISecret, u.Config.Cloud.GetSignatureAlgorithm())
+	if err != nil {
+		return false
+	}
+	expectedSignature := hex.EncodeToString(rawSignature)
+
+	return receivedSignature == expectedSignature
 }

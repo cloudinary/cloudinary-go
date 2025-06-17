@@ -11,6 +11,7 @@ type Cloud struct {
 	APISecret          string `schema:"-"`
 	OAuthToken         string `schema:"oauth_token"`
 	SignatureAlgorithm string `schema:"signature_algorithm"`
+	SignatureVersion   int    `schema:"signature_version" default:"2"`
 }
 
 // GetSignatureAlgorithm returns the signature algorithm.
@@ -20,4 +21,13 @@ func (c Cloud) GetSignatureAlgorithm() string {
 	}
 
 	return c.SignatureAlgorithm
+}
+
+// GetSignatureVersion returns the signature version.
+func (c Cloud) GetSignatureVersion() int {
+	if c.SignatureVersion == 0 {
+		return 2
+	}
+
+	return c.SignatureVersion
 }

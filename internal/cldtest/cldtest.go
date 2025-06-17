@@ -215,11 +215,12 @@ func DeleteTestMetadataField(t *testing.T, mdFieldExternalID string) string {
 
 // GetTestSuffix returns a unique test suffix.
 func GetTestSuffix() string {
-	testSuffix := os.Getenv("TRAVIS_JOB_ID")
+	testSuffix := os.Getenv("GITHUB_RUN_ID")
 
 	if testSuffix == "" {
 		rand.Seed(time.Now().UnixNano())
-		testSuffix = strconv.Itoa(rand.Intn(999999))
+		// Generate a random number between 100000 and 999999 to ensure 6 digits
+		testSuffix = strconv.Itoa(rand.Intn(900000) + 100000)
 	}
 
 	return testSuffix
