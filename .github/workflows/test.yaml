@@ -14,6 +14,7 @@ jobs:
           - 1.21.x
           - 1.22.x
           - 1.23.x
+          - 1.24.x
 
     steps:
       - name: 🔄 Checkout Repository
@@ -34,7 +35,7 @@ jobs:
           echo "cloud_name: $(echo $CLOUDINARY_URL | cut -d'@' -f2)"
 
       - name: 🧰 Install gotestsum
-        run: go install gotest.tools/gotestsum@latest
+        run: go install gotest.tools/gotestsum@v1.11.0
 
       - name: 🧪 Run Tests
         run: |
