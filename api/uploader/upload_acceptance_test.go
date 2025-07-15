@@ -5,12 +5,13 @@ package uploader_test
 import (
 	"context"
 	"fmt"
+	"testing"
+
 	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/cloudinary/cloudinary-go/v2/config"
 	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
-	"testing"
 )
 
 var oAuthTokenConfig, _ = config.NewFromOAuthToken(cldtest.CloudName, "MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI4")
@@ -98,6 +99,55 @@ func getFolderDecouplingTestCases() []UploadAPIAcceptanceTestCase {
 				Method: "POST",
 				URI:    "/auto/upload",
 				Body:   &body,
+			},
+			ExpectedCallCount: 1,
+		},
+	}
+}
+
+// Acceptance test cases for auto transcription
+func getAutoTranscriptionTestCases() []UploadAPIAcceptanceTestCase {
+	bodyEmpty := "auto_transcription=%7B%7D" +
+		"&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
+		"&timestamp=123456789" +
+		"&unsigned=true"
+	bodyTranslate := "auto_transcription=%7B%22translate%22%3A%5B%22en%22%5D%7D" +
+		"&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
+		"&timestamp=123456789" +
+		"&unsigned=true"
+
+	return []UploadAPIAcceptanceTestCase{
+		{
+			Name: "Upload Test Auto Transcription Empty",
+			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
+				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
+					AutoTranscription: &api.AutoTranscription{},
+					Unsigned:          api.Bool(true),
+					Timestamp:         123456789,
+				})
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "POST",
+				URI:    "/auto/upload",
+				Body:   &bodyEmpty,
+			},
+			ExpectedCallCount: 1,
+		},
+		{
+			Name: "Upload Test Auto Transcription Translate",
+			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
+				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
+					AutoTranscription: &api.AutoTranscription{Translate: []string{"en"}},
+					Unsigned:          api.Bool(true),
+					Timestamp:         123456789,
+				})
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "POST",
+				URI:    "/auto/upload",
+				Body:   &bodyTranslate,
 			},
 			ExpectedCallCount: 1,
 		},
@@ -192,6 +242,7 @@ func TestUploadAPI_Acceptance(t *testing.T) {
 	testUploadAPIByTestCases(getUserAgentTestCases(), t)
 	testUploadAPIByTestCases(getAuthorizationTestCases(), t)
 	testUploadAPIByTestCases(getFolderDecouplingTestCases(), t)
+	testUploadAPIByTestCases(getAutoTranscriptionTestCases(), t)
 	testUploadAPIByTestCases(getBooleanValuesTestCases(), t)
 	testUploadAPIByTestCases(getVariousValuesTestCases(), t)
 	testUploadAPIByTestCases(getUploadConfigTestCases(), t)
