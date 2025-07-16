@@ -73,6 +73,8 @@ type UploadParams struct {
 	QualityAnalysis                *bool                       `json:"quality_analysis,omitempty"`
 	AccessibilityAnalysis          *bool                       `json:"accessibility_analysis,omitempty"`
 	CinemagraphAnalysis            *bool                       `json:"cinemagraph_analysis,omitempty"`
+	AutoChaptering                 *bool                       `json:"auto_chaptering,omitempty"`
+	AutoTranscription              *api.AutoTranscription      `json:"auto_transcription,omitempty"`
 }
 
 // SingleResponsiveBreakpointsParams represents params for a single responsive breakpoints generation request.

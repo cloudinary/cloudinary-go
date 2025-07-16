@@ -8,7 +8,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
 	"io"
 	"log"
 	"net/url"
@@ -18,6 +17,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
 )
 
 // EndPoint represents the API endpoint.
@@ -169,6 +170,20 @@ type Metadata map[string]interface{}
 
 // HookExecution is the result of a hook execution.
 type HookExecution map[string]interface{}
+
+// AutoTranscription represents the auto transcription params.
+type AutoTranscription struct {
+	Translate []string `json:"translate,omitempty"`
+}
+
+func (at AutoTranscription) MarshalJSON() ([]byte, error) {
+	type Alias AutoTranscription
+	marshalled, err := json.Marshal((Alias)(at))
+	if err != nil {
+		return nil, err
+	}
+	return []byte(strconv.Quote(string(marshalled))), nil
+}
 
 // BriefAssetResult represents a partial asset result that is returned when assets are listed.
 type BriefAssetResult struct {
