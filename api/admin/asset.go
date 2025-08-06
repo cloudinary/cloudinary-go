@@ -6,6 +6,7 @@ package admin
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/cloudinary/cloudinary-go/v2/api"
@@ -146,6 +147,38 @@ type PredominantResult struct {
 // AssetContextResult contains the contextual metadata
 type AssetContextResult struct {
 	Custom map[string]string `json:"custom"`
+}
+
+func (m *AssetContextResult) UnmarshalJSON(data []byte) error {
+	// map format
+	var mapData struct {
+		Custom map[string]string `json:"custom"`
+	}
+	if err := json.Unmarshal(data, &mapData); err == nil {
+		*m = AssetContextResult{
+			Custom: mapData.Custom,
+		}
+		return nil
+	}
+
+	// array format
+	var arrayData []struct {
+		Key   string `json:"key"`
+		Value string `json:"value"`
+	}
+	if err := json.Unmarshal(data, &arrayData); err != nil {
+		return err
+	}
+
+	result := AssetContextResult{
+		Custom: make(map[string]string),
+	}
+	for _, item := range arrayData {
+		result.Custom[item.Key] = item.Value
+	}
+	*m = result
+
+	return nil
 }
 
 // UpdateAssetParams are the parameters for UpdateAsset.
