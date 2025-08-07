@@ -1,3 +1,11 @@
+2.11.0 / 2025-07-16
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `AutoChaptering` and `AutoTranscript` upload parameters
+
 2.10.1 / 2025-06-17
 ==================
 

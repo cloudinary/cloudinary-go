@@ -8,7 +8,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
 	"io"
 	"log"
 	"net/url"
@@ -18,13 +17,15 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
 )
 
 // EndPoint represents the API endpoint.
 type EndPoint = string
 
 // Version is the Cloudinary Go package version.
-const Version = "2.10.1"
+const Version = "2.11.0"
 
 // UserAgent contains information about the SDK user agent. Passed to the Cloudinary servers.
 var UserAgent = fmt.Sprintf("CloudinaryGo/%s (Go %s)", Version, strings.TrimPrefix(runtime.Version(), "go"))
@@ -169,6 +170,20 @@ type Metadata map[string]interface{}
 
 // HookExecution is the result of a hook execution.
 type HookExecution map[string]interface{}
+
+// AutoTranscription represents the auto transcription params.
+type AutoTranscription struct {
+	Translate []string `json:"translate,omitempty"`
+}
+
+func (at AutoTranscription) MarshalJSON() ([]byte, error) {
+	type Alias AutoTranscription
+	marshalled, err := json.Marshal((Alias)(at))
+	if err != nil {
+		return nil, err
+	}
+	return []byte(strconv.Quote(string(marshalled))), nil
+}
 
 // BriefAssetResult represents a partial asset result that is returned when assets are listed.
 type BriefAssetResult struct {
