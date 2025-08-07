@@ -1,3 +1,8 @@
+2.11.1 / 2025-08-07
+==================
+
+  * Fix handling of multiple formats of contextual metadata
+
 2.11.0 / 2025-07-16
 ==================
 
