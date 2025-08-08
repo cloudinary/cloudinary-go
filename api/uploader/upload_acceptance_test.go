@@ -154,6 +154,34 @@ func getAutoTranscriptionTestCases() []UploadAPIAcceptanceTestCase {
 	}
 }
 
+// Acceptance test cases for auto video details
+func getAutoVideoDetailsTestCases() []UploadAPIAcceptanceTestCase {
+	bodyEmpty := "auto_video_details=%7B%7D" +
+		"&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
+		"&timestamp=123456789" +
+		"&unsigned=true"
+
+	return []UploadAPIAcceptanceTestCase{
+		{
+			Name: "Upload Test Auto Video Details Empty",
+			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
+				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
+					AutoVideoDetails: &api.AutoVideoDetails{},
+					Unsigned:         api.Bool(true),
+					Timestamp:        123456789,
+				})
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "POST",
+				URI:    "/auto/upload",
+				Body:   &bodyEmpty,
+			},
+			ExpectedCallCount: 1,
+		},
+	}
+}
+
 // Acceptance test cases for handling of boolean values
 func getBooleanValuesTestCases() []UploadAPIAcceptanceTestCase {
 	body := "file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
