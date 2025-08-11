@@ -185,6 +185,9 @@ func (at AutoTranscription) MarshalJSON() ([]byte, error) {
 	return []byte(strconv.Quote(string(marshalled))), nil
 }
 
+// AutoVideoDetails represents the auto video details param.
+type AutoVideoDetails struct{}
+
 // BriefAssetResult represents a partial asset result that is returned when assets are listed.
 type BriefAssetResult struct {
 	AssetID     string    `json:"asset_id"`
