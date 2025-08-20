@@ -14,7 +14,7 @@ var metadataField = metadata.Field{
 	Type:         metadata.SetFieldType,
 	ExternalID:   cldtest.UniqueID("go_color_id_"),
 	Label:        cldtest.UniqueID("GoColors"),
-	Mandatory:    true,
+	Mandatory:    false,
 	DefaultValue: []string{"go_color1", "go_color2"},
 	DataSource:   dataSource1,
 }
