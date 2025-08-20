@@ -160,6 +160,10 @@ func getAutoVideoDetailsTestCases() []UploadAPIAcceptanceTestCase {
 		"&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
 		"&timestamp=123456789" +
 		"&unsigned=true"
+	bodyFields := "auto_video_details=%7B%22fields%22%3A%5B%22title%22%2C%22description%22%5D%7D" +
+		"&file=data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FyH5BAEAAAAALAAAAAABAAEAAAIBRAA7" +
+		"&timestamp=123456789" +
+		"&unsigned=true"
 
 	return []UploadAPIAcceptanceTestCase{
 		{
@@ -176,6 +180,23 @@ func getAutoVideoDetailsTestCases() []UploadAPIAcceptanceTestCase {
 				Method: "POST",
 				URI:    "/auto/upload",
 				Body:   &bodyEmpty,
+			},
+			ExpectedCallCount: 1,
+		},
+		{
+			Name: "Upload Test Auto Video Details With Fields",
+			RequestTest: func(uploadAPI *uploader.API, ctx context.Context) (interface{}, error) {
+				return uploadAPI.Upload(ctx, cldtest.Base64Image, uploader.UploadParams{
+					AutoVideoDetails: &api.AutoVideoDetails{
+						Fields: []string{"title", "description"},
+					},
+				})
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "POST",
+				URI:    "/auto/upload",
+				Body:   &bodyFields,
 			},
 			ExpectedCallCount: 1,
 		},
