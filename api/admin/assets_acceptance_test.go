@@ -5,12 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/v2/api"
-	"github.com/cloudinary/cloudinary-go/v2/api/admin"
-	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"net/url"
 	"reflect"
 	"testing"
+
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/api/admin"
+	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 )
 
 // Acceptance test cases for `restore` method
@@ -1230,6 +1231,158 @@ func getDeleteRelatedAssetsByAssetIDsTestCases() []AdminAPIAcceptanceTestCase {
 	return testCases
 }
 
+// Acceptance test cases for `AddRelatedAssetsByAssetIDs` method
+func getAddRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptanceTestCase {
+	type addRelatedComplementaryAssetsByAssetIDsTestCase struct {
+		requestParams  admin.AddRelatedComplementaryAssetsByAssetIDsParams
+		uri            string
+		expectedParams *string
+	}
+
+	getTestCase := func(num int, t addRelatedComplementaryAssetsByAssetIDsTestCase) AdminAPIAcceptanceTestCase {
+		return AdminAPIAcceptanceTestCase{
+			Name: fmt.Sprintf("AddRelatedComplementaryAssetsByAssetIDs #%d", num),
+			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+				return api.AddRelatedComplementaryAssetsByAssetIDs(ctx, t.requestParams)
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {
+				_, ok := response.(*admin.AddRelatedAssetsResult)
+				if !ok {
+					t.Errorf("Response should be type of AddRelatedAssetsResult, %s given", reflect.TypeOf(response))
+				}
+			},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "POST",
+				URI:    t.uri,
+				Body:   t.expectedParams,
+			},
+			JsonResponse:      "{}",
+			ExpectedCallCount: 1,
+		}
+	}
+
+	var testCases []AdminAPIAcceptanceTestCase
+
+	params := fmt.Sprintf("{\"complementary_assets_to_relate\":[\"%s\",\"%s\"],\"subkind\":\"subkind\"}", cldtest.AssetID2, cldtest.AssetID3)
+	addRelatedComplementaryAssetsByAssetIDsTestCases := []addRelatedComplementaryAssetsByAssetIDsTestCase{
+		{
+			requestParams: admin.AddRelatedComplementaryAssetsByAssetIDsParams{
+				AssetID:                     cldtest.AssetID,
+				ComplementaryAssetsToRelate: []string{cldtest.AssetID2, cldtest.AssetID3},
+				Subkind:                     "subkind",
+			},
+			uri:            "/resources/related_complementary_assets/" + cldtest.AssetID,
+			expectedParams: &params,
+		},
+	}
+
+	for num, testCase := range addRelatedComplementaryAssetsByAssetIDsTestCases {
+		testCases = append(testCases, getTestCase(num, testCase))
+	}
+
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
+		Name: "Related Complementary Assets By Asset IDs error case",
+		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+			return api.AddRelatedComplementaryAssetsByAssetIDs(ctx, admin.AddRelatedComplementaryAssetsByAssetIDsParams{AssetID: cldtest.AssetID})
+		},
+		ResponseTest: func(response interface{}, t *testing.T) {
+			v, ok := response.(*admin.AddRelatedAssetsResult)
+			if !ok {
+				t.Errorf("Response should be type of AddRelatedComplementaryAssetsResult, %s given", reflect.TypeOf(response))
+			}
+
+			if v.Failed[0].Message != "TEST ERROR" {
+				t.Errorf("Error message should be %s, %s given", "TEST ERROR", v.Failed[0].Message)
+			}
+		},
+		ExpectedRequest: cldtest.ExpectedRequestParams{
+			Method: "POST",
+			URI:    "/resources/related_complementary_assets/" + cldtest.AssetID,
+			Params: &url.Values{},
+		},
+		JsonResponse:      "{\"failed\":[{\"message\": \"TEST ERROR\"}]}",
+		ExpectedCallCount: 1,
+	})
+
+	return testCases
+}
+
+// Acceptance test cases for `DeleteRelatedAssetsByAssetIDs` method
+func getDeleteRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptanceTestCase {
+	type deleteRelatedComplementaryAssetsByAssetIDsTestCase struct {
+		requestParams  admin.DeleteRelatedComplementaryAssetsByAssetIDsParams
+		uri            string
+		expectedParams *string
+	}
+
+	getTestCase := func(num int, t deleteRelatedComplementaryAssetsByAssetIDsTestCase) AdminAPIAcceptanceTestCase {
+		return AdminAPIAcceptanceTestCase{
+			Name: fmt.Sprintf("DeleteRelatedComplementaryAssetsByAssetIDs #%d", num),
+			RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+				return api.DeleteRelatedComplementaryAssetsByAssetIDs(ctx, t.requestParams)
+			},
+			ResponseTest: func(response interface{}, t *testing.T) {
+				_, ok := response.(*admin.DeleteRelatedAssetsResult)
+				if !ok {
+					t.Errorf("Response should be type of DeleteRelatedAssetsResult, %s given", reflect.TypeOf(response))
+				}
+			},
+			ExpectedRequest: cldtest.ExpectedRequestParams{
+				Method: "DELETE",
+				URI:    t.uri,
+				Body:   t.expectedParams,
+			},
+			JsonResponse:      "{}",
+			ExpectedCallCount: 1,
+		}
+	}
+
+	var testCases []AdminAPIAcceptanceTestCase
+
+	params := fmt.Sprintf("{\"complementary_assets_to_unrelate\":[\"%s\",\"%s\"],\"subkind\":\"subkind\"}", cldtest.AssetID2, cldtest.AssetID3)
+	deleteRelatedComplementaryAssetsByAssetIDsTestCases := []deleteRelatedComplementaryAssetsByAssetIDsTestCase{
+		{
+			requestParams: admin.DeleteRelatedComplementaryAssetsByAssetIDsParams{
+				AssetID:                       cldtest.AssetID,
+				ComplementaryAssetsToUnrelate: []string{cldtest.AssetID2, cldtest.AssetID3},
+				Subkind:                       "subkind",
+			},
+			uri:            "/resources/related_complementary_assets/" + cldtest.AssetID,
+			expectedParams: &params,
+		},
+	}
+
+	for num, testCase := range deleteRelatedComplementaryAssetsByAssetIDsTestCases {
+		testCases = append(testCases, getTestCase(num, testCase))
+	}
+
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
+		Name: "Related Complementary Assets By Asset IDs error case",
+		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+			return api.DeleteRelatedComplementaryAssetsByAssetIDs(ctx, admin.DeleteRelatedComplementaryAssetsByAssetIDsParams{AssetID: cldtest.AssetID})
+		},
+		ResponseTest: func(response interface{}, t *testing.T) {
+			v, ok := response.(*admin.DeleteRelatedAssetsResult)
+			if !ok {
+				t.Errorf("Response should be type of DeleteRelatedAssetsResult, %s given", reflect.TypeOf(response))
+			}
+
+			if v.Failed[0].Message != "TEST ERROR" {
+				t.Errorf("Error message should be %s, %s given", "TEST ERROR", v.Failed[0].Message)
+			}
+		},
+		ExpectedRequest: cldtest.ExpectedRequestParams{
+			Method: "DELETE",
+			URI:    "/resources/related_complementary_assets/" + cldtest.AssetID,
+			Params: &url.Values{},
+		},
+		JsonResponse:      "{\"failed\":[{\"message\": \"TEST ERROR\"}]}",
+		ExpectedCallCount: 1,
+	})
+
+	return testCases
+}
+
 // Acceptance test cases for `VisualSearch` method
 func getVisualSearchTestCases() []AdminAPIAcceptanceTestCase {
 	type visualSearchTestCase struct {
@@ -1306,6 +1459,8 @@ func TestAssets_Acceptance(t *testing.T) {
 	testAdminAPIByTestCases(getDeleteRelatedAssetsTestCases(), t)
 	testAdminAPIByTestCases(getAddRelatedAssetsByAssetIDsTestCases(), t)
 	testAdminAPIByTestCases(getDeleteRelatedAssetsByAssetIDsTestCases(), t)
+	testAdminAPIByTestCases(getAddRelatedComplementaryAssetsByAssetIDsTestCases(), t)
+	testAdminAPIByTestCases(getDeleteRelatedComplementaryAssetsByAssetIDsTestCases(), t)
 	testAdminAPIByTestCases(getAssetsByModerationTestCases(), t)
 	testAdminAPIByTestCases(getVisualSearchTestCases(), t)
 	testAdminAPIByTestCases(getDeleteAssetsTestCases(), t)
