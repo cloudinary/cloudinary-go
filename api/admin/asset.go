@@ -122,10 +122,12 @@ type QualityAnalysisResult struct {
 
 // RelatedComplementaryAssetResult contains the details about a related complementary asset.
 type RelatedComplementaryAssetResult struct {
-	AssetID  string `json:"asset_id"`
-	PublicID string `json:"public_id"`
-	Status   string `json:"status"`
-	Subkind  string `json:"subkind"`
+	AssetID           string `json:"asset_id"`
+	PublicID          string `json:"public_id"`
+	ResourceType      string `json:"resource_type"`
+	Type              string `json:"type"`
+	Status            string `json:"status"`
+	ComplementaryType string `json:"complementary_type"`
 }
 
 // AccessibilityAnalysisResult contains the details about accessibility analysis.

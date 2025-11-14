@@ -1234,7 +1234,7 @@ func getDeleteRelatedAssetsByAssetIDsTestCases() []AdminAPIAcceptanceTestCase {
 // Acceptance test cases for `AddRelatedAssetsByAssetIDs` method
 func getAddRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptanceTestCase {
 	type addRelatedComplementaryAssetsByAssetIDsTestCase struct {
-		requestParams  admin.AddRelatedComplementaryAssetsByAssetIDsParams
+		requestParams  admin.RelatedComplementaryAssetsByAssetIDsParams
 		uri            string
 		expectedParams *string
 	}
@@ -1263,13 +1263,13 @@ func getAddRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptanceT
 
 	var testCases []AdminAPIAcceptanceTestCase
 
-	params := fmt.Sprintf("{\"complementary_assets_to_relate\":[\"%s\",\"%s\"],\"subkind\":\"subkind\"}", cldtest.AssetID2, cldtest.AssetID3)
+	params := fmt.Sprintf("{\"related_asset_ids\":[\"%s\",\"%s\"],\"complementary_type\":\"complementary_type\"}", cldtest.AssetID2, cldtest.AssetID3)
 	addRelatedComplementaryAssetsByAssetIDsTestCases := []addRelatedComplementaryAssetsByAssetIDsTestCase{
 		{
-			requestParams: admin.AddRelatedComplementaryAssetsByAssetIDsParams{
-				AssetID:                     cldtest.AssetID,
-				ComplementaryAssetsToRelate: []string{cldtest.AssetID2, cldtest.AssetID3},
-				Subkind:                     "subkind",
+			requestParams: admin.RelatedComplementaryAssetsByAssetIDsParams{
+				AssetID:           cldtest.AssetID,
+				RelatedAssetIDs:   []string{cldtest.AssetID2, cldtest.AssetID3},
+				ComplementaryType: "complementary_type",
 			},
 			uri:            "/resources/related_complementary_assets/" + cldtest.AssetID,
 			expectedParams: &params,
@@ -1283,7 +1283,7 @@ func getAddRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptanceT
 	testCases = append(testCases, AdminAPIAcceptanceTestCase{
 		Name: "Related Complementary Assets By Asset IDs error case",
 		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
-			return api.AddRelatedComplementaryAssetsByAssetIDs(ctx, admin.AddRelatedComplementaryAssetsByAssetIDsParams{AssetID: cldtest.AssetID})
+			return api.AddRelatedComplementaryAssetsByAssetIDs(ctx, admin.RelatedComplementaryAssetsByAssetIDsParams{AssetID: cldtest.AssetID})
 		},
 		ResponseTest: func(response interface{}, t *testing.T) {
 			v, ok := response.(*admin.AddRelatedAssetsResult)
@@ -1310,7 +1310,7 @@ func getAddRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptanceT
 // Acceptance test cases for `DeleteRelatedAssetsByAssetIDs` method
 func getDeleteRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptanceTestCase {
 	type deleteRelatedComplementaryAssetsByAssetIDsTestCase struct {
-		requestParams  admin.DeleteRelatedComplementaryAssetsByAssetIDsParams
+		requestParams  admin.RelatedComplementaryAssetsByAssetIDsParams
 		uri            string
 		expectedParams *string
 	}
@@ -1339,13 +1339,13 @@ func getDeleteRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptan
 
 	var testCases []AdminAPIAcceptanceTestCase
 
-	params := fmt.Sprintf("{\"complementary_assets_to_unrelate\":[\"%s\",\"%s\"],\"subkind\":\"subkind\"}", cldtest.AssetID2, cldtest.AssetID3)
+	params := fmt.Sprintf("{\"related_asset_ids\":[\"%s\",\"%s\"],\"complementary_type\":\"complementary_type\"}", cldtest.AssetID2, cldtest.AssetID3)
 	deleteRelatedComplementaryAssetsByAssetIDsTestCases := []deleteRelatedComplementaryAssetsByAssetIDsTestCase{
 		{
-			requestParams: admin.DeleteRelatedComplementaryAssetsByAssetIDsParams{
-				AssetID:                       cldtest.AssetID,
-				ComplementaryAssetsToUnrelate: []string{cldtest.AssetID2, cldtest.AssetID3},
-				Subkind:                       "subkind",
+			requestParams: admin.RelatedComplementaryAssetsByAssetIDsParams{
+				AssetID:           cldtest.AssetID,
+				RelatedAssetIDs:   []string{cldtest.AssetID2, cldtest.AssetID3},
+				ComplementaryType: "complementary_type",
 			},
 			uri:            "/resources/related_complementary_assets/" + cldtest.AssetID,
 			expectedParams: &params,
@@ -1359,7 +1359,7 @@ func getDeleteRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptan
 	testCases = append(testCases, AdminAPIAcceptanceTestCase{
 		Name: "Related Complementary Assets By Asset IDs error case",
 		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
-			return api.DeleteRelatedComplementaryAssetsByAssetIDs(ctx, admin.DeleteRelatedComplementaryAssetsByAssetIDsParams{AssetID: cldtest.AssetID})
+			return api.DeleteRelatedComplementaryAssetsByAssetIDs(ctx, admin.RelatedComplementaryAssetsByAssetIDsParams{AssetID: cldtest.AssetID})
 		},
 		ResponseTest: func(response interface{}, t *testing.T) {
 			v, ok := response.(*admin.DeleteRelatedAssetsResult)
