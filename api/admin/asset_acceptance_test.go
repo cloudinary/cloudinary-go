@@ -62,6 +62,15 @@ func getAssetTestCases() []AdminAPIAcceptanceTestCase {
 				"related_next_cursor": []string{"NEXT_CURSOR"},
 			},
 		},
+		{
+			requestParams: admin.AssetParams{PublicID: cldtest.PublicID,
+				RelatedComplementary: api.Bool(true), RelatedComplementaryNextCursor: "NEXT_CURSOR"},
+			uri: "/resources/image/upload/" + cldtest.PublicID,
+			expectedParams: &url.Values{
+				"related_complementary":             []string{"true"},
+				"related_complementary_next_cursor": []string{"NEXT_CURSOR"},
+			},
+		},
 	}
 
 	for num, testCase := range assetTestCases {
