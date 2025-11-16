@@ -171,6 +171,26 @@ type Metadata map[string]interface{}
 // HookExecution is the result of a hook execution.
 type HookExecution map[string]interface{}
 
+type AdminContextOp string
+
+const (
+	AdminContextOpAdd     AdminContextOp = "+"
+	AdminContextOpRemove  AdminContextOp = "-"
+	AdminContextOpReplace AdminContextOp = "="
+)
+
+type AdminContextType string
+
+const AdminContextTypeArray AdminContextType = "array"
+
+// AdminContext is the Cloudinary admin contextual metadata payload
+type AdminContext struct {
+	Name  string           `json:"name"`
+	Value []string         `json:"value"`
+	Type  AdminContextType `json:"type"`
+	Op    AdminContextOp   `json:"op"`
+}
+
 // AutoTranscription represents the auto transcription params.
 type AutoTranscription struct {
 	Translate []string `json:"translate,omitempty"`

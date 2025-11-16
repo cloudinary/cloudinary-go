@@ -185,6 +185,47 @@ func getAssetTestCases() []AdminAPIAcceptanceTestCase {
 		ExpectedCallCount: 1,
 	})
 
+	assetWithAdminContext := admin.AssetResult{
+		AssetID:  "1",
+		PublicID: cldtest.PublicID,
+		AdminContext: []admin.AssetAdminContextResult{
+			{
+				Name:  "key1",
+				Value: []interface{}{"value1", "value2"},
+			},
+		},
+	}
+	responseJsonAdminContext, _ := json.Marshal(map[string]interface{}{
+		"asset_id":  "1",
+		"public_id": cldtest.PublicID,
+		"admin_context": []map[string]interface{}{
+			{"name": "key1", "value": []string{"value1", "value2"}},
+		},
+	})
+
+	testCases = append(testCases, AdminAPIAcceptanceTestCase{
+		Name: "Asset response with admin context",
+		RequestTest: func(api *admin.API, ctx context.Context) (interface{}, error) {
+			return api.Asset(ctx, admin.AssetParams{PublicID: cldtest.PublicID})
+		},
+		ResponseTest: func(response interface{}, t *testing.T) {
+			v, ok := response.(*admin.AssetResult)
+			if !ok {
+				t.Errorf("Response should be type of AssetResult, %s given", reflect.TypeOf(response))
+			}
+			v.Response = nil // omit raw response comparison
+			if !reflect.DeepEqual(*v, assetWithAdminContext) {
+				t.Errorf("Response asset should be %+v\n%+v given", assetWithAdminContext, *v)
+			}
+		},
+		ExpectedRequest: cldtest.ExpectedRequestParams{
+			Method: "GET",
+			URI:    "/resources/image/upload/" + cldtest.PublicID,
+		},
+		JsonResponse:      string(responseJsonAdminContext),
+		ExpectedCallCount: 1,
+	})
+
 	return testCases
 }
 

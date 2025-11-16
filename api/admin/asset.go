@@ -98,6 +98,7 @@ type AssetResult struct {
 	Usage                      interface{}                       `json:"usage"`
 	OriginalFilename           string                            `json:"original_filename"`
 	Context                    AssetContextResult                `json:"context"`
+	AdminContext               []AssetAdminContextResult         `json:"admin_context"`
 	Error                      api.ErrorResp                     `json:"error,omitempty"`
 	Response                   interface{}
 }
@@ -194,6 +195,11 @@ func (m *AssetContextResult) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type AssetAdminContextResult struct {
+	Name  string      `json:"name"`
+	Value interface{} `json:"value"`
+}
+
 // UpdateAssetParams are the parameters for UpdateAsset.
 type UpdateAssetParams struct {
 	AssetType         api.AssetType        `json:"-"`
@@ -215,6 +221,7 @@ type UpdateAssetParams struct {
 	NotificationURL   string               `json:"notification_url,omitempty"`
 	Tags              api.CldAPIArray      `json:"tags,omitempty,omitempty"`
 	Context           api.CldAPIMap        `json:"context,omitempty"`
+	AdminContext      []api.AdminContext   `json:"admin_context,omitempty"`
 	FaceCoordinates   api.Coordinates      `json:"face_coordinates,omitempty"`
 	CustomCoordinates api.Coordinates      `json:"custom_coordinates,omitempty"`
 	AccessControl     interface{}          `json:"access_control,omitempty"`
