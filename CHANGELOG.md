@@ -1,3 +1,16 @@
+2.14.0 / 2025-11-16
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `AdminContext`
+  * Add support for complementary asset relation APIs
+
+Other Changes
+-------------
+  * Fix flaky tests
+
 2.13.0 / 2025-08-20
 ==================
 
