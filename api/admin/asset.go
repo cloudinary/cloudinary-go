@@ -98,7 +98,7 @@ type AssetResult struct {
 	Usage                      interface{}                       `json:"usage"`
 	OriginalFilename           string                            `json:"original_filename"`
 	Context                    AssetContextResult                `json:"context"`
-	AdminContext          []AssetAdminContextResult   `json:"admin_context"`
+	AdminContext               []AssetAdminContextResult         `json:"admin_context"`
 	Error                      api.ErrorResp                     `json:"error,omitempty"`
 	Response                   interface{}
 }
