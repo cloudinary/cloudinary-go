@@ -1,3 +1,8 @@
+2.14.1 / 2026-01-28
+==================
+
+  * Fix `ApiSecret` validation when `ApiKey` is not present
+
 2.14.0 / 2025-11-16
 ==================
 
