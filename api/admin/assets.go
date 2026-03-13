@@ -454,9 +454,10 @@ func (a *API) DeleteRelatedAssetsByAssetIDs(ctx context.Context, params DeleteRe
 
 // RelatedComplementaryAssetsByAssetIDsParams are the parameters for AddRelatedComplementaryAssetsByAssetIDs.
 type RelatedComplementaryAssetsByAssetIDsParams struct {
-	AssetID           string   `json:"-"`
-	RelatedAssetIDs   []string `json:"related_asset_ids"`
-	ComplementaryType string   `json:"complementary_type"`
+	AssetID           string                 `json:"-"`
+	RelatedAssetIDs   []string               `json:"related_asset_ids"`
+	ComplementaryType string                 `json:"complementary_type"`
+	Metadata          map[string]interface{} `json:"metadata,omitempty"`
 }
 
 // AddRelatedComplementaryAssetsByAssetIDs relates an asset to other complementary assets by asset IDs.
