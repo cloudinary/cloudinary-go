@@ -1263,13 +1263,16 @@ func getAddRelatedComplementaryAssetsByAssetIDsTestCases() []AdminAPIAcceptanceT
 
 	var testCases []AdminAPIAcceptanceTestCase
 
-	params := fmt.Sprintf("{\"related_asset_ids\":[\"%s\",\"%s\"],\"complementary_type\":\"complementary_type\"}", cldtest.AssetID2, cldtest.AssetID3)
+	params := fmt.Sprintf("{\"related_asset_ids\":[\"%s\",\"%s\"],\"complementary_type\":\"complementary_type\",\"metadata\":{\"test_value\":\"a string\"}}", cldtest.AssetID2, cldtest.AssetID3)
 	addRelatedComplementaryAssetsByAssetIDsTestCases := []addRelatedComplementaryAssetsByAssetIDsTestCase{
 		{
 			requestParams: admin.RelatedComplementaryAssetsByAssetIDsParams{
 				AssetID:           cldtest.AssetID,
 				RelatedAssetIDs:   []string{cldtest.AssetID2, cldtest.AssetID3},
 				ComplementaryType: "complementary_type",
+				Metadata: map[string]interface{}{
+					"test_value": "a string",
+				},
 			},
 			uri:            "/resources/related_complementary_assets/" + cldtest.AssetID,
 			expectedParams: &params,
