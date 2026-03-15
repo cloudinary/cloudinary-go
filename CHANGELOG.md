@@ -1,3 +1,11 @@
+2.15.0 / 2026-03-15
+==================
+
+New Functionality And Features
+------------------------------
+
+  * Add support for `Metadata` in complementary asset relation APIs
+
 2.14.1 / 2026-01-28
 ==================
 
