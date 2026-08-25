@@ -34,7 +34,7 @@ jobs:
           echo "cloud_name: $(echo $CLOUDINARY_URL | cut -d'@' -f2)"
 
       - name: 🧰 Install gotestsum
-        run: go install gotest.tools/gotestsum@v1.11.0
+        run: go install gotest.tools/gotestsum@v1.13.0
 
       - name: 🧪 Run Tests
         run: |
