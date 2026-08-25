@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
@@ -310,7 +309,7 @@ func TestUploader_UploadWithResponsiveBreakpoints(t *testing.T) {
 	}
 
 	if eResp == nil {
-		t.Error(resp)
+		t.Fatal(resp)
 	}
 
 	assert.Len(t, eResp.ResponsiveBreakpoints, 2)
@@ -364,7 +363,7 @@ func populateLargeImage() string {
 		"\xFC\x00\x00\x00\x00\x00\x00\x00\x00fff\xFC\x00\x00\x00\x00\x00\x00\x00\x00\xC4\xF5(\xFF\x00\x00\x00" +
 		"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 
-	tmpFile, err := ioutil.TempFile(cldtest.TestDataDir(), largeImagePublicID+".*.bmp")
+	tmpFile, err := os.CreateTemp(cldtest.TestDataDir(), largeImagePublicID+".*.bmp")
 	if err != nil {
 		log.Fatal(err)
 	}

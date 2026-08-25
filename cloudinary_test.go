@@ -26,7 +26,7 @@ func TestCloudinary_CreateInstance(t *testing.T) {
 		t.Error("Failed creating Cloudinary instance from Cloudinary URL.")
 	}
 
-	c, err := NewFromURL("")
+	_, err := NewFromURL("")
 	if err == nil || err.Error() != "must provide CLOUDINARY_URL" {
 		t.Error("Error expected, got: ", err)
 	}

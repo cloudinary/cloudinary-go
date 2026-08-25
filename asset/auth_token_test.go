@@ -8,14 +8,11 @@ import (
 )
 
 const authTokenKey = "00112233FF99"
-const authTokenAltKey = "CCBB2233FF00"
 
 const duration = 300
 const startTime = 11111111
 
 const authTokenTestImage = "sample.jpg"
-const authTokenTestConfigACL = "/*/t_foobar"
-const authTokenTestPath = "http://res.cloudinary.com/test123/image/upload/v1486020273/sample.jpg"
 
 var authTokenConfig = config.AuthToken{
 	Duration:  duration,

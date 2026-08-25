@@ -190,6 +190,8 @@ func getAutoVideoDetailsTestCases() []UploadAPIAcceptanceTestCase {
 					AutoVideoDetails: &api.AutoVideoDetails{
 						Fields: []string{"title", "description"},
 					},
+					Unsigned:  api.Bool(true),
+					Timestamp: 123456789,
 				})
 			},
 			ResponseTest: func(response interface{}, t *testing.T) {},
@@ -292,6 +294,7 @@ func TestUploadAPI_Acceptance(t *testing.T) {
 	testUploadAPIByTestCases(getAuthorizationTestCases(), t)
 	testUploadAPIByTestCases(getFolderDecouplingTestCases(), t)
 	testUploadAPIByTestCases(getAutoTranscriptionTestCases(), t)
+	testUploadAPIByTestCases(getAutoVideoDetailsTestCases(), t)
 	testUploadAPIByTestCases(getBooleanValuesTestCases(), t)
 	testUploadAPIByTestCases(getVariousValuesTestCases(), t)
 	testUploadAPIByTestCases(getUploadConfigTestCases(), t)
