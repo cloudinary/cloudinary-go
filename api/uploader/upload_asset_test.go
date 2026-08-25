@@ -8,6 +8,7 @@ import (
 	"os"
 	"runtime"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -389,24 +390,29 @@ func readMemoryAlloc() uint64 {
 }
 
 func watchMemoryAllocation() func() uint64 {
-	var maxAlloc uint64
-	proceed := true
+	var maxAlloc atomic.Uint64
+	var proceed atomic.Bool
+	proceed.Store(true)
 	initialRead := readMemoryAlloc()
 	go func() {
 		for i := 0; i < 10000; i++ {
-			if !proceed {
+			if !proceed.Load() {
 				return
 			}
-			read := readMemoryAlloc()
-			if read-initialRead > maxAlloc {
-				maxAlloc = read - initialRead
+			// Alloc is the live heap, which can drop below the baseline once the
+			// GC collects. Only consider growth, otherwise the unsigned
+			// subtraction underflows.
+			if read := readMemoryAlloc(); read > initialRead {
+				if grown := read - initialRead; grown > maxAlloc.Load() {
+					maxAlloc.Store(grown)
+				}
 			}
 			time.Sleep(time.Millisecond * 500)
 		}
 	}()
 
 	return func() uint64 {
-		proceed = false
-		return maxAlloc
+		proceed.Store(false)
+		return maxAlloc.Load()
 	}
 }
