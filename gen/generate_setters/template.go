@@ -7,6 +7,7 @@ import (
 	"io"
 	"strings"
 	"text/template"
+	"unicode"
 )
 
 // Generate template for setters file
@@ -31,7 +32,7 @@ func ({{ .Receiver}} *{{ .StructName}}) <<index .FuncName %d>>(<<index .ParamNam
 
 	for i, t := range setters {
 		stringTemplate += fmt.Sprintf(functionTemplate, i, i, i, i, i)
-		templateData.FuncName[i] = strings.Title(t.Param) + t.Suffix
+		templateData.FuncName[i] = string(unicode.ToUpper(rune(t.Param[0]))) + t.Param[1:] + t.Suffix
 		templateData.Type[i] = t.Type
 		templateData.ParamName[i] = t.Param
 	}

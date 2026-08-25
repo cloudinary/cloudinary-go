@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -310,7 +310,7 @@ func TestUploader_UploadWithResponsiveBreakpoints(t *testing.T) {
 	}
 
 	if eResp == nil {
-		t.Error(resp)
+		t.Fatal(resp)
 	}
 
 	assert.Len(t, eResp.ResponsiveBreakpoints, 2)
@@ -364,7 +364,7 @@ func populateLargeImage() string {
 		"\xFC\x00\x00\x00\x00\x00\x00\x00\x00fff\xFC\x00\x00\x00\x00\x00\x00\x00\x00\xC4\xF5(\xFF\x00\x00\x00" +
 		"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 
-	tmpFile, err := ioutil.TempFile(cldtest.TestDataDir(), largeImagePublicID+".*.bmp")
+	tmpFile, err := os.CreateTemp(cldtest.TestDataDir(), largeImagePublicID+".*.bmp")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -390,24 +390,29 @@ func readMemoryAlloc() uint64 {
 }
 
 func watchMemoryAllocation() func() uint64 {
-	var maxAlloc uint64
-	proceed := true
+	var maxAlloc atomic.Uint64
+	var proceed atomic.Bool
+	proceed.Store(true)
 	initialRead := readMemoryAlloc()
 	go func() {
 		for i := 0; i < 10000; i++ {
-			if !proceed {
+			if !proceed.Load() {
 				return
 			}
-			read := readMemoryAlloc()
-			if read-initialRead > maxAlloc {
-				maxAlloc = read - initialRead
+			// Alloc is the live heap, which can drop below the baseline once the
+			// GC collects. Only consider growth, otherwise the unsigned
+			// subtraction underflows.
+			if read := readMemoryAlloc(); read > initialRead {
+				if grown := read - initialRead; grown > maxAlloc.Load() {
+					maxAlloc.Store(grown)
+				}
 			}
 			time.Sleep(time.Millisecond * 500)
 		}
 	}()
 
 	return func() uint64 {
-		proceed = false
-		return maxAlloc
+		proceed.Store(false)
+		return maxAlloc.Load()
 	}
 }

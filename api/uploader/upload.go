@@ -12,7 +12,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -358,7 +357,7 @@ func (u *API) postBody(ctx context.Context, urlPath interface{}, bodyReader io.R
 
 	defer api.DeferredClose(resp.Body)
 
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
 
 func setAuth(u *API, req *http.Request) {

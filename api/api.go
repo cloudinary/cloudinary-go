@@ -63,7 +63,7 @@ func BaseURL(uploadPrefix string, apiVer string) string {
 }
 
 // base64DataRegex is the regular expression for detecting base64 encoded strings.
-var base64DataRegex = regexp.MustCompile("^data:([\\w-]+/[\\w\\-+.]+)?(;[\\w-]+=[\\w-]+)*;base64,([a-zA-Z0-9/+\\n=]+)$")
+var base64DataRegex = regexp.MustCompile(`^data:([\w-]+/[\w\-+.]+)?(;[\w-]+=[\w-]+)*;base64,([a-zA-Z0-9/+\n=]+)$`)
 
 // AssetType is the type of the asset.
 type AssetType string

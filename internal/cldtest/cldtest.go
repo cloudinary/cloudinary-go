@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/cloudinary/cloudinary-go/v2/api"
 	"io"
-	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"net/http/httptest"
@@ -218,9 +217,7 @@ func GetTestSuffix() string {
 	testSuffix := os.Getenv("GITHUB_RUN_ID")
 
 	if testSuffix == "" {
-		rand.Seed(time.Now().UnixNano())
-		// Generate a random number between 100000 and 999999 to ensure 6 digits
-		testSuffix = strconv.Itoa(rand.Intn(900000) + 100000)
+		testSuffix = strconv.Itoa(rand.New(rand.NewSource(time.Now().UnixNano())).Intn(900000) + 100000)
 	}
 
 	return testSuffix
@@ -310,7 +307,7 @@ func GetTestHandler(response string, t *testing.T, callCounter *int, ep Expected
 
 		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodDelete {
 			if r.Body != nil && ep.Body != nil {
-				bodyString, err := ioutil.ReadAll(r.Body)
+				bodyString, err := io.ReadAll(r.Body)
 
 				if err != nil {
 					t.Error(err)

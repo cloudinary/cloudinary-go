@@ -27,7 +27,7 @@ func TestConfiguration_CreateInstance(t *testing.T) {
 	assert.Equal(t, cldtest.CloudName, c.Cloud.CloudName)
 	assert.Equal(t, signature.SHA256, c.Cloud.SignatureAlgorithm)
 
-	c, err = config.NewFromURL("")
+	_, err = config.NewFromURL("")
 	if err == nil || err.Error() != "must provide CLOUDINARY_URL" {
 		t.Error("Error expected, got: ", err)
 	}
