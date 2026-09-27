@@ -3,59 +3,40 @@ package uploader_test
 import (
 	"encoding/hex"
 	"fmt"
-	"net/url"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/cloudinary/cloudinary-go/v2/internal/signature"
 )
 
 // TestUploader_VerifyApiResponseSignature tests API response signature verification.
+// Expected signatures are fixed values, the same as other Cloudinary SDKs compute.
 func TestUploader_VerifyApiResponseSignature(t *testing.T) {
-	const publicID1 = "b8sjhoslj8cq8ovoa0ma"
-	const publicID2 = "z5sjhoskl2cq8ovoa0mv"
-	const version1 = "1555337587"
-	const version2 = "1555337588"
+	const testSecret = "hdcixPpR2iKERPwqvH6sHdK9cyac"
+	const publicID = "b8sjhoslj8cq8ovoa0ma"
+	const version = "1555337587"
 
-	// Test valid signature
-	urlParams := make(url.Values)
-	urlParams.Set("public_id", publicID1)
-	urlParams.Set("version", version1)
-	correctSignature, err := api.SignParametersUsingAlgoAndVersion(urlParams, uploadAPI.Config.Cloud.APISecret,
-		uploadAPI.Config.Cloud.GetSignatureAlgorithm(), 1)
-	if err != nil {
-		t.Error(err)
-	}
+	tempConfig := uploadAPI.Config
+	tempConfig.Cloud.APISecret = testSecret
+	tempConfig.Cloud.SignatureAlgorithm = signature.SHA1
+	tempAPI := &uploader.API{Config: tempConfig}
 
-	isValid := uploadAPI.VerifyApiResponseSignature(publicID1, version1, correctSignature)
-	assert.True(t, isValid, "The response signature is valid for the same parameters")
+	const validSignature = "3e974ccf50d4d1b195d2046c95994fe50ff81267"
 
-	// Test invalid signature with wrong version
-	urlParams.Set("version", version2)
-	newVersionSignature, err := api.SignParametersUsingAlgoAndVersion(urlParams, uploadAPI.Config.Cloud.APISecret,
-		uploadAPI.Config.Cloud.GetSignatureAlgorithm(), 1)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.True(t, tempAPI.VerifyApiResponseSignature(publicID, version, validSignature),
+		"The response signature is valid for the same parameters")
+	assert.False(t, tempAPI.VerifyApiResponseSignature(publicID, "1555337588", validSignature),
+		"The response signature is invalid for the wrong version")
+	assert.False(t, tempAPI.VerifyApiResponseSignature("z5sjhoskl2cq8ovoa0mv", version, validSignature),
+		"The response signature is invalid for the wrong resource")
 
-	isValid = uploadAPI.VerifyApiResponseSignature(publicID1, version1, newVersionSignature)
-	assert.False(t, isValid, "The response signature is invalid for the wrong version")
-
-	// Test invalid signature with wrong resource
-	urlParams.Set("version", version1)
-	urlParams.Set("public_id", publicID2)
-	anotherResourceSignature, err := api.SignParametersUsingAlgoAndVersion(urlParams, uploadAPI.Config.Cloud.APISecret,
-		uploadAPI.Config.Cloud.GetSignatureAlgorithm(), 1)
-	if err != nil {
-		t.Error(err)
-	}
-
-	isValid = uploadAPI.VerifyApiResponseSignature(publicID1, version1, anotherResourceSignature)
-	assert.False(t, isValid, "The response signature is invalid for the wrong resource")
+	tempAPI.Config.Cloud.SignatureAlgorithm = signature.SHA256
+	assert.True(t, tempAPI.VerifyApiResponseSignature(publicID, version,
+		"80f837513994d089160b01dd3ee04e6b86f127f75fab820dca5c15057deddc48"),
+		"The response signature is valid with SHA256")
 }
 
 // TestUploader_VerifyApiResponseSignatureWithAmpersand tests signature verification with & characters.
@@ -64,18 +45,12 @@ func TestUploader_VerifyApiResponseSignatureWithAmpersand(t *testing.T) {
 
 	tempConfig := uploadAPI.Config
 	tempConfig.Cloud.APISecret = testSecret
+	tempConfig.Cloud.SignatureAlgorithm = signature.SHA1
 	tempAPI := &uploader.API{Config: tempConfig}
-	publicIDWithAmpersand := "callback?a=1&tags=hello,world"
-	version := "1568810420"
 
-	urlParams := make(url.Values)
-	urlParams.Set("public_id", publicIDWithAmpersand)
-	urlParams.Set("version", version)
-	v1Signature, err := api.SignParametersUsingAlgoAndVersion(urlParams, testSecret, signature.SHA1, 1)
-	if err != nil {
-		t.Error(err)
-	}
-	isValid := tempAPI.VerifyApiResponseSignature(publicIDWithAmpersand, version, v1Signature)
+	// Signature version 1 does not encode "&" in values.
+	isValid := tempAPI.VerifyApiResponseSignature("callback?a=1&tags=hello,world", "1568810420",
+		"8bda7afdf8ccf991581ddb4782598cf2fc915b8f")
 	assert.True(t, isValid, "Should verify signature correctly with version 1")
 }
 
