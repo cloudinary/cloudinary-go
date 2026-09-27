@@ -100,3 +100,15 @@ func TestUploader_PrivateDownloadURL(t *testing.T) {
 	assert.Contains(t, privateDownloadURL, "signature")
 	assert.Contains(t, privateDownloadURL, "timestamp")
 }
+
+func TestUploader_PrivateDownloadURLWithoutFormat(t *testing.T) {
+	params := uploader.PrivateDownloadURLParams{
+		PublicID: cldtest.PublicID,
+	}
+
+	privateDownloadURL, err := uploadAPI.PrivateDownloadURL(params)
+
+	assert.NoError(t, err)
+	assert.Contains(t, privateDownloadURL, "public_id="+cldtest.PublicID)
+	assert.NotContains(t, privateDownloadURL, "format=")
+}
