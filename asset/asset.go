@@ -304,7 +304,7 @@ func (a *Asset) query() string {
 			panic(err)
 		}
 
-		return a.AuthToken.Generate(u.Path)
+		return a.AuthToken.Generate(u.EscapedPath())
 	}
 
 	if !a.Config.URL.Analytics {

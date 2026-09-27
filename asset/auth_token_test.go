@@ -1,6 +1,7 @@
 package asset_test
 
 import (
+	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/asset"
 	"github.com/cloudinary/cloudinary-go/v2/config"
 	"github.com/stretchr/testify/assert"
@@ -65,4 +66,18 @@ func TestAsset_AuthToken_EscapeToLower(t *testing.T) {
 	expected := "__cld_token__=st=11111111~exp=11111411~hmac=7ffc0fd1f3ee2622082689f64a65454da39d94c297bcf498b682aa65a0d2ce0a"
 
 	assert.Equal(t, expected, a.Generate("Encode these :~@#%^&{}[]\\\"';/\", but not those $!()_.*"))
+}
+
+// The token signs the escaped URL path, like the other Cloudinary SDKs.
+func TestAsset_AuthToken_SignsEscapedPath(t *testing.T) {
+	conf, _ := config.NewFromParams("test123", "key", "secret")
+
+	i, _ := asset.Image("ñandú.jpg", conf)
+	i.DeliveryType = api.Authenticated
+	i.Version = 1486020273
+	i.Config.URL.SignURL = true
+	i.AuthToken.Config = &config.AuthToken{Key: authTokenKey, Duration: duration, StartTime: startTime}
+
+	assert.Contains(t, getAssetUrl(t, i), "image/authenticated/v1486020273/%C3%B1and%C3%BA.jpg?__cld_token__=st=11111111~exp=11111411"+
+		"~hmac=e0dba2c6680a1efe6a89c4dc0302c86400d2684dcc07da32db4e9804ee284955")
 }
