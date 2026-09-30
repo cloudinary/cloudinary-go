@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/asset"
+	"github.com/cloudinary/cloudinary-go/v2/config"
 	"github.com/cloudinary/cloudinary-go/v2/internal/cldtest"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -107,4 +108,38 @@ func TestAsset_Media(t *testing.T) {
 		t.Fatal(err)
 	}
 	assert.Contains(t, getAssetUrl(t, m), fmt.Sprintf("image/upload/%s", cldtest.PublicID))
+}
+
+// Expected URLs match the Python SDK (cloudinary_url with raw_transformation).
+func TestAsset_PublicIDEncoding(t *testing.T) {
+	conf, _ := config.NewFromParams(cldtest.CloudName, cldtest.APIKey, cldtest.APISecret)
+
+	cases := []struct{ publicID, expected string }{
+		{"my image", "image/upload/my%20image"},
+		{"a+b", "image/upload/a%2Bb"},
+		{"100%", "image/upload/100%25"},
+		{"a%20b", "image/upload/a%20b"},
+		{"a%2Bb", "image/upload/a%2Bb"},
+	}
+
+	for _, c := range cases {
+		i, _ := asset.Image(c.publicID, conf)
+		assert.Contains(t, getAssetUrl(t, i), c.expected, c.publicID)
+	}
+}
+
+func TestAsset_CollapseSlashes(t *testing.T) {
+	conf, _ := config.NewFromParams(cldtest.CloudName, cldtest.APIKey, cldtest.APISecret)
+
+	i, _ := asset.Image("folder//img", conf)
+	i.Transformation = "w_100//e_sepia"
+
+	assert.Contains(t, getAssetUrl(t, i), "image/upload/w_100/e_sepia/v1/folder/img")
+
+	s, _ := asset.Image("sample", conf)
+	s.DeliveryType = api.Authenticated
+	s.Transformation = "w_100//e_sepia"
+	s.Config.URL.SignURL = true
+
+	assert.Contains(t, getAssetUrl(t, s), "image/authenticated/s--15JMHXkE--/w_100/e_sepia/sample")
 }

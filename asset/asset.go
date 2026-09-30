@@ -96,6 +96,9 @@ func (a Asset) String() (result string, err error) {
 		}
 	}()
 
+	a.Transformation = transformation.RawTransformation(collapseSlashes(string(a.Transformation)))
+	a.PublicID = collapseSlashes(a.PublicID)
+
 	assetURL := a.assetURL()
 	query := a.query()
 
@@ -268,10 +271,9 @@ func (a Asset) source() string {
 	source := fileNameWithoutExt(a.PublicID)
 
 	if !isURL(source) {
-		var err error
-		source, err = url.QueryUnescape(strings.Replace(source, "%20", "+", -1))
-		if err != nil {
-			panic(err)
+		// Decode a pre-escaped public ID. Keep it as is if it is not valid escaping (for example, a literal "%").
+		if unescaped, err := url.PathUnescape(source); err == nil {
+			source = unescaped
 		}
 	}
 
@@ -339,8 +341,16 @@ func isURL(candidate string) bool {
 	return urlRegexp.MatchString(candidate)
 }
 
+var multipleSlashesRegexp = regexp.MustCompile(`([^:])/+`)
+
+// collapseSlashes replaces "//" with "/", but keeps "://".
+func collapseSlashes(str string) string {
+	return multipleSlashesRegexp.ReplaceAllString(str, "$1/")
+}
+
 func smartEscape(str string) string {
-	revert := strings.NewReplacer("%3A", ":", "%2F", "/")
+	// QueryEscape encodes a space as "+" (a literal "+" becomes "%2B"). In a URL path, a space must be "%20".
+	revert := strings.NewReplacer("%3A", ":", "%2F", "/", "+", "%20")
 
 	return revert.Replace(url.QueryEscape(str))
 }
