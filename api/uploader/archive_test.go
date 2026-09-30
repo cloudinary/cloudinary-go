@@ -4,6 +4,7 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/cloudinary/cloudinary-go/v2/api"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
@@ -99,4 +100,23 @@ func TestUploader_PrivateDownloadURL(t *testing.T) {
 	assert.Contains(t, privateDownloadURL, "api_key")
 	assert.Contains(t, privateDownloadURL, "signature")
 	assert.Contains(t, privateDownloadURL, "timestamp")
+}
+
+func TestUploader_ExpiresAtIsUnixTimestamp(t *testing.T) {
+	expiresAt := time.Unix(1800000000, 0).UTC()
+
+	archiveURL, err := uploadAPI.DownloadZipURL(uploader.CreateArchiveParams{
+		PublicIDs: []string{cldtest.PublicID},
+		ExpiresAt: &expiresAt,
+	})
+	assert.NoError(t, err)
+	assert.Contains(t, archiveURL, "expires_at=1800000000")
+
+	privateDownloadURL, err := uploadAPI.PrivateDownloadURL(uploader.PrivateDownloadURLParams{
+		PublicID:  cldtest.PublicID,
+		Format:    "png",
+		ExpiresAt: &expiresAt,
+	})
+	assert.NoError(t, err)
+	assert.Contains(t, privateDownloadURL, "expires_at=1800000000")
 }
