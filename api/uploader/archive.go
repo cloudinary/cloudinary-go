@@ -182,7 +182,7 @@ func (u *API) DownloadBackedUpAsset(params DownloadBackedUpAssetParams) (string,
 // PrivateDownloadURLParams are the parameters for PrivateDownloadURL.
 type PrivateDownloadURLParams struct {
 	PublicID     string        `json:"public_id"`
-	Format       string        `json:"format"`
+	Format       string        `json:"format,omitempty"`
 	DeliveryType string        `json:"type,omitempty"`
 	Attachment   string        `json:"attachment,omitempty"`
 	ExpiresAt    *time.Time    `json:"expires_at,omitempty"`
